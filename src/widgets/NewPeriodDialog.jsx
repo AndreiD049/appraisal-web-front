@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Dialog, 
   DialogTitle, 
@@ -11,7 +11,7 @@ import {
   MenuItem,
   Button
 } from '@material-ui/core';
-import { useState } from 'react';
+import UserService from '../services/UserService';
 
 const NewPeriodDialog = ({
     context, 
@@ -24,16 +24,37 @@ const NewPeriodDialog = ({
     'Active',
     'Finished'
   ];
+  const [status, setStatus] = useState(selectValues[0]);
+  const [organizations, setOrganizations] = useState([]);
+  const [org, setOrg] = useState('');
+
   
   const handleStatusChange = (e) => {
     setStatus(e.target.value);
   }
 
-  const [status, setStatus] = useState(selectValues[0]);
+  const handleOrgChange = (e) => {
+    setOrg(e.target.value);
+  }
+
+  const closeDecorator = (e) => {
+    setStatus(selectValues[0]);
+    setOrg('');
+    handleClose(e);
+  }
+
+  // Fetch organizations
+  useEffect(() => {
+    async function getInfo() {
+      setOrganizations(await UserService.getUserOrganizations());
+    }
+    getInfo();
+  }, [])
+
   return (
     <Dialog 
       open={open} 
-      onClose={handleClose} 
+      onClose={closeDecorator} 
       aria-labelledby="new-period-dialog"
       >
       <DialogTitle id="new-period-dialog">Create new period</DialogTitle>
@@ -54,7 +75,11 @@ const NewPeriodDialog = ({
             </FormControl>
             <FormControl color='primary' required={true}>
               <InputLabel htmlFor="new-period-organization">Organization</InputLabel>
-              <Input id='new-period-organization' name='organization' />
+              <Select id='new-period-organizatrion' name='organization' value={org} onChange={handleOrgChange}>
+                {organizations.map(e => (
+                  <MenuItem key={e.id} value={e.id}>{e.name}</MenuItem>
+                ))}
+              </Select>
             </FormControl>
             <FormControl style={{margin: 20}}>
               <Button type='submit' color='primary' variant='contained' >
