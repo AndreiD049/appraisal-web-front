@@ -1,3 +1,3 @@
 export default {
-  serverURL: "http://localhost:3001"
+  serverURL: "http://161.35.69.229:3001"
 }
