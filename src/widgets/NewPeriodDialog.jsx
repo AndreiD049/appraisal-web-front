@@ -59,7 +59,7 @@ const NewPeriodDialog = ({
       >
       <DialogTitle id="new-period-dialog">Create new period</DialogTitle>
       <DialogContent>
-        <form>
+        <form onSubmit={() => alert("submit")}>
           <FormGroup >
             <FormControl color='primary' required={true}>
               <InputLabel htmlFor="new-period-name">Period name</InputLabel>
