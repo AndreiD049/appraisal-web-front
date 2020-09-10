@@ -102,7 +102,7 @@ const AppraisalService = {
       type: type,
       status: status,
       periodId: context.periodId,
-      user: context.user.id,
+      user: context.user ? context.user.id : null,
     });
   },
   

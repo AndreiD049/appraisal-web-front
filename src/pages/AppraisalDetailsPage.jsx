@@ -39,10 +39,12 @@ const AppraisalDetailsPage = ({context, ...props}) => {
   const [SWOTThreat, setSWOTThreat] = useState([]);
   const [fieldModified, setFieldModified] = useState(false);
   context.periodId = useParams()['id'];
-  
+
+
   useEffect(() => {
     async function run() {
       const data = await AppraisalService.getItems(context);
+      console.log(context);
       setPeriodDetails(data);
       setAchieved(AppraisalService.normalizeSet(context, data.items.filter(el => el.type === 'Achieved'), ACHIEVED_PLANNED_MIN, 'Achieved'));
       setPlanned(AppraisalService.normalizeSet(context, data.items.filter(el => el.type === 'Planned'), ACHIEVED_PLANNED_MIN, 'Planned'));
@@ -112,6 +114,7 @@ const AppraisalDetailsPage = ({context, ...props}) => {
   const achievedMemo = useMemo(() => {
     return (
       <InputCategory 
+        context={context}
         items={achieved} 
         min={ACHIEVED_PLANNED_MIN}
         label={'Achieved'}
@@ -121,11 +124,12 @@ const AppraisalDetailsPage = ({context, ...props}) => {
         setFunc={setAchieved}
       />
       );
-  }, [achieved, handleChange, handleBlur, removeHandler]);
+  }, [achieved, context, handleChange, handleBlur, removeHandler]);
     
   const plannedMemo = useMemo(() => {
     return (
       <InputCategory 
+        context={context}
         items={planned} 
         min={ACHIEVED_PLANNED_MIN}
         label={'Planned'}
@@ -135,11 +139,12 @@ const AppraisalDetailsPage = ({context, ...props}) => {
         setFunc={setPlanned}
       />
       );
-  }, [planned, handleBlur, handleChange, removeHandler]);
+  }, [planned, context, handleBlur, handleChange, removeHandler]);
       
   const trainingMemo = useMemo(() => {
     return (
       <InputCategory 
+        context={context}
         items={training} 
         min={TRAINING_MIN}
         label={'Training'}
@@ -149,11 +154,12 @@ const AppraisalDetailsPage = ({context, ...props}) => {
         setFunc={setTraining}
       />
       );
-  }, [training, handleBlur, handleChange, removeHandler]);
+  }, [training, context, handleBlur, handleChange, removeHandler]);
     
   const trainingSugMemo = useMemo(() => {
     return (
       <InputCategory 
+        context={context}
         items={trainingSug} 
         min={TRAINING_MIN}
         label={'Suggested Trainings'}
@@ -163,11 +169,12 @@ const AppraisalDetailsPage = ({context, ...props}) => {
         setFunc={setTrainingSug}
       />
       );
-  }, [trainingSug, handleBlur, handleChange, removeHandler]);
+  }, [trainingSug, context, handleBlur, handleChange, removeHandler]);
       
   const SSMemo = useMemo(() => {
     return (
       <InputCategory 
+        context={context}
         items={SWOTStrength} 
         min={SWOT_MIN}
         label={'Strength'}
@@ -177,11 +184,12 @@ const AppraisalDetailsPage = ({context, ...props}) => {
         setFunc={setSWOTStrength}
       />
       );
-  }, [SWOTStrength, handleBlur, handleChange, removeHandler]);
+  }, [SWOTStrength, context, handleBlur, handleChange, removeHandler]);
         
   const SWMemo = useMemo(() => {
     return (
       <InputCategory 
+        context={context}
         items={SWOTWeakness} 
         min={SWOT_MIN}
         label={'Weakness'}
@@ -191,11 +199,12 @@ const AppraisalDetailsPage = ({context, ...props}) => {
         setFunc={setSWOTWeakness}
       />
       );
-  }, [SWOTWeakness, handleBlur, handleChange, removeHandler]);
+  }, [SWOTWeakness, context, handleBlur, handleChange, removeHandler]);
         
   const SOMemo = useMemo(() => {
     return (
       <InputCategory 
+        context={context}
         items={SWOTOpportunity} 
         min={SWOT_MIN}
         label={'Opportunity'}
@@ -205,11 +214,12 @@ const AppraisalDetailsPage = ({context, ...props}) => {
         setFunc={setSWOTOpportunity}
       />
       );
-  }, [SWOTOpportunity, handleBlur, handleChange, removeHandler]);
+  }, [SWOTOpportunity, context, handleBlur, handleChange, removeHandler]);
           
   const STMemo = useMemo(() => {
     return (
       <InputCategory 
+        context={context}
         items={SWOTThreat} 
         min={SWOT_MIN}
         label={'Threat'}
@@ -219,7 +229,7 @@ const AppraisalDetailsPage = ({context, ...props}) => {
         setFunc={setSWOTThreat}
       />
       );
-  }, [SWOTThreat, handleBlur, handleChange, removeHandler]);
+  }, [SWOTThreat, context, handleBlur, handleChange, removeHandler]);
 
   return (
     <Container maxWidth='md'>

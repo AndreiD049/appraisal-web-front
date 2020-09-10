@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Navigation from './widgets/Navigation';
 import CssBaseline from '@material-ui/core/CssBaseline'
 import { 
@@ -15,12 +15,13 @@ import SettingsPage from './pages/SettingsPage';
 import ReportsPage from './pages/ReportsPage';
 
 function App() {
-	const context = Object.create(Context);
+	const [context, setContext] = useState(Context);
 
 	useEffect(() => {
 		// Set up the context
 		async function getUser() {
-			context.setUser(await LoginService.getCurrentUser(context));
+			if (!context.user)
+				setContext({...context, user: await LoginService.getCurrentUser(context)});
 		} 
 		getUser();
 	}, [context]);
