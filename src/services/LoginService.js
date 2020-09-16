@@ -1,8 +1,7 @@
 import axios from 'axios';
-import config from '../config';
 
 const LoginService = {
-  currentUserPath: `${config.serverURL}/api/me`,
+  currentUserPath: `/api/me`,
   getCurrentUser: async function(context) {
     try {
       const response = await axios.get(this.currentUserPath);

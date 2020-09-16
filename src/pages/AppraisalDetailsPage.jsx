@@ -110,6 +110,11 @@ const AppraisalDetailsPage = ({context, ...props}) => {
       setFieldModified(false);
     }
   }, [context, fieldModified]);
+
+  const handleFinishPeriod = useCallback(async (e) => {
+    e.persist();
+    await AppraisalService.finishPeriod(context, context.periodId);
+  }, [context]);
   
   const achievedMemo = useMemo(() => {
     return (
@@ -277,7 +282,7 @@ const AppraisalDetailsPage = ({context, ...props}) => {
         </Grid>
       
         <Grid item xs={12} className={classes.centerButton} >
-          <ApButton context={context} onClick={() => alert("Finished")} variant='contained' color='primary'>
+          <ApButton context={context} onClick={handleFinishPeriod} variant='contained' color='primary'>
             Finish
           </ApButton>
         </Grid>

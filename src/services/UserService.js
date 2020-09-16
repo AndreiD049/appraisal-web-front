@@ -1,8 +1,7 @@
 import axios from 'axios';
-import config from '../config';
 
 const UserService = {
-  getUserOrganizationsPath: `${config.serverURL}/api/users/organizations`,
+  getUserOrganizationsPath: `/api/users/organizations`,
 
   getUserOrganizations: async function(context) {
     try {

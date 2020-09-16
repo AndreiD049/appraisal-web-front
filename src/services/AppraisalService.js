@@ -1,14 +1,14 @@
 import axios from 'axios';
-import config from '../config';
 import { Item, validate, validateId } from '../models/AppraisalItemModel';
 
 const AppraisalService = {
-  getPeriodsPath: `${config.serverURL}/api/periods`,
-  getItemsPath: (id) => `${config.serverURL}/api/periods/${id}`,
-  getItemPath: (periodId, itemId) => `${config.serverURL}/api/periods/${periodId}/items/${itemId}`,
-  addItemPath: (periodId) => `${config.serverURL}/api/periods/${periodId}/items`,
-  updateItemPath: (periodId, itemId) => `${config.serverURL}/api/periods/${periodId}/items/${itemId}`,
-  deleteItemPath: (periodId, itemId) => `${config.serverURL}/api/periods/${periodId}/items/${itemId}`,
+  getPeriodsPath: `/api/periods`,
+  getItemsPath: (id) => `/api/periods/${id}`,
+  getItemPath: (periodId, itemId) => `/api/periods/${periodId}/items/${itemId}`,
+  addItemPath: (periodId) => `/api/periods/${periodId}/items`,
+  updateItemPath: (periodId, itemId) => `/api/periods/${periodId}/items/${itemId}`,
+  deleteItemPath: (periodId, itemId) => `/api/periods/${periodId}/items/${itemId}`,
+  finishPeriodPath: (periodId) => `/api/periods/${periodId}/finish`,
 
   getPeriods: async function(context) {
     try {
@@ -93,6 +93,20 @@ const AppraisalService = {
       }
     } catch (err) {
       context.showAlert('error', `AppraisalService.deleteItem: Error fetching periods: ${err.message}`);
+      throw err;
+    }
+  },
+
+  finishPeriod: async function(context, periodId) {
+    try {
+      const response = await axios.post(this.finishPeriodPath(periodId));
+      if (response.status === 200) {
+        return true;
+      } else {
+        throw new Error(`Server response: ${response.status} - ${response.statusText}`);
+      }
+    } catch (err) {
+      context.showAlert('error', `AppraisalService.finishPeriod: Error finishing period: ${err.message}`);
       throw err;
     }
   },
