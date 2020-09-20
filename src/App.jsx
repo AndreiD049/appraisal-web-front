@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Navigation from './widgets/Navigation';
 import CssBaseline from '@material-ui/core/CssBaseline'
 import { 
@@ -9,45 +9,39 @@ import {
 import AppraisalsPage from './pages/AppraisalsPage';
 import AppraisalDetailsPage from './pages/AppraisalDetailsPage';
 import Context from './models/AppContext';
-import LoginService  from './services/LoginService';
 import HomePage from './pages/HomePage';
 import SettingsPage from './pages/SettingsPage';
 import ReportsPage from './pages/ReportsPage';
+import LoginPage from './pages/LoginPage';
 
 function App() {
 	const [context, setContext] = useState(Context);
 
-	useEffect(() => {
-		// Set up the context
-		async function getUser() {
-			if (!context.user)
-				setContext({...context, user: await LoginService.getCurrentUser(context)});
-		} 
-		getUser();
-	}, [context]);
-	
 	return (
 		<>
 			<CssBaseline/>
 			<Router>
-				<Navigation/>
+				<Navigation ctx={context}/>
 
 				{/* The page switch */}
 				<Switch>
 					<Route path='/appraisals/:id'>
-						<AppraisalDetailsPage context={context}/>
+						<AppraisalDetailsPage ctx={context} setCtx={setContext}/>
 					</Route>
 					<Route path='/appraisals'>
-						<AppraisalsPage context={context}/>
+						<AppraisalsPage ctx={context} setCtx={setContext}/>
 					</Route>
 					<Route path='/reports'>
-						<ReportsPage context={context}/>
+						<ReportsPage ctx={context} setCtx={setContext}/>
 					</Route>
 					<Route path='/settings'>
-						<SettingsPage context={context}/>
+						<SettingsPage ctx={context} setCtx={setContext}/>
+					</Route>
+					<Route path='/login'>
+						<LoginPage ctx={context} setCtx={setContext}/>
 					</Route>
 					<Route path='/'>
-						<HomePage context={context}/>
+						<HomePage ctx={context} setCtx={setContext}/>
 					</Route>
 				</Switch>
 			</Router>

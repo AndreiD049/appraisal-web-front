@@ -18,6 +18,10 @@ export const Context = {
         console.log(`OTHER: ${Date.now()} - ${message}`)
         break;
     }
+  },
+
+  isAuth: function() {
+    return Boolean(this.user);
   }
 }
 

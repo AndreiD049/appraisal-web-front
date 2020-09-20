@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from '@material-ui/core';
 
-const ApButton = ({context, ...props}) => {
+const ApButton = ({ctx, ...props}) => {
   return (
     <Button {...props}>
       {props.children}

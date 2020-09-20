@@ -11,10 +11,11 @@ const useStyles = makeStyles({
     },
     listItem: {
         justifyContent: 'center',
+        padding: 0
     }
 })
 
-const InputCategory = ({items, min, label, handleChange, handleBlur, handleRemove, setFunc}) => {
+const InputCategory = ({ctx, items, min, label, handleChange, handleBlur, handleRemove, setFunc}) => {
   const classes = useStyles();
   return (
     <Box>

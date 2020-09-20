@@ -1,8 +1,12 @@
 import React from 'react';
+import UserInfoProvider from '../widgets/UserInfoProvider';
 
-const HomePage = ({context, ...props}) => {
+const HomePage = ({ctx, setCtx, ...props}) => {
   return (
-    <h1 style={{textAlign: 'center'}}>HomePage</h1>
+    <>
+      <UserInfoProvider ctx={ctx} setCtx={setCtx}/>
+      <h1 style={{textAlign: 'center'}}>HomePage</h1>
+    </>
   );
 };
 

@@ -3,6 +3,7 @@ import { Item, validate, validateId } from '../models/AppraisalItemModel';
 
 const AppraisalService = {
   getPeriodsPath: `/api/periods`,
+  addPeriodsPath: `/api/periods`,
   getItemsPath: (id) => `/api/periods/${id}`,
   getItemPath: (periodId, itemId) => `/api/periods/${periodId}/items/${itemId}`,
   addItemPath: (periodId) => `/api/periods/${periodId}/items`,
@@ -97,6 +98,22 @@ const AppraisalService = {
     }
   },
 
+  addPeriod: async function(context, body) {
+    try {
+      const response = await axios.post(this.addPeriodsPath, body);
+      if (response.status === 200) {
+        return response.data;
+      } else {
+        throw new Error(`Server response: ${response.status} - ${response.statusText}`);
+      }
+    } catch (err) {
+      if (context.showAlert) {
+        context.showAlert('error', `AppraisalService.addPeriod: Error adding period: ${err.message}`);
+      }
+      throw err;
+    }
+  },
+
   finishPeriod: async function(context, periodId) {
     try {
       const response = await axios.post(this.finishPeriodPath(periodId));
@@ -127,8 +144,10 @@ const AppraisalService = {
    * 2. if number of items > min and blank items > 1 => remove blank items until
    * blank items = 1 or number of items = min
    */
-  normalizeSet: function(context, items, min, type) {
+  normalizeSet: function(context, items, min, type, period) {
     const copy = items.slice();
+    if (period && period.status !== 'Active')
+      return copy
     // array of em,pty indexes ex: [1, 4, 5]
     const empty = copy.map((i, idx) => idx).filter(i => copy[i].content === '');
     if (empty.length === 0) {

@@ -1,8 +1,12 @@
 import React from 'react';
+import LoginRequired from '../widgets/LoginRequired';
 
-const ReportsPage = ({context, ...props}) => {
+const ReportsPage = ({ctx, setCtx, ...props}) => {
   return (
-    <h1 style={{textAlign: 'center'}}>Reports</h1>
+    <>
+      <LoginRequired ctx={ctx} setCtx={setCtx} />
+      <h1 style={{textAlign: 'center'}}>Reports</h1>
+    </>
   );
 };
 

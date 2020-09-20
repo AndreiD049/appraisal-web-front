@@ -1,8 +1,12 @@
 import React from 'react';
+import LoginRequired from '../widgets/LoginRequired';
 
-const SettingsPage = ({context, ...props}) => {
+const SettingsPage = ({ctx, setCtx, ...props}) => {
   return (
-    <h1 style={{textAlign: 'center'}}>Settings</h1>
+    <>
+      <LoginRequired ctx={ctx} setCtx={setCtx} />
+      <h1 style={{textAlign: 'center'}}>Settings</h1>
+    </>
   );
 };
 
