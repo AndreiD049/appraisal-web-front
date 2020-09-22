@@ -1,4 +1,6 @@
 export const Context = {
+  user: null,
+
   setUser: function(user) {
     this.user = user;
   },
@@ -21,7 +23,7 @@ export const Context = {
   },
 
   isAuth: function() {
-    return Boolean(this.user);
+    return this.user && this.user.id;
   }
 }
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
@@ -15,6 +15,7 @@ import ArrowDropDownCircleIcon from '@material-ui/icons/ArrowDropDownCircle';
 import { Toolbar, ListItemIcon, Button, Typography, Link as MuiLink, Menu, MenuItem } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom'
+import GlobalContext from '../services/GlobalContext';
 
 /*
  * TODO: extract all styles in a makeStyle
@@ -29,8 +30,9 @@ import { Link } from 'react-router-dom'
      },
  }))
 
-export default function Navigation({ctx})
+export default function Navigation()
 {
+    const global = useContext(GlobalContext);
     const [navPaneOpened, setOpened] = useState(false);
     const [userMenuAnchorEl, setUserMenuAnchorEl] = useState(null);
     const classes = useStyles();
@@ -62,9 +64,9 @@ export default function Navigation({ctx})
                         Admin TC
                     </Typography>
                     {
-                        ctx.isAuth() ?  
+                        global.context.isAuth() ?  
                             <Toolbar>
-                                <Typography variant='body1'>Hey, {ctx.user.id}</Typography>
+                                <Typography variant='body1'>Hey, {global.context.user.id}</Typography>
                                 <IconButton aria-label='menu' color='inherit' onClick={handleClickUserMenu}>
                                     <ArrowDropDownCircleIcon />
                                 </IconButton>
@@ -90,9 +92,13 @@ export default function Navigation({ctx})
                                 </Menu>
                             </Toolbar> :
                             <div>
+                                { global.context.user !== null ?
                                 <MuiLink href="/api/login" color='inherit'>
                                     <Button edge='end' color='inherit'>Login</Button>
                                 </MuiLink>
+                                :
+                                null
+                                }
                             </div>
                     }
                 </Toolbar>

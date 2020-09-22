@@ -13,39 +13,40 @@ import HomePage from './pages/HomePage';
 import SettingsPage from './pages/SettingsPage';
 import ReportsPage from './pages/ReportsPage';
 import LoginPage from './pages/LoginPage';
+import GlobalContext from './services/GlobalContext';
 
 function App() {
 	const [context, setContext] = useState(Context);
 
 	return (
-		<>
-			<CssBaseline/>
-			<Router>
-				<Navigation ctx={context}/>
+			<GlobalContext.Provider value={{context: context, setContext: setContext}}>
+				<CssBaseline/>
+				<Router>
+					<Navigation/>
 
-				{/* The page switch */}
-				<Switch>
-					<Route path='/appraisals/:id'>
-						<AppraisalDetailsPage ctx={context} setCtx={setContext}/>
-					</Route>
-					<Route path='/appraisals'>
-						<AppraisalsPage ctx={context} setCtx={setContext}/>
-					</Route>
-					<Route path='/reports'>
-						<ReportsPage ctx={context} setCtx={setContext}/>
-					</Route>
-					<Route path='/settings'>
-						<SettingsPage ctx={context} setCtx={setContext}/>
-					</Route>
-					<Route path='/login'>
-						<LoginPage ctx={context} setCtx={setContext}/>
-					</Route>
-					<Route path='/'>
-						<HomePage ctx={context} setCtx={setContext}/>
-					</Route>
-				</Switch>
-			</Router>
-		</>
+					{/* The page switch */}
+					<Switch>
+						<Route path='/appraisals/:id'>
+							<AppraisalDetailsPage ctx={context} setCtx={setContext}/>
+						</Route>
+						<Route path='/appraisals'>
+							<AppraisalsPage ctx={context} setCtx={setContext}/>
+						</Route>
+						<Route path='/reports'>
+							<ReportsPage ctx={context} setCtx={setContext}/>
+						</Route>
+						<Route path='/settings'>
+							<SettingsPage ctx={context} setCtx={setContext}/>
+						</Route>
+						<Route path='/login'>
+							<LoginPage ctx={context} setCtx={setContext}/>
+						</Route>
+						<Route path='/'>
+							<HomePage ctx={context} setCtx={setContext}/>
+						</Route>
+					</Switch>
+				</Router>
+			</GlobalContext.Provider>
   );
 }
 

@@ -1,29 +1,31 @@
-import React from 'react';
-import { useEffect } from 'react';
-import { useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { Redirect } from 'react-router-dom'
 import LoginService from '../services/LoginService';
+import GlobalContext from '../services/GlobalContext';
 
-const LoginRequired = ({ctx, setCtx}) => {
+const LoginRequired = () => {
   const [redirect, setRedirect] = useState(false);
+  const global = useContext(GlobalContext);
 
   useEffect(() => {
     async function getUser() {
-      const user = await LoginService.getCurrentUser(ctx);
+      const user = await LoginService.getCurrentUser(global.context);
+      console.log(user);
 
+      let ctxCopy = {...global.context};
+      // There is no user anymore, probably logged out, so we need to remove it from the state
       if (user === null) {
         setRedirect(true);
-        if (ctx.user) {
-          let ctxCopy = {...ctx};
-          delete ctxCopy.user;
-          setCtx(ctxCopy);
+        if (global.context.user) {
+          ctxCopy.user = {};
+          global.setContext(ctxCopy);
         }
-      } else if (!ctx.user || ctx.user.oid !== user.oid) {
-        setCtx({...ctx, user: user});
+      } else if (!global.context.user || global.context.user.oid !== user.oid) {
+        global.setContext({...global.context, user: user});
       }
     }
     getUser();
-  }, [ctx, setCtx])
+  }, [global])
 
   return (
     <>
