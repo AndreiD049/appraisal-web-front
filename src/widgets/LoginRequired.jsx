@@ -10,7 +10,6 @@ const LoginRequired = () => {
   useEffect(() => {
     async function getUser() {
       const user = await LoginService.getCurrentUser(global.context);
-      console.log(user);
 
       let ctxCopy = {...global.context};
       // There is no user anymore, probably logged out, so we need to remove it from the state
