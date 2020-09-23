@@ -16,7 +16,6 @@ import LoginPage from './pages/LoginPage';
 import GlobalContext from './services/GlobalContext';
 
 function App() {
-	console.log("test");
 	const [context, setContext] = useState(Context);
 
 	return (
