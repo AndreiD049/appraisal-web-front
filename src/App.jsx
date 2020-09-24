@@ -1,3 +1,4 @@
+import welcome from './utils/welcome';
 import React, { useState } from 'react';
 import Navigation from './widgets/Navigation';
 import CssBaseline from '@material-ui/core/CssBaseline'
