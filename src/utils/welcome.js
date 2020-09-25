@@ -1,4 +1,4 @@
-const welcome = `
+const welcome = () => console.log(`
            __.                                              
         .-".'                      .--.            _..._    
       .' .'                     .'    \\       .-""  __ ""-. 
@@ -33,8 +33,7 @@ const welcome = `
                       ;     , \`.                
                       :   \\  ; :                
                       '..__L.:-'
-`;
+`);
 
-console.log(welcome);
 
 export default welcome;

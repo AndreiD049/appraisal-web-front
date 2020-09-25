@@ -15,6 +15,7 @@ import SettingsPage from './pages/SettingsPage';
 import ReportsPage from './pages/ReportsPage';
 import LoginPage from './pages/LoginPage';
 import GlobalContext from './services/GlobalContext';
+welcome();
 
 function App() {
 	const [context, setContext] = useState(Context);
