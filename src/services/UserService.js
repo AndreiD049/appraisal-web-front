@@ -2,8 +2,9 @@ import axios from 'axios';
 
 const UserService = {
   getUserOrganizationsPath: `/api/users/organizations`,
+  getUserTeamMembersPath: `/api/users/team-members`,
 
-  getUserOrganizations: async function(context) {
+  getUserOrganizations: async function() {
     try {
       const response = await axios.get(this.getUserOrganizationsPath);
       if (response.status === 200) {
@@ -12,7 +13,16 @@ const UserService = {
         throw new Error(`Server response: ${response.status} - ${response.statusText}`);
       }
     } catch (err) {
-      context.showAlert('error', `UserService.getUserOrganizations: ${err.message}`);
+      throw err;
+    }
+  },
+
+  getUserTeamMembers: async function() {
+    try {
+      const response = await axios.get(this.getUserTeamMembersPath);
+      return response.data;
+    } catch (err) {
+        throw err;
     }
   }
 }

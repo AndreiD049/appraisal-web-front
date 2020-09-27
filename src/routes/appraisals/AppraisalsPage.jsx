@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/core/styles';
 import {Grid, Card, CardHeader, IconButton, CardContent, Typography, CardActions, Button } from '@material-ui/core';
-import { Link, } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import AppraisalService from '../services/AppraisalService';
-import ApButton from '../components/ApButton';
-import NewPeriodDialog from '../widgets/NewPeriodDialog';
-import LoginRequired from '../widgets/LoginRequired';
+import AppraisalService from '../../services/AppraisalService';
+import GlobalContext from '../../services/GlobalContext';
+import NewPeriodDialog from '../../components/new-period-dialog';
+import LoginRequired from '../../widgets/LoginRequired';
 
 const useStyles = makeStyles((theme) => ({
     header: {
@@ -41,21 +41,22 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const AppraisalsPage = ({ctx, setCtx, ...props}) => {
+const AppraisalsPage = (props) => {
     const [items, setItems] = useState([]);
     const [dialogOpen, setDialogOpen] = useState(false);
+    const global = useContext(GlobalContext);
     const classes = useStyles();
 
     useEffect(() => {
         async function loadData() {
-            setItems(await AppraisalService.getPeriods(ctx));
+            setItems(await AppraisalService.getPeriods());
         }
         loadData();
-    }, [ctx]);
+    }, []);
 
     return (
         <Container maxWidth='md'>
-            <LoginRequired ctx={ctx} setCtx={setCtx} />
+            <LoginRequired />
             <Grid container>
                 <Grid item xs={12}>
                     <h1 className={classes.header}>Appraisals</h1>
@@ -131,12 +132,12 @@ const AppraisalsPage = ({ctx, setCtx, ...props}) => {
                         })}
                 </Grid>
                 <Grid item xs={12} className={classes.centerButton}>
-                    <ApButton ctx={ctx} onClick={() => setDialogOpen(true)} variant='contained' color='primary'>
+                    <Button onClick={() => setDialogOpen(true)} variant='contained' color='primary'>
                         New Period
-                    </ApButton>
+                    </Button>
                 </Grid>
                 {/* Dialogs */}
-                <NewPeriodDialog open={dialogOpen} ctx={ctx} setCtx={setCtx} handleClose={() => setDialogOpen(false)} />
+                <NewPeriodDialog open={dialogOpen} context={global.context} handleClose={() => setDialogOpen(false)} />
             </Grid>
         </Container>
     );

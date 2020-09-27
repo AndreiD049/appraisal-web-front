@@ -1,20 +1,21 @@
-import welcome from './utils/welcome';
+import welcome from '../../utils/welcome';
 import React, { useState } from 'react';
-import Navigation from './widgets/Navigation';
+import Navigation from '../../widgets/Navigation';
 import CssBaseline from '@material-ui/core/CssBaseline'
 import { 
 	BrowserRouter as Router,
 	Route,
 	Switch
 } from 'react-router-dom';
-import AppraisalsPage from './pages/AppraisalsPage';
-import AppraisalDetailsPage from './pages/AppraisalDetailsPage';
-import Context from './models/AppContext';
-import HomePage from './pages/HomePage';
-import SettingsPage from './pages/SettingsPage';
-import ReportsPage from './pages/ReportsPage';
-import LoginPage from './pages/LoginPage';
-import GlobalContext from './services/GlobalContext';
+import AppraisalsPage from '../../routes/appraisals';
+import AppraisalDetailsPage from '../../routes/appraisal-details/AppraisalDetailsPage';
+import Context from '../../models/AppContext';
+import HomePage from '../../routes/home';
+import SettingsPage from '../../routes/settings';
+import ReportsPage from '../../routes/reports';
+import LoginPage from '../../routes/login';
+import GlobalContext from '../../services/GlobalContext';
+import SandboxPage from '../../routes/sandbox';
 welcome();
 
 function App() {
@@ -42,6 +43,9 @@ function App() {
 						</Route>
 						<Route path='/login'>
 							<LoginPage ctx={context} setCtx={setContext}/>
+						</Route>
+						<Route path='/sandbox'>
+							<SandboxPage />
 						</Route>
 						<Route path='/'>
 							<HomePage ctx={context} setCtx={setContext}/>

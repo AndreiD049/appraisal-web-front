@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const LoginService = {
   currentUserPath: `/api/me`,
-  getCurrentUser: async function(context) {
+  getCurrentUser: async function() {
     try {
       const response = await axios.get(this.currentUserPath);
       if (response.status === 200) {
@@ -11,7 +11,6 @@ const LoginService = {
         return null;
       }
     } catch (err) {
-      context.showAlert('error', 'Error fetching user info');
       return null;
     }
   }

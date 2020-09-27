@@ -1,6 +1,6 @@
 import React from 'react';
 import {makeStyles, Box, List, ListItem } from '@material-ui/core';
-import AppraisalInput from '../components/AppraisalInput';
+import AppraisalInput from '../components/appraisal-field-set/components/appraisal-input/AppraisalInput';
 
 const useStyles = makeStyles({
     header: {

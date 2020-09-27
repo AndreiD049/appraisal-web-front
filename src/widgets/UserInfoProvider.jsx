@@ -10,7 +10,7 @@ const UserInfoProvider = ({ctx, setCtx}) => {
   useEffect(() => {
     async function getUser() {
       if (!global.context.user && !verified) {
-        let user = await LoginService.getCurrentUser(global.context)
+        let user = await LoginService.getCurrentUser()
         global.setContext({...global.context, user: user !== null ? user : {}});
         setVerified(true);
       }
