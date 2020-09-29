@@ -10,7 +10,7 @@ const AppraisalDetailsInfo = ({ periodId, setPeriodDetails }) => {
         }
         run();
     }, [periodId, setPeriodDetails]);
-    console.log("fetch");
+
     return null;
 };
 

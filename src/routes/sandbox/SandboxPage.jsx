@@ -1,5 +1,5 @@
 import React from 'react';
-import TeamMatesAutocomplete from '../../widgets/TeamMatesAutocomplete';
+import TeamMatesAutocomplete from '../../components/shared/team-mates-autocomplete';
 
 const SandboxPage = ({ onUserSelect }) => {
     return (

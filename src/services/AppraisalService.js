@@ -5,10 +5,14 @@ const AppraisalService = {
   getPeriodsPath: `/api/periods`,
   addPeriodsPath: `/api/periods`,
   getItemsPath: (id) => `/api/periods/${id}`,
+  getUserItemsPath: (id, userId) => `/api/periods/${id}/users/${userId}`,
   getItemPath: (periodId, itemId) => `/api/periods/${periodId}/items/${itemId}`,
   addItemPath: (periodId) => `/api/periods/${periodId}/items`,
+  addUserItemPath: (periodId, userId) => `/api/periods/${periodId}/users/${userId}/items`,
   updateItemPath: (periodId, itemId) => `/api/periods/${periodId}/items/${itemId}`,
+  updateUserItemPath: (periodId, userId, itemId) => `/api/periods/${periodId}/users/${userId}/items/${itemId}`,
   deleteItemPath: (periodId, itemId) => `/api/periods/${periodId}/items/${itemId}`,
+  deleteUserItemPath: (periodId, userId, itemId) => `/api/periods/${periodId}/users/${userId}/items/${itemId}`,
   finishPeriodPath: (periodId) => `/api/periods/${periodId}/finish`,
 
   getPeriods: async function() {
@@ -37,6 +41,19 @@ const AppraisalService = {
     }
   }, 
 
+  getUserItems: async function(periodId, userId) {
+    try {
+      const response = await axios.get(this.getUserItemsPath(periodId, userId));
+      if (response.status === 200) {
+        return response.data;
+      } else {
+        throw new Error(`Server response: ${response.status} - ${response.statusText}`);
+      }
+    } catch (err) {
+      throw err;
+    }
+  },
+
   getItem: async function(periodId, itemId) {
     try {
       const response = await axios.get(this.getItemPath(periodId, itemId));
@@ -63,7 +80,21 @@ const AppraisalService = {
       throw err;
     }
   },
-  
+
+  addUserItem: async function(periodId, userId, item) {
+    try {
+      validate(item);
+      const response = await axios.post(this.addUserItemPath(periodId, userId), {...item});
+      if (response.status === 200) {
+        return response.data;
+      } else {
+        throw new Error(`Server response: ${response.status} - ${response.statusText}`);
+      }
+    } catch (err) {
+      throw err;
+    }
+  },
+
   updateItem: async function(periodId, item) {
     try {
       validate(item);
@@ -79,9 +110,37 @@ const AppraisalService = {
     }
   },
 
+  updateUserItem: async function(periodId, userId, item) {
+    try {
+      validate(item);
+      validateId(item);
+      const response = await axios.put(this.updateUserItemPath(periodId, userId, item.id), {...item});
+      if (response.status === 200) {
+        return response.data;
+      } else {
+        throw new Error(`Server response: ${response.status} - ${response.statusText}`);
+      }
+    } catch (err) {
+      throw err;
+    }
+  },
+
   deleteItem: async function(periodId, itemId) {
     try {
       const response = await axios.delete(this.deleteItemPath(periodId, itemId));
+      if (response.status === 204) {
+        return response.data;
+      } else {
+        throw new Error(`Server response: ${response.status} - ${response.statusText}`);
+      }
+    } catch (err) {
+      throw err;
+    }
+  },
+
+  deleteUserItem: async function(periodId, userId, itemId) {
+    try {
+      const response = await axios.delete(this.deleteUserItemPath(periodId, userId, itemId));
       if (response.status === 204) {
         return response.data;
       } else {
@@ -152,24 +211,32 @@ const AppraisalService = {
     return copy;
   },
 
-  // Get the element index
-  getIndex: function(el) {
-    const attr = el.getAttribute('data-index');
-    if (attr === '' || isNaN(Number(attr)))
-      throw new Error(`Attribute is not valid: ${attr}`);
-    else 
-      return Number(attr);
-  },
-
   addItemToSet: async function(periodId, item) {
     try {
       const result = await this.addItem(periodId, item);
       return {
         value: result,
+        error: null
       };
     } catch (err) {
       return {
-        error: err,
+        value: null,
+        error: err
+      };
+    }
+  },
+
+  addUserItemToSet: async function(periodId, userId, item) {
+    try {
+      const result = await this.addUserItem(periodId, userId, item);
+      return {
+        value: result,
+        error: null
+      };
+    } catch (err) {
+      return {
+        value: null,
+        error: err
       };
     }
   },
@@ -179,9 +246,26 @@ const AppraisalService = {
       const result = await this.deleteItem(periodId, item.id);
       return {
         value: result,
+        error: null
       };
     } catch (err) {
       return {
+        value: await this.getItem(periodId, item.id),
+        error: err,
+      };
+    }
+  },
+
+  deleteUserItemFromSet: async function(periodId, userId, item) {
+    try {
+      const result = await this.deleteUserItem(periodId, userId, item.id);
+      return {
+        value: result,
+        error: null
+      };
+    } catch (err) {
+      return {
+        value: await this.getItem(periodId, item.id),
         error: err,
       };
     }
@@ -192,13 +276,30 @@ const AppraisalService = {
       const result = await this.updateItem(periodId, item);
       return {
         value: result,
+        error: null
       };
     } catch (err) {
       return {
-        error: err,
+        value: await this.getItem(periodId, item.id),
+        error: err
       };
     }
-  }
+  },
+
+  updateUserItemInSet: async function(periodId, userId, item) {
+    try {
+      const result = await this.updateUserItem(periodId, userId, item);
+      return {
+        value: result,
+        error: null
+      };
+    } catch (err) {
+      return {
+        value: await this.getItem(periodId, item.id),
+        error: err
+      };
+    }
+  },
 }
 
 export default AppraisalService;

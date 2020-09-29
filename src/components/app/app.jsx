@@ -8,7 +8,6 @@ import {
 	Switch
 } from 'react-router-dom';
 import AppraisalsPage from '../../routes/appraisals';
-import AppraisalDetailsPage from '../../routes/appraisal-details/AppraisalDetailsPage';
 import Context from '../../models/AppContext';
 import HomePage from '../../routes/home';
 import SettingsPage from '../../routes/settings';
@@ -29,9 +28,6 @@ function App() {
 
 					{/* The page switch */}
 					<Switch>
-						<Route path='/appraisals/:id'>
-							<AppraisalDetailsPage ctx={context} setCtx={setContext}/>
-						</Route>
 						<Route path='/appraisals'>
 							<AppraisalsPage ctx={context} setCtx={setContext}/>
 						</Route>
