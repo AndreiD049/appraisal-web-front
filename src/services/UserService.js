@@ -1,9 +1,23 @@
 import axios from 'axios';
 
 const UserService = {
+  getUsersPath: `/api/users`,
   getUserPath: (id) => `/api/users/user/${id}`,
   getUserOrganizationsPath: `/api/users/organizations`,
   getUserTeamMembersPath: `/api/users/team-members`,
+
+  getUsers: async function() {
+    try {
+      const response = await axios.get(this.getUsersPath);
+      if (response.status === 200) {
+        return response.data;
+      } else {
+        throw new Error(`Server response: ${response.status} - ${response.statusText}`);
+      }
+    } catch(err) {
+      throw err;
+    }
+  },
 
   getUser: async function(id) {
     try {

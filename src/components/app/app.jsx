@@ -1,6 +1,6 @@
 import welcome from '../../utils/welcome';
 import React, { useState } from 'react';
-import Navigation from '../../widgets/Navigation';
+import Navigation from '../navigation/Navigation';
 import CssBaseline from '@material-ui/core/CssBaseline'
 import { 
 	BrowserRouter as Router,
@@ -24,7 +24,7 @@ function App() {
 			<GlobalContext.Provider value={{context: context, setContext: setContext}}>
 				<CssBaseline/>
 				<Router>
-					<Navigation/>
+					<Navigation annexElements={context.annexElements}/>
 
 					{/* The page switch */}
 					<Switch>
