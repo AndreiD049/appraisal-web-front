@@ -142,7 +142,7 @@ const AppraisalsPage = (props) => {
                 </Button>
               </Grid>
                 {/* Dialogs */}
-              <NewPeriodDialog open={dialogOpen} context={global.context} handleClose={() => setDialogOpen(false)} />
+              <NewPeriodDialog open={dialogOpen} context={global.context} handleClose={() => setDialogOpen(false)} setItems={setItems} />
             </Grid>
           </Container>
         </Route>

@@ -14,41 +14,57 @@ import SettingsPage from '../../routes/settings';
 import ReportsPage from '../../routes/reports';
 import LoginPage from '../../routes/login';
 import GlobalContext from '../../services/GlobalContext';
+import NotificationManager from '../../components/shared/notification-manager';
+import NotificationService, { NotificationContextObject } from '../../services/NotificationService';
+import PopUp from '../../components/shared/pop-up';
 import SandboxPage from '../../routes/sandbox';
 welcome();
 
 function App() {
 	const [context, setContext] = useState(Context);
+	const [notifications, setNotifications] = useState([]);
+	const notificationObject = NotificationContextObject(notifications, setNotifications);
+	// set the notification object so we can notify the user
+	NotificationService.notificationObject = notificationObject;
 
 	return (
-			<GlobalContext.Provider value={{context: context, setContext: setContext}}>
-				<CssBaseline/>
-				<Router>
-					<Navigation annexElements={context.annexElements}/>
+		<GlobalContext.Provider value={{context: context, setContext: setContext}}>
+			<NotificationManager
+				notifications={notifications}
+				notificationRender={(notification, props) => (
+					<PopUp {...props} type={notification.type} />
+				)}
+				onAfterClose={(entry) => {
+					setNotifications(prev => prev.filter(n => n !== entry));
+				}}
+			/>
+			<CssBaseline/>
+			<Router>
+				<Navigation annexElements={context.annexElements}/>
 
-					{/* The page switch */}
-					<Switch>
-						<Route path='/appraisals'>
-							<AppraisalsPage ctx={context} setCtx={setContext}/>
-						</Route>
-						<Route path='/reports'>
-							<ReportsPage ctx={context} setCtx={setContext}/>
-						</Route>
-						<Route path='/settings'>
-							<SettingsPage ctx={context} setCtx={setContext}/>
-						</Route>
-						<Route path='/login'>
-							<LoginPage ctx={context} setCtx={setContext}/>
-						</Route>
-						<Route path='/sandbox'>
-							<SandboxPage />
-						</Route>
-						<Route path='/'>
-							<HomePage ctx={context} setCtx={setContext}/>
-						</Route>
-					</Switch>
-				</Router>
-			</GlobalContext.Provider>
+				{/* The page switch */}
+				<Switch>
+					<Route path='/appraisals'>
+						<AppraisalsPage ctx={context} setCtx={setContext}/>
+					</Route>
+					<Route path='/reports'>
+						<ReportsPage ctx={context} setCtx={setContext}/>
+					</Route>
+					<Route path='/settings'>
+						<SettingsPage ctx={context} setCtx={setContext}/>
+					</Route>
+					<Route path='/login'>
+						<LoginPage ctx={context} setCtx={setContext}/>
+					</Route>
+					<Route path='/sandbox'>
+						<SandboxPage />
+					</Route>
+					<Route path='/'>
+						<HomePage ctx={context} setCtx={setContext}/>
+					</Route>
+				</Switch>
+			</Router>
+		</GlobalContext.Provider>
   );
 }
 

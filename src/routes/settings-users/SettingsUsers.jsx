@@ -1,16 +1,16 @@
-import { Grid } from '@material-ui/core';
+import { Grid, TextField } from '@material-ui/core';
 import React, { useEffect, useState, useContext } from 'react';
 import MaterialTable from 'material-table';
-import { tableIcons } from '../../components/shared/material-table-utils';
+import { tableIcons } from '../../utils/material-table-utils';
 import UserService from '../../services/UserService';
-import AutocompleteChip from '../../components/shared/autocomplete-chip';
+import TeamService from '../../services/TeamService';
+import { Autocomplete } from '@material-ui/lab';
 import GlobalContext from '../../services/GlobalContext';
 
 const SettingsUsers = (props) => {
   const [data, setData] = useState([]);
+  const [teams, setTeams] = useState([]);
   const global = useContext(GlobalContext);
-  const optionsTeams = global.context.user && global.context.user.teams;
-  const optionsOrganizations = global.context.user && global.context.user.organizations.map(o => o.name);
 
   const columns = [
     {
@@ -21,13 +21,28 @@ const SettingsUsers = (props) => {
     {
       title: 'teams',
       field: 'teams',
-      render: rowData => rowData.teams.join(', '),
+      render: rowData => rowData.teams.map(t => t.name).join(', '),
       editComponent: props => (
-        <AutocompleteChip
+        <Autocomplete
           multiple
-          options={optionsTeams}
-          data={props}
-          defaultValue={props.value}
+          id="tags-standard"
+          options={teams}
+          getOptionLabel={(option) => option.name}
+          getOptionSelected={(option, value) => {
+            return option.name === value.name;
+          }}
+          value={props.rowData.teams}
+          onChange={(e, newVal) => {
+            props.onChange(newVal)
+          }}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              variant="standard"
+              label="Multiple values"
+              placeholder="Favorites"
+            />
+          )}
         />
       )
     },
@@ -39,6 +54,29 @@ const SettingsUsers = (props) => {
         const fl = filterValue.toLowerCase();
         return rowData.organizations.filter(o => o.name.toLowerCase().indexOf(fl) !== -1).length > 0
       }, 
+      editComponent: props => (
+        <Autocomplete
+          multiple
+          id="tags-standard-organizations"
+          options={global.context.user.organizations}
+          getOptionLabel={(option) => option.name}
+          getOptionSelected={(option, value) => {
+            return option.name === value.name;
+          }}
+          value={props.rowData.organizations}
+          onChange={(e, newVal) => {
+            props.onChange(newVal)
+          }}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              variant="standard"
+              label="Multiple values"
+              placeholder="Favorites"
+            />
+          )}
+        />
+      )
     }
   ];
 
@@ -48,7 +86,6 @@ const SettingsUsers = (props) => {
         const dataUpdate = [...data];
         const index = oldData.tableData.id;
         dataUpdate[index] = newData;
-        console.log(newData);
         setData(oldData => dataUpdate);
         // TODO: Add database sync
         resolve();
@@ -74,7 +111,9 @@ const SettingsUsers = (props) => {
   useEffect(() => {
     async function run() {
       const users = await UserService.getUsers();
+      const teams = await TeamService.getTeams();
       setData(oldData => users);
+      setTeams(prev => teams);
     }
     run();
   }, [])

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import NotificationService from './NotificationService';
 
 const LoginService = {
   currentUserPath: `/api/me`,
@@ -11,6 +12,11 @@ const LoginService = {
         return null;
       }
     } catch (err) {
+      NotificationService.notify({
+        type: 'error',
+        header: 'Error',
+        content: err.message,
+      });
       return null;
     }
   }

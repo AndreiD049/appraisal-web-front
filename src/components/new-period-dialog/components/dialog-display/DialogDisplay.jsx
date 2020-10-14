@@ -37,7 +37,8 @@ const DialogDisplay = ({
 	}
 
 	const handleSubmitWrapper = async (e) => {
-		e.persist();
+    e.persist();
+    e.preventDefault();
 		await handleSubmit(name, status, org);
 	}
 

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import NotificationService from './NotificationService';
 
 const UserService = {
   getUsersPath: `/api/users`,
@@ -15,6 +16,11 @@ const UserService = {
         throw new Error(`Server response: ${response.status} - ${response.statusText}`);
       }
     } catch(err) {
+      NotificationService.notify({
+        type: 'error',
+        header: 'Error',
+        content: err.message,
+      });
       throw err;
     }
   },
@@ -28,6 +34,11 @@ const UserService = {
         throw new Error(`Server response: ${response.status} - ${response.statusText}`);
       }
     } catch (err) {
+      NotificationService.notify({
+        type: 'error',
+        header: 'Error',
+        content: err.message,
+      });
       throw err;
     }
   },
@@ -41,6 +52,11 @@ const UserService = {
         throw new Error(`Server response: ${response.status} - ${response.statusText}`);
       }
     } catch (err) {
+      NotificationService.notify({
+        type: 'error',
+        header: 'Error',
+        content: err.message,
+      });
       throw err;
     }
   },
@@ -50,7 +66,12 @@ const UserService = {
       const response = await axios.get(this.getUserTeamMembersPath);
       return response.data;
     } catch (err) {
-        throw err;
+      NotificationService.notify({
+        type: 'error',
+        header: 'Error',
+        content: err.message,
+      });
+      throw err;
     }
   }, 
   

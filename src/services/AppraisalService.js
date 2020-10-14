@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { Item, validate, validateId } from '../models/AppraisalItemModel';
+import NotificationService from './NotificationService';
 
 const AppraisalService = {
   getPeriodsPath: `/api/periods`,
@@ -24,6 +25,11 @@ const AppraisalService = {
         throw new Error(`Server response: ${response.status} - ${response.statusText}`);
       }
     } catch (err) {
+      NotificationService.notify({
+        type: 'error',
+        header: 'Error',
+        content: err.message,
+      });
       throw err;
     }
   },
@@ -37,6 +43,11 @@ const AppraisalService = {
         throw new Error(`Server response: ${response.status} - ${response.statusText}`);
       }
     } catch (err) {
+      NotificationService.notify({
+        type: 'error',
+        header: 'Error',
+        content: err.message,
+      });
       throw err;
     }
   }, 
@@ -50,6 +61,11 @@ const AppraisalService = {
         throw new Error(`Server response: ${response.status} - ${response.statusText}`);
       }
     } catch (err) {
+      NotificationService.notify({
+        type: 'error',
+        header: 'Error',
+        content: err.message,
+      });
       throw err;
     }
   },
@@ -63,6 +79,11 @@ const AppraisalService = {
         throw new Error(`Server response: ${response.status} - ${response.statusText}`);
       }
     } catch (err) {
+      NotificationService.notify({
+        type: 'error',
+        header: 'Error',
+        content: err.message,
+      });
       throw err;
     }
   }, 
@@ -77,6 +98,11 @@ const AppraisalService = {
         throw new Error(`Server response: ${response.status} - ${response.statusText}`);
       }
     } catch (err) {
+      NotificationService.notify({
+        type: 'error',
+        header: 'Error',
+        content: err.message,
+      });
       throw err;
     }
   },
@@ -91,6 +117,11 @@ const AppraisalService = {
         throw new Error(`Server response: ${response.status} - ${response.statusText}`);
       }
     } catch (err) {
+      NotificationService.notify({
+        type: 'error',
+        header: 'Error',
+        content: err.message,
+      });
       throw err;
     }
   },
@@ -106,6 +137,11 @@ const AppraisalService = {
         throw new Error(`Server response: ${response.status} - ${response.statusText}`);
       }
     } catch (err) {
+      NotificationService.notify({
+        type: 'error',
+        header: 'Error',
+        content: err.message,
+      });
       throw err;
     }
   },
@@ -121,6 +157,11 @@ const AppraisalService = {
         throw new Error(`Server response: ${response.status} - ${response.statusText}`);
       }
     } catch (err) {
+      NotificationService.notify({
+        type: 'error',
+        header: 'Error',
+        content: err.message,
+      });
       throw err;
     }
   },
@@ -134,6 +175,11 @@ const AppraisalService = {
         throw new Error(`Server response: ${response.status} - ${response.statusText}`);
       }
     } catch (err) {
+      NotificationService.notify({
+        type: 'error',
+        header: 'Error',
+        content: err.message,
+      });
       throw err;
     }
   },
@@ -147,6 +193,11 @@ const AppraisalService = {
         throw new Error(`Server response: ${response.status} - ${response.statusText}`);
       }
     } catch (err) {
+      NotificationService.notify({
+        type: 'error',
+        header: 'Error',
+        content: err.message,
+      });
       throw err;
     }
   },
@@ -160,6 +211,11 @@ const AppraisalService = {
         throw new Error(`Server response: ${response.status} - ${response.statusText}`);
       }
     } catch (err) {
+      NotificationService.notify({
+        type: 'error',
+        header: 'Error',
+        content: err.message,
+      });
       throw err;
     }
   },
@@ -173,6 +229,11 @@ const AppraisalService = {
         throw new Error(`Server response: ${response.status} - ${response.statusText}`);
       }
     } catch (err) {
+      NotificationService.notify({
+        type: 'error',
+        header: 'Error',
+        content: err.message,
+      });
       throw err;
     }
   },
@@ -219,6 +280,11 @@ const AppraisalService = {
         error: null
       };
     } catch (err) {
+      NotificationService.notify({
+        type: 'error',
+        header: 'Error',
+        content: err.message,
+      });
       return {
         value: null,
         error: err
@@ -234,6 +300,11 @@ const AppraisalService = {
         error: null
       };
     } catch (err) {
+      NotificationService.notify({
+        type: 'error',
+        header: 'Error',
+        content: err.message,
+      });
       return {
         value: null,
         error: err
@@ -249,6 +320,11 @@ const AppraisalService = {
         error: null
       };
     } catch (err) {
+      NotificationService.notify({
+        type: 'error',
+        header: 'Error',
+        content: err.message,
+      });
       return {
         value: await this.getItem(periodId, item.id),
         error: err,
@@ -264,6 +340,11 @@ const AppraisalService = {
         error: null
       };
     } catch (err) {
+      NotificationService.notify({
+        type: 'error',
+        header: 'Error',
+        content: err.message,
+      });
       return {
         value: await this.getItem(periodId, item.id),
         error: err,
@@ -279,6 +360,11 @@ const AppraisalService = {
         error: null
       };
     } catch (err) {
+      NotificationService.notify({
+        type: 'error',
+        header: 'Error',
+        content: err.message,
+      });
       return {
         value: await this.getItem(periodId, item.id),
         error: err
@@ -294,6 +380,11 @@ const AppraisalService = {
         error: null
       };
     } catch (err) {
+      NotificationService.notify({
+        type: 'error',
+        header: 'Error',
+        content: err.message,
+      });
       return {
         value: await this.getItem(periodId, item.id),
         error: err
