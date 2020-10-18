@@ -94,7 +94,7 @@ const DialogDisplay = ({
             </FormGroup>
           </form>
         </DialogContent>
-      </Dialog> : 
+      </Dialog>
     </>
   );
 

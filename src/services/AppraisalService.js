@@ -28,7 +28,7 @@ const AppraisalService = {
       NotificationService.notify({
         type: 'error',
         header: 'Error',
-        content: err.message,
+        content: (err.response.data && err.response.data.error) || err.message,
       });
       throw err;
     }
@@ -46,7 +46,7 @@ const AppraisalService = {
       NotificationService.notify({
         type: 'error',
         header: 'Error',
-        content: err.message,
+        content: (err.response.data && err.response.data.error) || err.message,
       });
       throw err;
     }
@@ -64,7 +64,7 @@ const AppraisalService = {
       NotificationService.notify({
         type: 'error',
         header: 'Error',
-        content: err.message,
+        content: (err.response.data && err.response.data.error) || err.message,
       });
       throw err;
     }
@@ -82,7 +82,7 @@ const AppraisalService = {
       NotificationService.notify({
         type: 'error',
         header: 'Error',
-        content: err.message,
+        content: (err.response.data && err.response.data.error) || err.message,
       });
       throw err;
     }
@@ -101,7 +101,7 @@ const AppraisalService = {
       NotificationService.notify({
         type: 'error',
         header: 'Error',
-        content: err.message,
+        content: (err.response.data && err.response.data.error) || err.message,
       });
       throw err;
     }
@@ -120,7 +120,7 @@ const AppraisalService = {
       NotificationService.notify({
         type: 'error',
         header: 'Error',
-        content: err.message,
+        content: (err.response.data && err.response.data.error) || err.message,
       });
       throw err;
     }
@@ -140,7 +140,7 @@ const AppraisalService = {
       NotificationService.notify({
         type: 'error',
         header: 'Error',
-        content: err.message,
+        content: (err.response.data && err.response.data.error) || err.message,
       });
       throw err;
     }
@@ -160,7 +160,7 @@ const AppraisalService = {
       NotificationService.notify({
         type: 'error',
         header: 'Error',
-        content: err.message,
+        content: (err.response.data && err.response.data.error) || err.message,
       });
       throw err;
     }
@@ -178,7 +178,7 @@ const AppraisalService = {
       NotificationService.notify({
         type: 'error',
         header: 'Error',
-        content: err.message,
+        content: (err.response.data && err.response.data.error) || err.message,
       });
       throw err;
     }
@@ -196,7 +196,7 @@ const AppraisalService = {
       NotificationService.notify({
         type: 'error',
         header: 'Error',
-        content: err.message,
+        content: (err.response.data && err.response.data.error) || err.message,
       });
       throw err;
     }
@@ -214,7 +214,7 @@ const AppraisalService = {
       NotificationService.notify({
         type: 'error',
         header: 'Error',
-        content: err.message,
+        content: (err.response.data && err.response.data.error) || err.message,
       });
       throw err;
     }
@@ -232,7 +232,7 @@ const AppraisalService = {
       NotificationService.notify({
         type: 'error',
         header: 'Error',
-        content: err.message,
+        content: (err.response.data && err.response.data.error) || err.message,
       });
       throw err;
     }
@@ -280,11 +280,6 @@ const AppraisalService = {
         error: null
       };
     } catch (err) {
-      NotificationService.notify({
-        type: 'error',
-        header: 'Error',
-        content: err.message,
-      });
       return {
         value: null,
         error: err
@@ -300,11 +295,6 @@ const AppraisalService = {
         error: null
       };
     } catch (err) {
-      NotificationService.notify({
-        type: 'error',
-        header: 'Error',
-        content: err.message,
-      });
       return {
         value: null,
         error: err
@@ -320,11 +310,6 @@ const AppraisalService = {
         error: null
       };
     } catch (err) {
-      NotificationService.notify({
-        type: 'error',
-        header: 'Error',
-        content: err.message,
-      });
       return {
         value: await this.getItem(periodId, item.id),
         error: err,
@@ -340,11 +325,6 @@ const AppraisalService = {
         error: null
       };
     } catch (err) {
-      NotificationService.notify({
-        type: 'error',
-        header: 'Error',
-        content: err.message,
-      });
       return {
         value: await this.getItem(periodId, item.id),
         error: err,
@@ -360,11 +340,6 @@ const AppraisalService = {
         error: null
       };
     } catch (err) {
-      NotificationService.notify({
-        type: 'error',
-        header: 'Error',
-        content: err.message,
-      });
       return {
         value: await this.getItem(periodId, item.id),
         error: err
@@ -380,11 +355,6 @@ const AppraisalService = {
         error: null
       };
     } catch (err) {
-      NotificationService.notify({
-        type: 'error',
-        header: 'Error',
-        content: err.message,
-      });
       return {
         value: await this.getItem(periodId, item.id),
         error: err

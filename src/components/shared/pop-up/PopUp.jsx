@@ -11,6 +11,9 @@ import useStyles from './styles.js';
 
 
 const PopUp = (props) => {
+  // default fields
+  props.entry.type = props.entry.type || 'error';
+
   const classes = useStyles(props);
   const [open, setOpen] = useState(true);
   const [paused, setPaused] = useState(false);
@@ -22,6 +25,7 @@ const PopUp = (props) => {
           setOpen(false);
           props.onAfterClose && props.onAfterClose(props.entry);
   }, [props]);
+
 
   useEffect(() => {
     setTimerId(setTimeout(handleTimeout, duration * 1000))
@@ -42,7 +46,6 @@ const PopUp = (props) => {
   };
 
   const handleClose = () => {
-    console.log(timerId);
     clearTimeout(timerId);
     handleTimeout();
   }

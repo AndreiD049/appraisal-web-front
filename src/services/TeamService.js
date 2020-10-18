@@ -23,7 +23,7 @@ const TeamService = {
       NotificationService.notify({
         type: 'error',
         header: 'Error',
-        content: err.message,
+        content: (err.response.data && err.response.data.error) || err.message,
       });
       throw err;
     }
@@ -42,7 +42,7 @@ const TeamService = {
       NotificationService.notify({
         type: 'error',
         header: 'Error',
-        content: err.message,
+        content: (err.response.data && err.response.data.error) || err.message,
       });
       throw err;
     }

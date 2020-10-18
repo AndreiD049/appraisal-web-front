@@ -8,7 +8,6 @@ import {
 	Switch
 } from 'react-router-dom';
 import AppraisalsPage from '../../routes/appraisals';
-import Context from '../../models/AppContext';
 import HomePage from '../../routes/home';
 import SettingsPage from '../../routes/settings';
 import ReportsPage from '../../routes/reports';
@@ -18,10 +17,19 @@ import NotificationManager from '../../components/shared/notification-manager';
 import NotificationService, { NotificationContextObject } from '../../services/NotificationService';
 import PopUp from '../../components/shared/pop-up';
 import SandboxPage from '../../routes/sandbox';
+import UserSecuritiesProvider from '../shared/user-securities-provider';
+import AuthorizationService from '../../services/AuthorizationService';
+import UserInfoProvider from '../../components/shared/user-info-provider';
+import { Container } from '@material-ui/core';
+import useStyle from './styles';
 welcome();
 
 function App() {
-	const [context, setContext] = useState(Context);
+	const classes = useStyle();
+	const [context, setContext] = useState({ 
+		user: null,
+		Authorize: AuthorizationService.Authorize 
+	});
 	const [notifications, setNotifications] = useState([]);
 	const notificationObject = NotificationContextObject(notifications, setNotifications);
 	// set the notification object so we can notify the user
@@ -38,31 +46,34 @@ function App() {
 					setNotifications(prev => prev.filter(n => n !== entry));
 				}}
 			/>
+      <UserInfoProvider ctx={context} setCtx={setContext}/>
 			<CssBaseline/>
+			<UserSecuritiesProvider/>
 			<Router>
 				<Navigation annexElements={context.annexElements}/>
-
-				{/* The page switch */}
-				<Switch>
-					<Route path='/appraisals'>
-						<AppraisalsPage ctx={context} setCtx={setContext}/>
-					</Route>
-					<Route path='/reports'>
-						<ReportsPage ctx={context} setCtx={setContext}/>
-					</Route>
-					<Route path='/settings'>
-						<SettingsPage ctx={context} setCtx={setContext}/>
-					</Route>
-					<Route path='/login'>
-						<LoginPage ctx={context} setCtx={setContext}/>
-					</Route>
-					<Route path='/sandbox'>
-						<SandboxPage />
-					</Route>
-					<Route path='/'>
-						<HomePage ctx={context} setCtx={setContext}/>
-					</Route>
-				</Switch>
+				<Container maxWidth='lg' className={classes.root}>
+					{/* The page switch */}
+					<Switch>
+						<Route path='/appraisals'>
+							<AppraisalsPage ctx={context} setCtx={setContext}/>
+						</Route>
+						<Route path='/reports'>
+							<ReportsPage ctx={context} setCtx={setContext}/>
+						</Route>
+						<Route path='/settings'>
+							<SettingsPage ctx={context} setCtx={setContext}/>
+						</Route>
+						<Route path='/login'>
+							<LoginPage ctx={context} setCtx={setContext}/>
+						</Route>
+						<Route path='/sandbox'>
+							<SandboxPage />
+						</Route>
+						<Route path='/'>
+							<HomePage ctx={context} setCtx={setContext}/>
+						</Route>
+					</Switch>
+				</Container>
 			</Router>
 		</GlobalContext.Provider>
   );

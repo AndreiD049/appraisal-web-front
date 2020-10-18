@@ -15,7 +15,7 @@ const LoginService = {
       NotificationService.notify({
         type: 'error',
         header: 'Error',
-        content: err.message,
+        content: (err.response.data && err.response.data.error) || err.message,
       });
       return null;
     }

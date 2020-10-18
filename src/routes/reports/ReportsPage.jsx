@@ -1,5 +1,5 @@
 import React from 'react';
-import LoginRequired from '../../widgets/LoginRequired';
+import LoginRequired from '../../components/shared/login-required';
 
 const ReportsPage = ({ctx, setCtx, ...props}) => {
   return (

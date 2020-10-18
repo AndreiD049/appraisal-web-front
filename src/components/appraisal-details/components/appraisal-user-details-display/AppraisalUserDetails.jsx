@@ -23,6 +23,15 @@ const userStyles = makeStyles((theme) => ({
 	},
 	topMargin: {
 		marginTop: theme.spacing(4)
+	},
+	conatiner: {
+		"& > *:last-child": {
+			marginBottom: theme.spacing(5),
+		}
+	},
+	userInput: {
+		width: '50%',
+		margin: '2em auto'
 	}
 }));
 
@@ -30,11 +39,11 @@ const AppraisalUserDetails = ({ context, periodDetails, userDetails }) => {
   const classes = userStyles();
 
 	return (
-		<Container maxWidth='md'>
+		<Container maxWidth='md' className={classes.conatiner}>
 			<h1 className={classes.header}>Details {periodDetails.name ? `'${periodDetails.name}'` : null}</h1>
 			<Grid container>
 				<Grid item xs={12}>
-					<AppraisalUserRedirect defaultValue={userDetails} />
+					<AppraisalUserRedirect defaultValue={userDetails} className={classes.userInput} />
 				</Grid>
 				<Grid container item xs={12} component={Paper} className={classes.inputBlock}>
 					<Grid item xs={12} sm={6}>

@@ -14,8 +14,8 @@ const SettingsUsers = (props) => {
 
   const columns = [
     {
-      title: 'id',
-      field: 'id',
+      title: 'username',
+      field: 'username',
       editable: 'never',
     },
     {
@@ -83,26 +83,34 @@ const SettingsUsers = (props) => {
   const editable = {
     onRowUpdate: (newData, oldData) =>
       new Promise(async (resolve, reject) => {
-        const dataUpdate = [...data];
-        const index = oldData.tableData.id;
-        dataUpdate[index] = newData;
-        setData(oldData => dataUpdate);
-        // TODO: Add database sync
-        resolve();
+        try {
+          const dataUpdate = [...data];
+          const index = oldData.tableData.id;
+          const result = await UserService.updateUser(newData.id, {
+            ...newData,
+            teams: newData.teams.map(t => t.id),
+            organizations: newData.organizations.map(o => o.id),
+          });
+          dataUpdate[index] = result;
+          setData(oldData => dataUpdate);
+          resolve();
+        } catch (err) {
+          reject(err);
+        }
       }).catch(err => {
-        console.error(err);
+        throw err;
       }),
-    onRowDelete: (oldData) => 
-      new Promise((resolve, reject) => {
-        const dataDelete = [...data];
-        const index = oldData.tableData.id;
-        dataDelete.splice(index, 1);
-        setData([...dataDelete]);
-        // TODO: Add database sync
-        resolve();
-      }).catch(err => {
-        console.error(err);
-      })
+    // onRowDelete: (oldData) => 
+    //   new Promise((resolve, reject) => {
+    //     const dataDelete = [...data];
+    //     const index = oldData.tableData.id;
+    //     dataDelete.splice(index, 1);
+    //     setData([...dataDelete]);
+    //     // TODO: Add database sync
+    //     resolve();
+    //   }).catch(err => {
+    //     console.error(err);
+      // })
   }
 
   /**

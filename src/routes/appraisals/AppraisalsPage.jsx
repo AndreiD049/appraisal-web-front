@@ -7,7 +7,7 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import AppraisalService from '../../services/AppraisalService';
 import GlobalContext from '../../services/GlobalContext';
 import NewPeriodDialog from '../../components/new-period-dialog';
-import LoginRequired from '../../widgets/LoginRequired';
+import LoginRequired from '../../components/shared/login-required';
 import AppraisalDetailsPage from '../../routes/appraisal-details'
 
 const useStyles = makeStyles((theme) => ({
@@ -84,7 +84,7 @@ const AppraisalsPage = (props) => {
                     />
                     <CardContent>
                       <Typography variant='body1' component='p'>
-                        Created by: {item.createdUser}
+                        Created by: {item.createdUser.username}
                       </Typography>
                       <Typography variant='body2' color='textSecondary' component='p'>
                         {(new Date(item.createdDate)).toLocaleString()}
@@ -119,7 +119,7 @@ const AppraisalsPage = (props) => {
                       />
                       <CardContent>
                         <Typography variant='body1' component='p'>
-                          Created by: {item.createdUser}
+                          Created by: {item.createdUser.username}
                         </Typography>
                         <Typography variant='body2' color='textSecondary' component='p'>
                           {(new Date(item.createdDate)).toLocaleString()}

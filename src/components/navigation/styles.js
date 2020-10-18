@@ -53,7 +53,7 @@ const styles = makeStyles((theme) => ({
     [theme.breakpoints.up('sm')]: {
       width: theme.spacing(7) + 1,
     }
-  }
+  },
 }));
 
 export default styles;

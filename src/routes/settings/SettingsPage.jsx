@@ -1,39 +1,20 @@
-import React, { useEffect, useContext } from 'react';
-import LoginRequired from '../../widgets/LoginRequired';
-import GlobalContext from '../../services/GlobalContext';
+import React from 'react';
+import LoginRequired from '../../components/shared/login-required';
 import { useRouteMatch, Switch, Route } from 'react-router-dom'
 import { Container, } from '@material-ui/core';
-import NavigationAnnex from './components/navigation-annex';
 import styles from './styles';
 import SettingsGeneral from '../settings-general';
 import SettingsUsers from '../settings-users';
 import SettingsAppraisalPeriods from '../settings-app-periods';
 import SettingsAppraisalItems from '../settings-app-items';
+import SettingsRolesPage from '../settings-role-permissions';
 
 /*
  * On the settings page the navigation will be done via a 
  */
 const SettingsPage = ({ctx, setCtx, ...props}) => {
   const { path } = useRouteMatch();
-  const global = useContext(GlobalContext)
   const classes = styles();
-
-  useEffect(() => {
-    console.log("enter");
-    global.setContext({
-      ...global.context,
-      annexElements: (<NavigationAnnex/>)
-    });
-    return () => {
-      console.log("leave")
-      global.setContext({
-        ...global.context,
-        annexElements: null
-      });
-    }
-  // eslint-disable-next-line
-  }, [])
-
 
   return (
     <>
@@ -51,6 +32,9 @@ const SettingsPage = ({ctx, setCtx, ...props}) => {
           </Route>
           <Route path={`${path}/appraisal-items`}>
             <SettingsAppraisalItems/>
+          </Route>
+          <Route path={`${path}/permissions`}>
+            <SettingsRolesPage />
           </Route>
         </Switch>
       </Container>
