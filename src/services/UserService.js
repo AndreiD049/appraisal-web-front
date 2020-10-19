@@ -12,7 +12,7 @@ const UserService = {
     if (user.role && user.role.id) {
       user.role = user.role.id
     };
-    if (user.organization.id) {
+    if (user.organization && user.organization.id) {
       user.organization = user.organization.id
     };
     user.organizations = user.organizations.map(o => o.id || o)
