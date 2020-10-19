@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import DialogDisplay from './components/dialog-display';
-import DialogInfo from './components/dialog-info';
 import AppraisalService from '../../services/AppraisalService';
 import NotificationService from '../../services/NotificationService';
 
@@ -11,7 +10,6 @@ const NewPeriodDialog = ({
     setItems,
     ...props
   }) => {
-  const [organizations, setOrganizations] = useState([]);
   const selectValues = [
     'Active',
     'Finished'
@@ -29,10 +27,8 @@ const NewPeriodDialog = ({
 
   return (
     <>
-      <DialogInfo setOrganizations={setOrganizations}/>
       <DialogDisplay
         open={open}
-        organizations={organizations}
         selectValues={selectValues}
         handleSubmit={handleSubmit}
         handleClose={handleClose}

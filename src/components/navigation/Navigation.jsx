@@ -26,6 +26,7 @@ import { Toolbar, ListItemIcon, Button, Typography, Link as MuiLink, Menu, MenuI
 import { Link } from 'react-router-dom'
 import GlobalContext from '../../services/GlobalContext';
 import SettingsNavigation from './components/settings-navigation';
+import AuthorizationComponent from '../shared/authorization-component';
 
 export default function Navigation()
 {
@@ -163,26 +164,24 @@ export default function Navigation()
                         </ListItemIcon>
                         <ListItemText primary="Appraisals"/>
                     </ListItemLink>
-                    {
-                        global.context.Authorize('REPORTS', 'read') ? 
-                        (<ListItemLink to="/reports">
-                            <ListItemIcon>
-                                <PieChartIcon/>
-                            </ListItemIcon>
-                            <ListItemText primary="Reports"/>
-                        </ListItemLink>) : 
-                        null
-                    }
-                    <ListItem button onClick={handleCollapseToggle('settings')}>
+                    <ListItemLink to="/reports">
                         <ListItemIcon>
-                            <SettingsIcon />
+                            <PieChartIcon/>
                         </ListItemIcon>
-                        <ListItemText primary="Settings"/>
-                        {collapses['settings'] ? <ExpandLessIcon/> : <ExpandMoreIcon />}
-                    </ListItem>
-                    <Collapse in={collapses['settings']}>
-                        <SettingsNavigation/>
-                    </Collapse>
+                        <ListItemText primary="Reports"/>
+                    </ListItemLink> 
+                    <AuthorizationComponent code='SETTINGS' grant='read'>
+                        <ListItem button onClick={handleCollapseToggle('settings')}>
+                            <ListItemIcon>
+                                <SettingsIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="Settings"/>
+                            {collapses['settings'] ? <ExpandLessIcon/> : <ExpandMoreIcon />}
+                        </ListItem>
+                        <Collapse in={collapses['settings']}>
+                            <SettingsNavigation/>
+                        </Collapse>
+                    </AuthorizationComponent>
                 </List>
             </Drawer>
         </div>

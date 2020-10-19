@@ -8,6 +8,8 @@ import SettingsUsers from '../settings-users';
 import SettingsAppraisalPeriods from '../settings-app-periods';
 import SettingsAppraisalItems from '../settings-app-items';
 import SettingsRolesPage from '../settings-role-permissions';
+import AuthorizationRedirectComponent from '../../components/shared/authorization-redirect-component';
+import AuthorizationComponent from '../../components/shared/authorization-component';
 
 /*
  * On the settings page the navigation will be done via a 
@@ -22,19 +24,69 @@ const SettingsPage = ({ctx, setCtx, ...props}) => {
       <Container maxWidth='lg' className={classes.root}>
         <Switch>
           <Route exact path={path}>
-            <SettingsGeneral/>
+            <AuthorizationRedirectComponent 
+              code='SETTINGS' 
+              grant='general' 
+              to='/'
+              failureNotification={{
+                header: 'No Access',
+                content: 'No permission to access this page. Please contact your administrator.'
+              }}
+            >
+              <SettingsGeneral/>
+            </AuthorizationRedirectComponent>
           </Route>
           <Route path={`${path}/users`}>
-            <SettingsUsers/>
+            <AuthorizationRedirectComponent 
+              code='SETTINGS' 
+              grant='users' 
+              to='/'
+              failureNotification={{
+                header: 'No Access',
+                content: 'No permission to access this page. Please contact your administrator.'
+              }}
+            >
+              <SettingsUsers/>
+            </AuthorizationRedirectComponent>
           </Route>
           <Route path={`${path}/appraisal-periods`}>
-            <SettingsAppraisalPeriods/>
+            <AuthorizationRedirectComponent 
+              code='SETTINGS' 
+              grant='appraisal-periods' 
+              to='/'
+              failureNotification={{
+                header: 'No Access',
+                content: 'No permission to access this page. Please contact your administrator.'
+              }}
+            >
+              <SettingsAppraisalPeriods/>
+            </AuthorizationRedirectComponent>
           </Route>
           <Route path={`${path}/appraisal-items`}>
-            <SettingsAppraisalItems/>
+            <AuthorizationRedirectComponent 
+              code='SETTINGS' 
+              grant='appraisal-items' 
+              to='/'
+              failureNotification={{
+                header: 'No Access',
+                content: 'No permission to access this page. Please contact your administrator.'
+              }}
+            >
+              <SettingsAppraisalItems/>
+            </AuthorizationRedirectComponent>
           </Route>
           <Route path={`${path}/permissions`}>
-            <SettingsRolesPage />
+            <AuthorizationRedirectComponent 
+              code='SETTINGS' 
+              grant='permissions' 
+              to='/'
+              failureNotification={{
+                header: 'No Access',
+                content: 'No permission to access this page. Please contact your administrator.'
+              }}
+            >
+              <SettingsRolesPage />
+            </AuthorizationRedirectComponent>
           </Route>
         </Switch>
       </Container>

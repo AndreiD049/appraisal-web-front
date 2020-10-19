@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { 
   Dialog, 
   DialogTitle, 
@@ -11,18 +11,18 @@ import {
   MenuItem,
   Button
 } from '@material-ui/core';
+import GlobalContext from '../../../../services/GlobalContext';
 
 const DialogDisplay = ({
     open,
-    organizations,
     selectValues,
     handleSubmit,
     handleClose,
     ...props
 }) => {
+  const global = useContext(GlobalContext);
   const [name, setName] = useState('');
   const [status, setStatus] = useState(selectValues[0]);
-  const [org, setOrg] = useState('');
 
   const handleNameChange = (e) => {
     setName(e.target.value);
@@ -32,19 +32,15 @@ const DialogDisplay = ({
     setStatus(e.target.value);
   }
 
-  const handleOrgChange = (e) => {
-    setOrg(e.target.value);
-	}
-
 	const handleSubmitWrapper = async (e) => {
+    console.log(global.context);
     e.persist();
     e.preventDefault();
-		await handleSubmit(name, status, org);
+		await handleSubmit(name, status, global.context.user.organization.id);
 	}
 
   const handleCloseWrapper = (e) => {
     setStatus(selectValues[0]);
-    setOrg('');
     handleClose(e);
   }
 
@@ -71,17 +67,6 @@ const DialogDisplay = ({
                     selectValues.map(e => (
                       <MenuItem key={e} value={e}>{e}</MenuItem>
                     )) :
-                    null
-                  }
-                </Select>
-              </FormControl>
-              <FormControl color='primary' required={true}>
-                <InputLabel htmlFor="new-period-organization">Organization</InputLabel>
-                <Select id='new-period-organizatrion' name='organization' value={org} onChange={handleOrgChange}>
-                  {organizations ? 
-                    organizations.map(e => (
-                      <MenuItem key={e.id} value={e.id}>{e.name}</MenuItem>
-                    )) : 
                     null
                   }
                 </Select>

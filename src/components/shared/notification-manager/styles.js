@@ -14,6 +14,7 @@ const useStyles = makeStyles({
     right: 10,
     bottom: 10,
     minWidth: 400,
+    zIndex: 9999,
     "& > * + *": {
       marginTop: '.5em',
     }

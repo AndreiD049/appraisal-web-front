@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import SecurityInfoProvider from './components/security-info-provider';
 import SecurityDetailsRoleDisplay from './components/security-details-role-display';
+import SecurityDetailsUserDisplay from './components/security-details-user-display';
 import { useEffect } from 'react';
 import { AppBar, Tabs, Tab, TabP, Box } from '@material-ui/core';
 
@@ -101,7 +102,14 @@ const SecurityDetails = (props) => {
               /> 
             </TabPanel>            
             <TabPanel value={selectedTab} index={1}>
-              <h1>Not implemented yet</h1>
+              <SecurityDetailsUserDisplay
+                codes={permissionCodes} 
+                users={users} 
+                userPermissions={userPermissions} 
+                setUserPermissions={setUserPermissions}
+                selectedUser={selectedUser}
+                setSelectedUser={setSelectedUser} 
+              />
             </TabPanel>
           </>
           ) :

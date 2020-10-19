@@ -8,6 +8,17 @@ const UserService = {
   getUserOrganizationsPath: `/api/users/organizations`,
   getUserTeamMembersPath: `/api/users/team-members`,
 
+  normalizeUser: function(user) {
+    if (user.role && user.role.id) {
+      user.role = user.role.id
+    };
+    if (user.organization.id) {
+      user.organization = user.organization.id
+    };
+    user.organizations = user.organizations.map(o => o.id || o)
+    return user;
+  },
+
   getUsers: async function() {
     try {
       const response = await axios.get(this.getUsersPath);
@@ -46,12 +57,11 @@ const UserService = {
 
   updateUser: async function(id, user) {
     try {
-      const response = await axios.put(this.updateUsersPath(id), user);
+      const response = await axios.put(this.updateUsersPath(id), this.normalizeUser(user));
       if (response.status === 200) {
         return response.data;
       } else {
-        console.log("trhrow");
-        throw new Error(`Server response: ${response.status} - ${response.statusText}\n${response.data.error}`);
+        throw new Error(`Server response: ${response.status} - ${response.statusText}\n`);
       }
     } catch (err) {
       NotificationService.notify({

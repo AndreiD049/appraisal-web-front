@@ -134,7 +134,7 @@ const SecurityDetailsRoleDisplay = ({codes, roles, rolePermissions, setRolePermi
                 <FormGroup aria-label={grant} row key={`${permission.id}-${grant}`}>
                   <FormControlLabel 
                     value={grant}
-                    label={grant}
+                    label={<Typography variant='button'>{grant}</Typography>}
                     control={<Checkbox color='secondary' checked={getPermissionChecked(selectedRole, permission, grant)} />}
                     onChange={handleClick(selectedRole, permission, grant)}
                     labelPlacement="start"

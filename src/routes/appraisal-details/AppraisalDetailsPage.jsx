@@ -20,7 +20,7 @@ const AppraisalDetailsPage = (props) => {
           header: 'No access',
           content: 'You have no access to this page. Please contact your administrator',
         }} >
-        <AppraisalDetails context={global.context} /> :
+        <AppraisalDetails context={global.context} />
       </AuthorizationRedirectComponent>
     </Container>
   );

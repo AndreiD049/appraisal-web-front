@@ -13,40 +13,51 @@ import  {
   ListItem,
   ListItemText,
 } from '@material-ui/core'
+import AuthorizationComponent from '../../../shared/authorization-component';
 
 const SettingsNavigation = (props) => {
   return (
     <List component="div" disablePadding>
-        <ListItem button component={Link} to='/settings'>
-            <ListItemIcon>
-                <DesktopMacIcon />
-            </ListItemIcon>
-            <ListItemText primary='General' />
-        </ListItem>
-        <ListItem button component={Link} to='/settings/users'>
-            <ListItemIcon>
-                <PeopleIcon/>
-            </ListItemIcon>
-            <ListItemText primary='Users' />
-        </ListItem>
-        <ListItem button component={Link} to='/settings/appraisal-periods'>
-            <ListItemIcon>
-                <EqualizerIcon/>
-            </ListItemIcon>
-            <ListItemText primary='Appraisal-periods' />
-        </ListItem>
-        <ListItem button component={Link} to='/settings/appraisal-items'>
-            <ListItemIcon>
-                <NotesIcon/>
-            </ListItemIcon>
-            <ListItemText primary='Appraisal-items' />
-        </ListItem>
-        <ListItem button component={Link} to='/settings/permissions'>
-            <ListItemIcon>
-                <KeyIcon />
-            </ListItemIcon>
-            <ListItemText primary='Permissions' />
-        </ListItem>
+        <AuthorizationComponent code='SETTINGS' grant='general'>
+            <ListItem button component={Link} to='/settings'>
+                <ListItemIcon>
+                    <DesktopMacIcon />
+                </ListItemIcon>
+                <ListItemText primary='General' />
+            </ListItem>
+        </AuthorizationComponent>
+        <AuthorizationComponent code='SETTINGS' grant='users'>
+            <ListItem button component={Link} to='/settings/users'>
+                <ListItemIcon>
+                    <PeopleIcon/>
+                </ListItemIcon>
+                <ListItemText primary='Users' />
+            </ListItem>
+        </AuthorizationComponent>
+        <AuthorizationComponent code='SETTINGS' grant='appraisal-periods'>
+            <ListItem button component={Link} to='/settings/appraisal-periods'>
+                <ListItemIcon>
+                    <EqualizerIcon/>
+                </ListItemIcon>
+                <ListItemText primary='Appraisal-periods' />
+            </ListItem>
+        </AuthorizationComponent>
+        <AuthorizationComponent code='SETTINGS' grant='appraisal-items'>
+            <ListItem button component={Link} to='/settings/appraisal-items'>
+                <ListItemIcon>
+                    <NotesIcon/>
+                </ListItemIcon>
+                <ListItemText primary='Appraisal-items' />
+            </ListItem>
+        </AuthorizationComponent>
+        <AuthorizationComponent code='SETTINGS' grant='permissions'>
+            <ListItem button component={Link} to='/settings/permissions'>
+                <ListItemIcon>
+                    <KeyIcon />
+                </ListItemIcon>
+                <ListItemText primary='Permissions' />
+            </ListItem>
+        </AuthorizationComponent>
     </List>
   );
 };

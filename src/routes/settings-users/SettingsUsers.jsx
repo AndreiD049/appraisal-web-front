@@ -6,20 +6,22 @@ import UserService from '../../services/UserService';
 import TeamService from '../../services/TeamService';
 import { Autocomplete } from '@material-ui/lab';
 import GlobalContext from '../../services/GlobalContext';
+import AuthorizationService from '../../services/AuthorizationService';
 
 const SettingsUsers = (props) => {
   const [data, setData] = useState([]);
   const [teams, setTeams] = useState([]);
+  const [roles, setRoles] = useState([]);
   const global = useContext(GlobalContext);
 
   const columns = [
     {
-      title: 'username',
+      title: 'Username',
       field: 'username',
       editable: 'never',
     },
     {
-      title: 'teams',
+      title: 'Teams',
       field: 'teams',
       render: rowData => rowData.teams.map(t => t.name).join(', '),
       editComponent: props => (
@@ -47,7 +49,7 @@ const SettingsUsers = (props) => {
       )
     },
     {
-      title: 'organizations',
+      title: 'Organizations',
       field: 'organizations',
       render: rowData => rowData.organizations ? rowData.organizations.map(o => o.name).join(', '): console.log(data),
       customFilterAndSearch: (filterValue, rowData, columnDef) => {
@@ -71,18 +73,46 @@ const SettingsUsers = (props) => {
             <TextField
               {...params}
               variant="standard"
-              label="Multiple values"
-              placeholder="Favorites"
+              label="Organizaions"
+              placeholder="Organizations"
             />
           )}
         />
       )
-    }
+    },
+    {
+      title: 'Role',
+      field: 'role',
+      render: rowData => rowData.role && rowData.role.name,
+      editComponent: props => (
+        <Autocomplete
+          id="tags-standard-role"
+          options={roles}
+          getOptionLabel={(option) => option.name}
+          getOptionSelected={(option, value) => {
+            return option.name === value.name;
+          }}
+          value={props.rowData.role}
+          onChange={(e, newVal) => {
+            props.onChange(newVal)
+          }}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              variant="standard"
+              label="Roles"
+              placeholder="Roles"
+            />
+          )}
+        />
+      )
+    }, 
   ];
 
   const editable = {
     onRowUpdate: (newData, oldData) =>
       new Promise(async (resolve, reject) => {
+        console.log(newData);
         try {
           const dataUpdate = [...data];
           const index = oldData.tableData.id;
@@ -95,6 +125,7 @@ const SettingsUsers = (props) => {
           setData(oldData => dataUpdate);
           resolve();
         } catch (err) {
+          console.log(err);
           reject(err);
         }
       }).catch(err => {
@@ -120,8 +151,10 @@ const SettingsUsers = (props) => {
     async function run() {
       const users = await UserService.getUsers();
       const teams = await TeamService.getTeams();
+      const roles = await AuthorizationService.getRoles();
       setData(oldData => users);
       setTeams(prev => teams);
+      setRoles(prev => roles);
     }
     run();
   }, [])
