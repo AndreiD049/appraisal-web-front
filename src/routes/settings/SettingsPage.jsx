@@ -9,7 +9,6 @@ import SettingsAppraisalPeriods from '../settings-app-periods';
 import SettingsAppraisalItems from '../settings-app-items';
 import SettingsRolesPage from '../settings-role-permissions';
 import AuthorizationRedirectComponent from '../../components/shared/authorization-redirect-component';
-import AuthorizationComponent from '../../components/shared/authorization-component';
 
 /*
  * On the settings page the navigation will be done via a 

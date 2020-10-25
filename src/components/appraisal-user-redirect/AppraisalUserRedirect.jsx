@@ -1,24 +1,25 @@
 import React from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import TeamMatesAutocomplete from '../shared/team-mates-autocomplete';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 
 const AppraisalUserRedirect = ({defaultValue, ...props}) => {
   const id = useParams()['id'];
   const history = useHistory();
+  const [selectedUser, setSelectedUser] = useState(defaultValue || null);
 
   const handleSelect = useCallback((user) => {
     if (user)
       return history.push(`/appraisals/${id}/user/${user.id}`);
+    setSelectedUser(user);
   }, [history, id])
 
   return (
     <>
       <TeamMatesAutocomplete 
-        defValue={defaultValue}
+        value={selectedUser}
         onUserSelect={(user) => handleSelect(user)}
         {...props}
-        // renderOption={(option, state) => <Link color='textPrimary' underline='hover' component={MuiLink} style={{width: '100%'}} to={`/appraisals/${id}/user/${option.id}`}>{option.id}</Link>}
       />
     </>
   );

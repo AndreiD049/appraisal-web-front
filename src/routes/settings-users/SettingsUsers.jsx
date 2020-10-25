@@ -121,6 +121,7 @@ const SettingsUsers = (props) => {
             teams: newData.teams.map(t => t.id),
             organizations: newData.organizations.map(o => o.id),
           });
+          console.log(result);
           dataUpdate[index] = result;
           setData(oldData => dataUpdate);
           resolve();
@@ -131,17 +132,6 @@ const SettingsUsers = (props) => {
       }).catch(err => {
         throw err;
       }),
-    // onRowDelete: (oldData) => 
-    //   new Promise((resolve, reject) => {
-    //     const dataDelete = [...data];
-    //     const index = oldData.tableData.id;
-    //     dataDelete.splice(index, 1);
-    //     setData([...dataDelete]);
-    //     // TODO: Add database sync
-    //     resolve();
-    //   }).catch(err => {
-    //     console.error(err);
-      // })
   }
 
   /**
@@ -149,9 +139,12 @@ const SettingsUsers = (props) => {
    */
   useEffect(() => {
     async function run() {
-      const users = await UserService.getUsers();
-      const teams = await TeamService.getTeams();
-      const roles = await AuthorizationService.getRoles();
+      const [ users, teams, roles ] = await Promise.all(
+        [
+          UserService.getUsers(), 
+          TeamService.getTeams(), 
+          AuthorizationService.getRoles()
+        ]);
       setData(oldData => users);
       setTeams(prev => teams);
       setRoles(prev => roles);

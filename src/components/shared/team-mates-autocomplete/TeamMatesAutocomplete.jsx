@@ -23,11 +23,11 @@ const TeamMatesAutocomplete = ({ onUserSelect, defValue, ...props }) => {
             {...props}
             id="users-autocomplete"
             options={users}
-            getOptionLabel={(option) => option.id}
+            getOptionLabel={(option) => option.username}
             getOptionSelected={(option, value) => value && option.id === value.id}
             renderInput={(params) => <TextField {...params} label="Team-members" variant="outlined" />}
             onChange={handleSelect}
-            value={users.length ? defValue : null}
+            // value={users.length ? defValue : null}
         />
     );
 

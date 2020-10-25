@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import DialogDisplay from './components/dialog-display';
 import AppraisalService from '../../services/AppraisalService';
 import NotificationService from '../../services/NotificationService';

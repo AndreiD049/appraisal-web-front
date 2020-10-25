@@ -3,7 +3,7 @@ import SecurityInfoProvider from './components/security-info-provider';
 import SecurityDetailsRoleDisplay from './components/security-details-role-display';
 import SecurityDetailsUserDisplay from './components/security-details-user-display';
 import { useEffect } from 'react';
-import { AppBar, Tabs, Tab, TabP, Box } from '@material-ui/core';
+import { AppBar, Tabs, Tab, Box } from '@material-ui/core';
 
 const TabControl = ({value, setValue}) => {
   const handleChange = (e, newVal) => {

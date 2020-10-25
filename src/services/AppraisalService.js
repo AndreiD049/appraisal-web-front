@@ -15,6 +15,8 @@ const AppraisalService = {
   deleteItemPath: (periodId, itemId) => `/api/periods/${periodId}/items/${itemId}`,
   deleteUserItemPath: (periodId, userId, itemId) => `/api/periods/${periodId}/users/${userId}/items/${itemId}`,
   finishPeriodPath: (periodId) => `/api/periods/${periodId}/finish`,
+  updateItemTypePath: (periodId, itemId) => `/api/periods/${periodId}/items/${itemId}/change-type`,
+  updateUserItemTypePath: (periodId, itemId, userId) => `/api/periods/${periodId}/users/${userId}/items/${itemId}/change-type`,
 
   getPeriods: async function() {
     try {
@@ -144,6 +146,26 @@ const AppraisalService = {
       });
       throw err;
     }
+  }, 
+  
+  updateItemType: async function(periodId, item) {
+    try {
+      validate(item);
+      validateId(item);
+      const response = await axios.post(this.updateItemTypePath(periodId, item.id), {type: item.type});
+      if (response.status === 200) {
+        return response.data;
+      } else {
+        throw new Error(`Server response: ${response.status} - ${response.statusText}`);
+      }
+    } catch (err) {
+      NotificationService.notify({
+        type: 'error',
+        header: 'Error',
+        content: (err.response.data && err.response.data.error) || err.message,
+      });
+      throw err;
+    }
   },
 
   updateUserItem: async function(periodId, userId, item) {
@@ -151,6 +173,26 @@ const AppraisalService = {
       validate(item);
       validateId(item);
       const response = await axios.put(this.updateUserItemPath(periodId, userId, item.id), {...item});
+      if (response.status === 200) {
+        return response.data;
+      } else {
+        throw new Error(`Server response: ${response.status} - ${response.statusText}`);
+      }
+    } catch (err) {
+      NotificationService.notify({
+        type: 'error',
+        header: 'Error',
+        content: (err.response.data && err.response.data.error) || err.message,
+      });
+      throw err;
+    }
+  },
+
+  updateUserItemType: async function(periodId, userId, item) {
+    try {
+      validate(item);
+      validateId(item);
+      const response = await axios.post(this.updateUserItemTypePath(periodId, item.id, userId), {type: item.type});
       if (response.status === 200) {
         return response.data;
       } else {
@@ -259,7 +301,7 @@ const AppraisalService = {
     if ((period && period.status !== 'Active') || !user) {
       return copy
     }
-    // array of em,pty indexes ex: [1, 4, 5]
+    // array of empty indexes ex: [1, 4, 5]
     const empty = copy.map((i, idx) => idx).filter(i => copy[i].content === '');
     if (empty.length === 0) {
       copy.push(this.blankItem(periodId, user, type));
