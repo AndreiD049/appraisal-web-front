@@ -28,7 +28,7 @@ const FieldSet = ({context, items, setItems, details, type, ...props}) => {
 		'SWOT_O': 5,
 		'SWOT_T': 5
 	};
-	
+
 	const labels = {
 		'Achieved': 'Achieved',
 		'Planned': 'Planned',
@@ -50,7 +50,8 @@ const FieldSet = ({context, items, setItems, details, type, ...props}) => {
 			context.user,
 			items,
 			min,
-			type
+			type,
+			details
 		))
 		// eslint-disable-next-line
 	}, []);
@@ -71,14 +72,6 @@ const FieldSet = ({context, items, setItems, details, type, ...props}) => {
 			return AppraisalService.updateUserItemInSet(periodId, userId, item);
 		}
 	}, [userId]);
-
-	const updateItemType = useCallback(async (periodId, item) => {
-		if (!userId) {
-			return AppraisalService.updateItemType(periodId, item);
-		} else {
-			return AppraisalService.updateUserItemType(periodId, userId, item);
-		}
-	}, [userId])
 
 	const deleteItem = useCallback(async (periodId, item) => {
 	 if (!userId) {
@@ -103,14 +96,16 @@ const FieldSet = ({context, items, setItems, details, type, ...props}) => {
 			const item = items.find(i => i.id === itemId);
 			if (item) {
 				item.type = type;
-				const response = await updateItemType(periodId, item);
-				setItems(prev => 
-					AppraisalService.normalizeSet(periodId, context.user, prev.filter(i => i.id !== response.id), min, type, details));
-				props.setOtherItems(prev => 
-					AppraisalService.normalizeSet(periodId, context.user, prev.filter(i => i.content !== '').concat(response), min, type, details));
+				const result = await updateItem(periodId, item);
+				if (!result.error) {
+					setItems(prev => 
+						AppraisalService.normalizeSet(periodId, context.user, prev.filter(i => i.id !== result.value.id), min, type, details));
+					props.setOtherItems(prev => 
+						AppraisalService.normalizeSet(periodId, context.user, prev.filter(i => i.content !== '').concat(result.value), min, type, details));
+				}
 			}
 		}
-	}, [context.user, details, min, items, periodId, props, setItems, updateItemType])
+	}, [context.user, details, min, items, periodId, props, setItems, updateItem])
 	
 	// Handle the remove button press
 	const removeHandler = useCallback(async (item, idx) => {
@@ -209,6 +204,8 @@ const FieldSet = ({context, items, setItems, details, type, ...props}) => {
 							blurHandler={blurHandler}
 							removeHandler={removeHandler}
 							changeTypeHandler={changeTypeHandler}
+							canUpdate={context.Authorize(Boolean(userId) ? 'APPRAISAL DETAILS - OTHER USERS' : 'APPRAISAL DETAILS', 'update')}
+							canDelete={context.Authorize(Boolean(userId) ? 'APPRAISAL DETAILS - OTHER USERS' : 'APPRAISAL DETAILS', 'delete')}
 						/>
 					</ListItem>
 				))}

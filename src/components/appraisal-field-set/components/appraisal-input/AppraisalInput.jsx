@@ -18,13 +18,18 @@ import {
 } from '@material-ui/icons';
 import { useEffect } from 'react';
 import useStyles from './styles';
+import { useParams } from 'react-router-dom';
 
-const AppraisalInput = ({item, idx, label, changeHandler, blurHandler, removeHandler, changeTypeHandler}) => {
+const AppraisalInput = ({item, idx, label, changeHandler, blurHandler, removeHandler, changeTypeHandler, canUpdate, canDelete }) => {
   const classes = useStyles();
   const [value, setValue] = useState({...item});
   const [modified, setModified] = useState(false);
   const [itemMenuAnchorEl, setItemMenuAnchorEl] = useState(null);
   const isRelated = Boolean(item.relatedItemId);
+  const isDeletable = Boolean(isRelated) ? false : item.status === 'Active' ;
+  const isFinished = Boolean(item.status === 'Finished');
+  const userId = useParams()['userId'];
+  const isTrainingSuggestedAllowed = Boolean(item.type === 'Training_Suggested') ? !Boolean(userId) : false;
 
   useEffect(() => {
     setValue({...item});
@@ -97,7 +102,7 @@ const AppraisalInput = ({item, idx, label, changeHandler, blurHandler, removeHan
               horizontal: 'center'
           }}
       >
-        <MenuItem disabled={isRelated} aria-label='delete appraisal item' onClick={handleDelete}>
+        <MenuItem disabled={canDelete ? !isDeletable : true} aria-label='delete appraisal item' onClick={handleDelete}>
           <ListItemIcon>
             <Delete fontSize='small'/>
           </ListItemIcon>
@@ -141,10 +146,10 @@ const AppraisalInput = ({item, idx, label, changeHandler, blurHandler, removeHan
           multiline
           onChange={handleChange} 
           onBlur={ handleBlur } 
-          disabled={isRelated}
+          disabled={canUpdate ? (isRelated || isFinished || isTrainingSuggestedAllowed) : true}
           InputProps={{
             startAdornment: startAdornment,
-            endAdornment: endAdornment,
+            endAdornment: isFinished ? null : endAdornment,
           }}
         />
   );

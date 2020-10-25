@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Container, makeStyles, Grid, Paper } from '@material-ui/core';
 import FieldSet from '../../../appraisal-field-set';
 import AppraisalUserRedirect from '../../../appraisal-user-redirect';
+import AuthorizationComponent from '../../../shared/authorization-component';
 
 const userStyles = makeStyles((theme) => ({
 	header: {
@@ -51,9 +52,11 @@ const AppraisalDetailsDisplay = ({context, periodDetails }) => {
 		<Container maxWidth='md' className={classes.conatiner}>
 			<h1 className={classes.header}>Details {periodDetails.name ? `'${periodDetails.name}'` : null}</h1>
 			<Grid container>
-				<Grid item xs={12}>
-					<AppraisalUserRedirect className={classes.userInput} />
-				</Grid>
+				<AuthorizationComponent code='APPRAISAL DETAILS - OTHER USERS' grant='read'>
+					<Grid item xs={12}>
+						<AppraisalUserRedirect className={classes.userInput} />
+					</Grid>
+				</AuthorizationComponent>
 				<Grid container item xs={12} component={Paper} className={classes.inputBlock}>
 					<Grid item xs={12} sm={6}>
 						<FieldSet context={context} details={periodDetails} items={achieved} setItems={setAchieved} type='Achieved' setOtherItems={setPlanned}/>

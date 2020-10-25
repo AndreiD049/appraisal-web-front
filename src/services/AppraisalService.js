@@ -16,7 +16,7 @@ const AppraisalService = {
   deleteUserItemPath: (periodId, userId, itemId) => `/api/periods/${periodId}/users/${userId}/items/${itemId}`,
   finishPeriodPath: (periodId) => `/api/periods/${periodId}/finish`,
   updateItemTypePath: (periodId, itemId) => `/api/periods/${periodId}/items/${itemId}/change-type`,
-  updateUserItemTypePath: (periodId, itemId, userId) => `/api/periods/${periodId}/users/${userId}/items/${itemId}/change-type`,
+  updateUserItemTypePath: (periodId, userId, itemId) => `/api/periods/${periodId}/users/${userId}/items/${itemId}/change-type`,
 
   getPeriods: async function() {
     try {
@@ -147,26 +147,6 @@ const AppraisalService = {
       throw err;
     }
   }, 
-  
-  updateItemType: async function(periodId, item) {
-    try {
-      validate(item);
-      validateId(item);
-      const response = await axios.post(this.updateItemTypePath(periodId, item.id), {type: item.type});
-      if (response.status === 200) {
-        return response.data;
-      } else {
-        throw new Error(`Server response: ${response.status} - ${response.statusText}`);
-      }
-    } catch (err) {
-      NotificationService.notify({
-        type: 'error',
-        header: 'Error',
-        content: (err.response.data && err.response.data.error) || err.message,
-      });
-      throw err;
-    }
-  },
 
   updateUserItem: async function(periodId, userId, item) {
     try {
@@ -188,11 +168,31 @@ const AppraisalService = {
     }
   },
 
+  updateItemType: async function(periodId, item) {
+    try {
+      validate(item);
+      validateId(item);
+      const response = await axios.post(this.updateItemTypePath(periodId, item.id), {type: item.type});
+      if (response.status === 200) {
+        return response.data;
+      } else {
+        throw new Error(`Server response: ${response.status} - ${response.statusText}`);
+      }
+    } catch (err) {
+      NotificationService.notify({
+        type: 'error',
+        header: 'Error',
+        content: (err.response.data && err.response.data.error) || err.message,
+      });
+      throw err;
+    }
+  },
+
   updateUserItemType: async function(periodId, userId, item) {
     try {
       validate(item);
       validateId(item);
-      const response = await axios.post(this.updateUserItemTypePath(periodId, item.id, userId), {type: item.type});
+      const response = await axios.post(this.updateUserItemTypePath(periodId, userId, item.id), {type: item.type});
       if (response.status === 200) {
         return response.data;
       } else {
