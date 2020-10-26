@@ -1,14 +1,17 @@
 import React, { useState, useEffect, useContext } from 'react';
 import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/core/styles';
-import {Grid, Card, CardHeader, IconButton, CardContent, Typography, CardActions, Button } from '@material-ui/core';
+import {Grid, Card, CardHeader, IconButton, CardContent, Typography, CardActions, Button, Menu, MenuItem, ListItemIcon, ListItemText } from '@material-ui/core';
 import { Link, Switch, Route, useRouteMatch } from 'react-router-dom';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
 import AppraisalService from '../../services/AppraisalService';
 import GlobalContext from '../../services/GlobalContext';
 import NewPeriodDialog from '../../components/new-period-dialog';
 import LoginRequired from '../../components/shared/login-required';
 import AppraisalDetailsPage from '../../routes/appraisal-details'
+import { 
+  Lock as LockIcon,
+  MoreVert as MoreVertIcon,
+} from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
   header: {
@@ -48,6 +51,25 @@ const AppraisalsPage = (props) => {
   const global = useContext(GlobalContext);
   const classes = useStyles();
   const { path } = useRouteMatch();
+  const [itemMenuAnchorEl, setItemMenuAnchorEl] = useState(null);
+
+  const handleClickPeriodMenu = (evt) => {
+      setItemMenuAnchorEl(evt.currentTarget);
+  }
+
+  const handleClose = () => {
+    setItemMenuAnchorEl(null);
+  }
+
+  const clickFinishHandler = (item) => async (e) => {
+    const result = await AppraisalService.finishPeriod(item.id);
+    if (result) {
+      setItems(prev => {
+        return prev.map(i => i.id === item.id ? {...item, status: 'Finished'} : i);
+      });
+    }
+    handleClose();
+  }
   
   useEffect(() => {
     async function loadData() {
@@ -75,9 +97,34 @@ const AppraisalsPage = (props) => {
                   <Card key={item.id} className={classes.card}>
                     <CardHeader 
                       action={
-                        <IconButton aria-label="actions">
-                        <MoreVertIcon/>
-                        </IconButton>
+                        <>
+                          <IconButton aria-label='menu' color='inherit' tabIndex={-1} onClick={handleClickPeriodMenu}>
+                              <MoreVertIcon />
+                          </IconButton>
+                          <Menu 
+                              id={`item-menu-${item.id}`}  
+                              anchorEl={itemMenuAnchorEl}
+                              keepMounted
+                              open={Boolean(itemMenuAnchorEl)}
+                              onClose={handleClose}
+                              getContentAnchorEl={null}
+                              anchorOrigin={{
+                                  vertical: 'bottom',
+                                  horizontal: 'center'
+                              }}
+                              transformOrigin={{
+                                  vertical: 'top',
+                                  horizontal: 'center'
+                              }}
+                          >
+                            <MenuItem onClick={clickFinishHandler(item)}>
+                              <ListItemIcon>
+                                <LockIcon fontSize='small'/>
+                              </ListItemIcon>
+                              <ListItemText primary='Finish'/>
+                            </MenuItem>
+                          </Menu>
+                        </>
                       }
                       title={item.name}
                       subheader={item.status}

@@ -8,11 +8,15 @@ const AppraisalService = {
   getItemsPath: (id) => `/api/periods/${id}`,
   getUserItemsPath: (id, userId) => `/api/periods/${id}/users/${userId}`,
   getItemPath: (periodId, itemId) => `/api/periods/${periodId}/items/${itemId}`,
-  addItemPath: (periodId) => `/api/periods/${periodId}/items`,
+  getOrphansPath: `/api/appraisal-items`,
+  addItemPath: `/api/appraisal-items`,
+  updateItemPath: (id) => `/api/appraisal-items/${id}`,
+  deleteItemPath: (id) => `/api/appraisal-items/${id}`,
+  addItemToPeriodPath: (periodId) => `/api/periods/${periodId}/items`,
   addUserItemPath: (periodId, userId) => `/api/periods/${periodId}/users/${userId}/items`,
-  updateItemPath: (periodId, itemId) => `/api/periods/${periodId}/items/${itemId}`,
+  updateItemInPeriodPath: (periodId, itemId) => `/api/periods/${periodId}/items/${itemId}`,
   updateUserItemPath: (periodId, userId, itemId) => `/api/periods/${periodId}/users/${userId}/items/${itemId}`,
-  deleteItemPath: (periodId, itemId) => `/api/periods/${periodId}/items/${itemId}`,
+  deleteItemFromPeriodPath: (periodId, itemId) => `/api/periods/${periodId}/items/${itemId}`,
   deleteUserItemPath: (periodId, userId, itemId) => `/api/periods/${periodId}/users/${userId}/items/${itemId}`,
   finishPeriodPath: (periodId) => `/api/periods/${periodId}/finish`,
   updateItemTypePath: (periodId, itemId) => `/api/periods/${periodId}/items/${itemId}/change-type`,
@@ -54,6 +58,24 @@ const AppraisalService = {
     }
   }, 
 
+  getOrphans: async function() {
+    try {
+      const response = await axios.get(this.getOrphansPath);
+      if (response.status === 200) {
+        return response.data;
+      } else {
+        throw new Error(`Server response: ${response.status} - ${response.statusText}`);
+      }
+    } catch (err) {
+      NotificationService.notify({
+        type: 'error',
+        header: 'Error',
+        content: (err.response.data && err.response.data.error) || err.message,
+      });
+      throw err;
+    }
+  },
+
   getUserItems: async function(periodId, userId) {
     try {
       const response = await axios.get(this.getUserItemsPath(periodId, userId));
@@ -93,7 +115,26 @@ const AppraisalService = {
   addItem: async function(periodId, item) {
     try {
       validate(item);
-      const response = await axios.post(this.addItemPath(periodId), {...item});
+      const response = await axios.post(this.addItemToPeriodPath(periodId), {...item});
+      if (response.status === 200) {
+        return response.data;
+      } else {
+        throw new Error(`Server response: ${response.status} - ${response.statusText}`);
+      }
+    } catch (err) {
+      console.log(err);
+      NotificationService.notify({
+        type: 'error',
+        header: 'Error',
+        content: (err.response.data && err.response.data.error) || err.message,
+      });
+      throw err;
+    }
+  },
+
+  addOrphan: async function(item) {
+    try {
+      const response = await axios.post(this.addItemPath, item);
       if (response.status === 200) {
         return response.data;
       } else {
@@ -128,11 +169,11 @@ const AppraisalService = {
     }
   },
 
-  updateItem: async function(periodId, item) {
+  updateItemInPeriod: async function(periodId, item) {
     try {
       validate(item);
       validateId(item);
-      const response = await axios.put(this.updateItemPath(periodId, item.id), {...item});
+      const response = await axios.put(this.updateItemInPeriodPath(periodId, item.id), {...item});
       if (response.status === 200) {
         return response.data;
       } else {
@@ -147,6 +188,26 @@ const AppraisalService = {
       throw err;
     }
   }, 
+
+  updateItem: async function(item) {
+    try {
+      validate(item);
+      validateId(item);
+      const response = await axios.put(this.updateItemPath(item.id), item);
+      if (response.status === 200) {
+        return response.data;
+      } else {
+        throw new Error(`Server response: ${response.status} - ${response.statusText}`);
+      }
+    } catch (err) {
+      NotificationService.notify({
+        type: 'error',
+        header: 'Error',
+        content: (err.response.data && err.response.data.error) || err.message,
+      });
+      throw err;
+    }
+  },
 
   updateUserItem: async function(periodId, userId, item) {
     try {
@@ -208,9 +269,27 @@ const AppraisalService = {
     }
   },
 
-  deleteItem: async function(periodId, itemId) {
+  deleteItemFromPeriod: async function(periodId, itemId) {
     try {
-      const response = await axios.delete(this.deleteItemPath(periodId, itemId));
+      const response = await axios.delete(this.deleteItemFromPeriodPath(periodId, itemId));
+      if (response.status === 204) {
+        return response.data;
+      } else {
+        throw new Error(`Server response: ${response.status} - ${response.statusText}`);
+      }
+    } catch (err) {
+      NotificationService.notify({
+        type: 'error',
+        header: 'Error',
+        content: (err.response.data && err.response.data.error) || err.message,
+      });
+      throw err;
+    }
+  },
+
+  deleteItem: async function(itemId) {
+    try {
+      const response = await axios.delete(this.deleteItemPath(itemId));
       if (response.status === 204) {
         return response.data;
       } else {
@@ -346,7 +425,7 @@ const AppraisalService = {
 
   deleteItemFromSet: async function(periodId, item) {
     try {
-      const result = await this.deleteItem(periodId, item.id);
+      const result = await this.deleteItemFromPeriod(periodId, item.id);
       return {
         value: result,
         error: null
@@ -376,7 +455,7 @@ const AppraisalService = {
 
   updateItemInSet: async function(periodId, item) {
     try {
-      const result = await this.updateItem(periodId, item);
+      const result = await this.updateItemInPeriod(periodId, item);
       return {
         value: result,
         error: null
