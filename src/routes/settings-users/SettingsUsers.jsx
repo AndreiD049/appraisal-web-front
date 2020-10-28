@@ -120,10 +120,14 @@ const SettingsUsers = (props) => {
             ...newData,
             teams: newData.teams.map(t => t.id),
             organizations: newData.organizations.map(o => o.id),
+            organization: oldData.organization ||
+              newData.organizations.length ? 
+              newData.organizations[0].id : 
+              null
           });
-          console.log(result);
+          console.log(oldData);
           dataUpdate[index] = result;
-          setData(oldData => dataUpdate);
+          setData(prev => dataUpdate);
           resolve();
         } catch (err) {
           console.log(err);

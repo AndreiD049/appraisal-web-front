@@ -10,6 +10,7 @@ import {
     ArrowDropDownCircle,
     Build as BuildIcon,
     ExpandLess as ExpandLessIcon,
+    PanTool as PanToolIcon
 } from '@material-ui/icons';
 import {
     AppBar,
@@ -158,18 +159,30 @@ export default function Navigation()
                         </ListItemIcon>
                         <ListItemText primary="Home" />
                     </ListItemLink>
-                    <ListItemLink to="/appraisals">
-                        <ListItemIcon>
-                            <FeedbackIcon/>
-                        </ListItemIcon>
-                        <ListItemText primary="Appraisals"/>
-                    </ListItemLink>
-                    <ListItemLink to="/reports">
-                        <ListItemIcon>
-                            <PieChartIcon/>
-                        </ListItemIcon>
-                        <ListItemText primary="Reports"/>
-                    </ListItemLink> 
+                    <AuthorizationComponent code='APPRAISAL PERIODS' grant='read'>
+                        <ListItemLink to="/appraisals">
+                            <ListItemIcon>
+                                <FeedbackIcon/>
+                            </ListItemIcon>
+                            <ListItemText primary="Appraisals"/>
+                        </ListItemLink>
+                    </AuthorizationComponent>
+                    <AuthorizationComponent code='AUDITS' grant='read'>
+                        <ListItemLink to="/audits">
+                            <ListItemIcon>
+                                <PanToolIcon/>
+                            </ListItemIcon>
+                            <ListItemText primary="Audits"/>
+                        </ListItemLink>
+                    </AuthorizationComponent>
+                    <AuthorizationComponent code='REPORTS' grant='read'>
+                        <ListItemLink to="/reports">
+                            <ListItemIcon>
+                                <PieChartIcon/>
+                            </ListItemIcon>
+                            <ListItemText primary="Reports"/>
+                        </ListItemLink> 
+                    </AuthorizationComponent>
                     <AuthorizationComponent code='SETTINGS' grant='read'>
                         <ListItem button onClick={handleCollapseToggle('settings')}>
                             <ListItemIcon>

@@ -57,6 +57,9 @@ function App() {
 						<Route path='/appraisals'>
 							<AppraisalsPage ctx={context} setCtx={setContext}/>
 						</Route>
+						<Route path='/audits'>
+							<h1>IN PROGRESS</h1>
+						</Route>
 						<Route path='/reports'>
 							<ReportsPage ctx={context} setCtx={setContext}/>
 						</Route>

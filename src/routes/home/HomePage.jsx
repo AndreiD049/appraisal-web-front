@@ -10,16 +10,11 @@ const HomePage = ({ctx, setCtx, ...props}) => {
     <>
       <h1 style={{textAlign: 'center'}}>HomePage</h1>
       <Grid container>
-          <Grid item xs={6}>
+          <Grid item xs={12} sm={6}>
             <AuthorizationComponent code='APPRAISAL DETAILS' grant='read'>
               <HomePlannedItems/>
             </AuthorizationComponent>
           </Grid>
-        <Grid item xs={6}>
-          <AuthorizationComponent code='APPRAISAL DETAILS' grant='read'>
-            <HomePlannedItems/>
-          </AuthorizationComponent>
-        </Grid>
       </Grid>
     </>
   );

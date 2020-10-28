@@ -6,8 +6,6 @@ import HomePlannedItemsInfoProvider from './components/HomePlannedItemsInfoProvi
 const HomePlannedItems = (props) => {
     const [items, setItems] = useState([]);
 
-    console.log(items);
-
     return (
         <>
             <HomePlannedItemsInfoProvider setItems={setItems} />
