@@ -189,15 +189,15 @@ const AppraisalsPage = (props) => {
                 </Button>
               </Grid>
                 {/* Dialogs */}
-              <NewPeriodDialog open={dialogOpen} context={global.context} handleClose={() => setDialogOpen(false)} setItems={setItems} />
+              <NewPeriodDialog open={dialogOpen} context={global} handleClose={() => setDialogOpen(false)} setItems={setItems} />
             </Grid>
           </Container>
         </Route>
         <Route exact path={`${path}/:id/user/:userId`}>
-          <AppraisalDetailsPage ctx={global.context} setCtx={global.setContext}/>
+          <AppraisalDetailsPage ctx={global} setCtx={global.setContext}/>
         </Route>
         <Route path={`${path}/:id`}>
-          <AppraisalDetailsPage ctx={global.context} setCtx={global.setContext}/>
+          <AppraisalDetailsPage ctx={global} setCtx={global.setContext}/>
         </Route>
       </Switch>
     </>

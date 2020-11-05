@@ -10,10 +10,10 @@ const LoginRequired = () => {
     async function getUser() {
       // const user = await LoginService.getCurrentUser();
 
-      if (!global.context.userLoaded)
+      if (!global.userLoaded)
         return;
       // There is no user anymore, probably logged out, so we need to remove it from the state
-      if (global.context.user === null) {
+      if (global.user === null) {
         setRedirect(true);
       }
     }

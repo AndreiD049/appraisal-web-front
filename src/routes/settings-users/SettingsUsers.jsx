@@ -60,7 +60,7 @@ const SettingsUsers = (props) => {
         <Autocomplete
           multiple
           id="tags-standard-organizations"
-          options={global.context.user.organizations}
+          options={global.user.organizations}
           getOptionLabel={(option) => option.name}
           getOptionSelected={(option, value) => {
             return option.name === value.name;

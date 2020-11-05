@@ -63,8 +63,8 @@ export default function Navigation()
         return <ListItem button component={Link} {...props}/>
     }
 
-    const displayName = global.context.user ?
-        (global.context.user.displayName || global.context.user.username) :
+    const displayName = global.user ?
+        (global.user.displayName || global.user.username) :
         'Unknown';
 
     const UserAvatar = (
@@ -74,7 +74,7 @@ export default function Navigation()
             onClick={handleClickUserMenu}
             className={classes.avatar}
         >
-            { global.context.user && global.context.user.avatar }
+            { global.user && global.user.avatar }
         </Avatar>
     );
 
@@ -104,7 +104,7 @@ export default function Navigation()
                         Admin Tools 
                     </Typography>
                     {
-                        global.context.user ?  
+                        global.user ?  
                             <Toolbar>
                                 {UserAvatar}
                                 <Menu 
@@ -129,7 +129,7 @@ export default function Navigation()
                                 </Menu>
                             </Toolbar> :
                             <div>
-                                { global.context.userLoaded ?
+                                { global.userLoaded ?
                                 <MuiLink href="/api/login" color='inherit'>
                                     <Button edge='end' color='inherit'>Login</Button>
                                 </MuiLink>

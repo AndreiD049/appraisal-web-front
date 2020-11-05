@@ -15,7 +15,7 @@ const LoginService = {
       NotificationService.notify({
         type: 'error',
         header: 'Error',
-        content: (err.response.data && err.response.data.error) || err.message,
+        content: 'Not logged in. ' + ((err.response.data && err.response.data.error) || err.message),
       });
       return null;
     }

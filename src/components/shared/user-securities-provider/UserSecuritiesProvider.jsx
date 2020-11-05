@@ -7,7 +7,7 @@ const UserSecuritiesProvider = (props) => {
 
   useEffect(() => {
     async function run() {
-      if (!global.context.security && global.context.user !== null) {
+      if (!global.security && global.user !== null) {
 
         const result = await AuthorizationService.getSecurities();
         if (result) {

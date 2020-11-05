@@ -1,5 +1,5 @@
 import welcome from '../../utils/welcome';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navigation from '../navigation/Navigation';
 import CssBaseline from '@material-ui/core/CssBaseline'
 import { 
@@ -22,24 +22,39 @@ import AuthorizationService from '../../services/AuthorizationService';
 import UserInfoProvider from '../../components/shared/user-info-provider';
 import { Container } from '@material-ui/core';
 import useStyle from './styles';
-import ThemeController from '../theme-controller';
+import { ThemeProvider, createMuiTheme } from '@material-ui/core';
+import { themeDark, themeLight } from '../../styles/theme';
 
 welcome();
 
 function App() {
 	const classes = useStyle();
+
 	const [context, setContext] = useState({ 
 		user: null,
-		Authorize: AuthorizationService.Authorize 
+		Authorize: AuthorizationService.Authorize,
+		setContext: null,
+		userPreferences: {
+			theme: localStorage.getItem('theme') === 'dark' ? createMuiTheme(themeDark) : createMuiTheme(themeLight)
+		}
 	});
+
+	useEffect(() => {
+		setContext(prev => ({
+			...prev,
+			setContext: setContext
+		}));
+	}, []);
+
 	const [notifications, setNotifications] = useState([]);
 	const notificationObject = NotificationContextObject(notifications, setNotifications);
 	// set the notification object so we can notify the user
 	NotificationService.notificationObject = notificationObject;
 
 	return (
-		<GlobalContext.Provider value={{context: context, setContext: setContext}}>
-			<ThemeController>
+		// <GlobalContext.Provider value={{context: context, setContext: setContext}}>
+		<GlobalContext.Provider value={context}>
+			<ThemeProvider theme={context.userPreferences.theme}>
 				<NotificationManager
 					notifications={notifications}
 					notificationRender={(notification, props) => (
@@ -81,7 +96,7 @@ function App() {
 						</Switch>
 					</Container>
 				</Router>
-			</ThemeController>
+		  </ThemeProvider>
 		</GlobalContext.Provider>
   );
 }

@@ -6,7 +6,7 @@ const AuthorizationComponent = ({ code, grant, onReject, ...props }) => {
   const [access, setAccess] = useState(false);
 
   useEffect(() => {
-    setAccess(global.context.Authorize(code, grant));
+    setAccess(global.Authorize(code, grant));
   }, [global, code, grant]);
 
   return ( access ? props.children : (onReject ? onReject() : null) );

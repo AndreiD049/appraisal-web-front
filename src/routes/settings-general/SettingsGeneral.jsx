@@ -1,13 +1,13 @@
 import { Grid, Typography } from '@material-ui/core';
+import { createMuiTheme } from '@material-ui/core/styles';
 import Switch from '@material-ui/core/Switch';
 import React, { useContext, useState } from 'react';
 import GlobalContext from '../../services/GlobalContext';
+import { themeDark, themeLight } from '../../styles/theme';
 
 const SettingsGeneral = (props) => {
   const global = useContext(GlobalContext);
-  const [theme, setTheme] = useState((global.context.userPreferences && global.context.userPreferences.theme) ||
-    localStorage.getItem('theme') ||
-    'light');
+  const [theme, setTheme] = useState(global.userPreferences.theme.palette.type);
 
   const handleChange = (evt) => {
     let type;
@@ -20,12 +20,9 @@ const SettingsGeneral = (props) => {
     localStorage.setItem('theme', type);
     global.setContext(prev => ({
       ...prev,
-      context: {
-        ...global.context,
-        userPreferences: {
-          ...(global.context.userPreferences || null),
-          theme: type
-        }
+      userPreferences: {
+        ...global.userPreferences,
+        theme: type === 'light' ? createMuiTheme(themeLight) : createMuiTheme(themeDark)
       }
     }));
   }

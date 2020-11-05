@@ -33,10 +33,9 @@ const DialogDisplay = ({
   }
 
 	const handleSubmitWrapper = async (e) => {
-    console.log(global.context);
     e.persist();
     e.preventDefault();
-		await handleSubmit(name, status, global.context.user.organization.id);
+		await handleSubmit(name, status, global.user.organization.id);
 	}
 
   const handleCloseWrapper = (e) => {

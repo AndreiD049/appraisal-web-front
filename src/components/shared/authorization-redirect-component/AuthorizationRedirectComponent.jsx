@@ -10,9 +10,9 @@ const AuthorizationRedirectComponent = ({ code, grant, to, failureNotification, 
   const [notified, setNotified] = useState(false);
 
   useEffect(() => {
-    const isAuthorized = global.context.Authorize(code, grant);
+    const isAuthorized = global.Authorize(code, grant);
     setAccess(isAuthorized);
-    if (global.context.security) {
+    if (global.security) {
       setRedirect(!isAuthorized);
       if (failureNotification && !isAuthorized && !notified) {
         NotificationService.notify(failureNotification);
