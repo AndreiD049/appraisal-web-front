@@ -54,6 +54,9 @@ const styles = makeStyles((theme) => ({
       width: theme.spacing(7) + 1,
     }
   },
+  avatar: {
+    cursor: 'pointer'
+  }
 }));
 
 export default styles;

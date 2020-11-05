@@ -7,7 +7,6 @@ import {
     Settings as SettingsIcon,
     PieChart as PieChartIcon,
     ExpandMore as ExpandMoreIcon,
-    ArrowDropDownCircle,
     Build as BuildIcon,
     ExpandLess as ExpandLessIcon,
     PanTool as PanToolIcon
@@ -19,7 +18,8 @@ import {
     ListItem,
     ListItemText,
     Collapse,
-    IconButton
+    IconButton,
+    Avatar
 } from '@material-ui/core';
 import clsx from 'clsx';
 import styles from './styles';
@@ -27,6 +27,7 @@ import { Toolbar, ListItemIcon, Button, Typography, Link as MuiLink, Menu, MenuI
 import { Link } from 'react-router-dom'
 import GlobalContext from '../../services/GlobalContext';
 import SettingsNavigation from './components/settings-navigation';
+import ReportsNavigation from './components/reports-navigation';
 import AuthorizationComponent from '../shared/authorization-component';
 
 export default function Navigation()
@@ -62,6 +63,20 @@ export default function Navigation()
         return <ListItem button component={Link} {...props}/>
     }
 
+    const displayName = global.context.user ?
+        (global.context.user.displayName || global.context.user.username) :
+        'Unknown';
+
+    const UserAvatar = (
+        <Avatar 
+            title={displayName}
+            alt={displayName}
+            onClick={handleClickUserMenu}
+            className={classes.avatar}
+        >
+            { global.context.user && global.context.user.avatar }
+        </Avatar>
+    );
 
     return (
         <div>
@@ -91,10 +106,7 @@ export default function Navigation()
                     {
                         global.context.user ?  
                             <Toolbar>
-                                <Typography variant='body1'>Hey, {global.context.user.username}</Typography>
-                                <IconButton aria-label='menu' color='inherit' onClick={handleClickUserMenu}>
-                                    <ArrowDropDownCircle />
-                                </IconButton>
+                                {UserAvatar}
                                 <Menu 
                                     id='user-menu'
                                     anchorEl={userMenuAnchorEl}
@@ -176,12 +188,16 @@ export default function Navigation()
                         </ListItemLink>
                     </AuthorizationComponent>
                     <AuthorizationComponent code='REPORTS' grant='read'>
-                        <ListItemLink to="/reports">
+                        <ListItem button onClick={handleCollapseToggle('reports')}>
                             <ListItemIcon>
-                                <PieChartIcon/>
+                                <PieChartIcon />
                             </ListItemIcon>
-                            <ListItemText primary="Reports"/>
-                        </ListItemLink> 
+                            <ListItemText primary="Reporting"/>
+                            {collapses['reports'] ? <ExpandLessIcon/> : <ExpandMoreIcon />}
+                        </ListItem>
+                        <Collapse in={collapses['reports']}>
+                            <ReportsNavigation/>
+                        </Collapse>
                     </AuthorizationComponent>
                     <AuthorizationComponent code='SETTINGS' grant='read'>
                         <ListItem button onClick={handleCollapseToggle('settings')}>

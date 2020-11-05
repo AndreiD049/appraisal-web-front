@@ -1,0 +1,51 @@
+import React from 'react'
+import { useHistory, useRouteMatch } from 'react-router-dom';
+import { tableIcons } from '../../utils/material-table-utils';
+import {
+  Container,
+} from '@material-ui/core';
+import MaterialTable from 'material-table';
+import ReportNewTemplate from '../report-templates-new';
+
+const ReportTemplatesList = (props) => {
+  const history = useHistory();
+  const { path } = useRouteMatch();
+
+  return (
+    <Container maxWidth='lg'>
+      <h1 style={{textAlign: 'center'}}>Templates</h1>
+      <ReportNewTemplate />
+      <MaterialTable 
+        icons={ tableIcons }
+        title='List'
+        columns={[
+          {
+            title: 'Name', field: 'name'
+          },
+          {
+            title: 'Filename', field: 'filename'
+          },
+          {
+            title: 'User created', field: 'createdUser'
+          }
+        ]}
+        data={[
+          {id: 1234, name: 'Test', filename: 'test.xlsx', createdUser: 'me@you.com'},
+          {id: 41231, name: 'Test1', filename: 'test.xlsx', createdUser: 'me@you.com'},
+          {id: 123124, name: 'Test2', filename: 'test.xlsx', createdUser: 'me@you.com'},
+          {id: 12345, name: 'Test3', filename: 'test.xlsx', createdUser: 'me@you.com'},
+        ]}
+        actions={[
+          {
+            icon: tableIcons.Download,
+            tooltip: 'Download Template',
+            onClick: (event, rowData) => alert('Download file')
+          }
+        ]}
+        onRowClick={(evt, rowData) => history.push(`${path}/${rowData.id}`)}
+      />
+    </Container>
+  );
+};
+
+export default ReportTemplatesList

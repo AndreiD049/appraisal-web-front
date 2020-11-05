@@ -112,7 +112,6 @@ const SettingsUsers = (props) => {
   const editable = {
     onRowUpdate: (newData, oldData) =>
       new Promise(async (resolve, reject) => {
-        console.log(newData);
         try {
           const dataUpdate = [...data];
           const index = oldData.tableData.id;

@@ -15,6 +15,7 @@ import {
   SaveAlt, 
   Search, 
   ViewColumn,
+  CloudDownload
 } from '@material-ui/icons';
 
 const tableIcons = {
@@ -34,7 +35,8 @@ const tableIcons = {
     Search: forwardRef((props, ref) => <Search {...props} ref={ref} />),
     SortArrow: forwardRef((props, ref) => <ArrowDownward {...props} ref={ref} />),
     ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
-    ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
+    ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
+    Download: forwardRef((props, ref) => <CloudDownload {...props} ref={ref} />)
   };
 
 export {

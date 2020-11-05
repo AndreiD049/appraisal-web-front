@@ -21,41 +21,41 @@ const SettingsNavigation = (props) => {
         <AuthorizationComponent code='SETTINGS' grant='general'>
             <ListItem button component={Link} to='/settings'>
                 <ListItemIcon>
-                    <DesktopMacIcon />
+                    <DesktopMacIcon fontSize='small' />
                 </ListItemIcon>
-                <ListItemText primary='General' />
+                <ListItemText secondary='General' />
             </ListItem>
         </AuthorizationComponent>
         <AuthorizationComponent code='SETTINGS' grant='users'>
             <ListItem button component={Link} to='/settings/users'>
                 <ListItemIcon>
-                    <PeopleIcon/>
+                    <PeopleIcon fontSize='small'/>
                 </ListItemIcon>
-                <ListItemText primary='Users' />
+                <ListItemText secondary='Users' />
             </ListItem>
         </AuthorizationComponent>
         <AuthorizationComponent code='SETTINGS' grant='appraisal-periods'>
             <ListItem button component={Link} to='/settings/appraisal-periods'>
                 <ListItemIcon>
-                    <EqualizerIcon/>
+                    <EqualizerIcon fontSize='small' />
                 </ListItemIcon>
-                <ListItemText primary='Appraisal-periods' />
+                <ListItemText secondary='Appraisal-periods' />
             </ListItem>
         </AuthorizationComponent>
         <AuthorizationComponent code='SETTINGS' grant='appraisal-items'>
             <ListItem button component={Link} to='/settings/appraisal-items'>
                 <ListItemIcon>
-                    <NotesIcon/>
+                    <NotesIcon fontSize='small' />
                 </ListItemIcon>
-                <ListItemText primary='Appraisal-items' />
+                <ListItemText secondary='Appraisal-items' />
             </ListItem>
         </AuthorizationComponent>
         <AuthorizationComponent code='SETTINGS' grant='permissions'>
             <ListItem button component={Link} to='/settings/permissions'>
                 <ListItemIcon>
-                    <KeyIcon />
+                    <KeyIcon fontSize='small' />
                 </ListItemIcon>
-                <ListItemText primary='Permissions' />
+                <ListItemText secondary='Permissions' />
             </ListItem>
         </AuthorizationComponent>
     </List>

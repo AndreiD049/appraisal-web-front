@@ -62,7 +62,7 @@ const HomePlannedItemsDisplay = ({ items, setItems, ...props }) => {
 	}
 
 	const removeItem = async (item) => {
-		const result = await AppraisalService.deleteItem(item.id);
+		await AppraisalService.deleteItem(item.id);
 		setItems(prev => prev.filter(i => i.id !== item.id));
 	}
 	

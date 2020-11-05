@@ -10,7 +10,7 @@ import {
 import AppraisalsPage from '../../routes/appraisals';
 import HomePage from '../../routes/home';
 import SettingsPage from '../../routes/settings';
-import ReportsPage from '../../routes/reports';
+import ReportingPage from '../../routes/reporting';
 import LoginPage from '../../routes/login';
 import GlobalContext from '../../services/GlobalContext';
 import NotificationManager from '../../components/shared/notification-manager';
@@ -22,6 +22,8 @@ import AuthorizationService from '../../services/AuthorizationService';
 import UserInfoProvider from '../../components/shared/user-info-provider';
 import { Container } from '@material-ui/core';
 import useStyle from './styles';
+import ThemeController from '../theme-controller';
+
 welcome();
 
 function App() {
@@ -37,47 +39,49 @@ function App() {
 
 	return (
 		<GlobalContext.Provider value={{context: context, setContext: setContext}}>
-			<NotificationManager
-				notifications={notifications}
-				notificationRender={(notification, props) => (
-					<PopUp {...props} type={notification.type} />
-				)}
-				onAfterClose={(entry) => {
-					setNotifications(prev => prev.filter(n => n !== entry));
-				}}
-			/>
-      <UserInfoProvider ctx={context} setCtx={setContext}/>
-			<CssBaseline/>
-			<UserSecuritiesProvider/>
-			<Router>
-				<Navigation annexElements={context.annexElements}/>
-				<Container maxWidth='lg' className={classes.root}>
-					{/* The page switch */}
-					<Switch>
-						<Route path='/appraisals'>
-							<AppraisalsPage ctx={context} setCtx={setContext}/>
-						</Route>
-						<Route path='/audits'>
-							<h1>IN PROGRESS</h1>
-						</Route>
-						<Route path='/reports'>
-							<ReportsPage ctx={context} setCtx={setContext}/>
-						</Route>
-						<Route path='/settings'>
-							<SettingsPage ctx={context} setCtx={setContext}/>
-						</Route>
-						<Route path='/login'>
-							<LoginPage ctx={context} setCtx={setContext}/>
-						</Route>
-						<Route path='/sandbox'>
-							<SandboxPage />
-						</Route>
-						<Route path='/'>
-							<HomePage ctx={context} setCtx={setContext}/>
-						</Route>
-					</Switch>
-				</Container>
-			</Router>
+			<ThemeController>
+				<NotificationManager
+					notifications={notifications}
+					notificationRender={(notification, props) => (
+						<PopUp {...props} type={notification.type} />
+					)}
+					onAfterClose={(entry) => {
+						setNotifications(prev => prev.filter(n => n !== entry));
+					}}
+				/>
+				<UserInfoProvider ctx={context} setCtx={setContext}/>
+				<CssBaseline/>
+				<UserSecuritiesProvider/>
+				<Router>
+					<Navigation annexElements={context.annexElements}/>
+					<Container maxWidth='lg' className={classes.root}>
+						{/* The page switch */}
+						<Switch>
+							<Route path='/appraisals'>
+								<AppraisalsPage ctx={context} setCtx={setContext}/>
+							</Route>
+							<Route path='/audits'>
+								<h1>IN PROGRESS</h1>
+							</Route>
+							<Route path='/reporting'>
+								<ReportingPage ctx={context} setCtx={setContext}/>
+							</Route>
+							<Route path='/settings'>
+								<SettingsPage ctx={context} setCtx={setContext}/>
+							</Route>
+							<Route path='/login'>
+								<LoginPage ctx={context} setCtx={setContext}/>
+							</Route>
+							<Route path='/sandbox'>
+								<SandboxPage />
+							</Route>
+							<Route path='/'>
+								<HomePage ctx={context} setCtx={setContext}/>
+							</Route>
+						</Switch>
+					</Container>
+				</Router>
+			</ThemeController>
 		</GlobalContext.Provider>
   );
 }

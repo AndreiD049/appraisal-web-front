@@ -68,8 +68,8 @@ const SecurityDetailsRoleDisplay = ({codes, roles, rolePermissions, setRolePermi
     } else if (!e.target.checked) {
       const grants = rolePermissions[role.name][code.code].grants.filter(g => g !== grant);
       if (grants.length === 0) {
-        const result = await handleDelete(rolePermissions[role.name][code.code]);
-        result && handleSetPermission(role, code, null);
+        await handleDelete(rolePermissions[role.name][code.code]);
+        handleSetPermission(role, code, null);
       } else {
         const result = await handleUpdate({...rolePermissions[role.name][code.code], grants: grants});
         result && handleSetPermission(role, code, result);

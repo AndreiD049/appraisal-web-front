@@ -69,8 +69,8 @@ const SecurityDetailsUserDisplay = ({codes, users, userPermissions, setUserPermi
     } else if (!e.target.checked) {
       const grants = userPermissions[user.username][code.code].grants.filter(g => g !== grant);
       if (grants.length === 0) {
-        const result = await handleDelete(userPermissions[user.username][code.code]);
-        result && handleSetPermission(user, code, null);
+        await handleDelete(userPermissions[user.username][code.code]);
+        handleSetPermission(user, code, null);
       } else {
         const result = await handleUpdate({...userPermissions[user.username][code.code], grants: grants});
         result && handleSetPermission(user, code, result);
