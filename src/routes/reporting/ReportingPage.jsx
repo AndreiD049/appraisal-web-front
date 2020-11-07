@@ -45,6 +45,7 @@ const ReportingPage = ({ ctx, setCtx }) => {
     </>
   );
 };
+
 ReportingPage.propTypes = {
   ctx: PropTypes.shape({
     user: PropTypes.shape({
