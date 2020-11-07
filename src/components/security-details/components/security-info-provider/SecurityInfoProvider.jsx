@@ -21,7 +21,7 @@ const SecurityInfoProvider = ({
       setRoles(rolesInfo.sort((a, b) => (a.name < b.name ? -1 : 1)));
 
       // get all users
-      const userInfo = await UserService.getUsers();
+      const userInfo = await UserService.getSettingsUsers();
       setUsers(userInfo.sort((a, b) => (a.username < b.username ? -1 : 1)));
 
       // get All role permissions

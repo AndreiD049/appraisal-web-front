@@ -69,7 +69,7 @@ const SettingsUsers = () => {
           } else if (newData.organizations.length === 0) {
             organization = null;
           }
-          const result = await UserService.updateUser(newData.id, {
+          const result = await UserService.updateSettingsUser(newData.id, {
             ...newData,
             teams: newData.teams.map((t) => t.id),
             organizations: newData.organizations.map((o) => o.id),
@@ -95,7 +95,7 @@ const SettingsUsers = () => {
     async function run() {
       const [users, _teams, _roles] = await Promise.all(
         [
-          UserService.getUsers(),
+          UserService.getSettingsUsers(),
           TeamService.getTeams(),
           AuthorizationService.getRoles(),
         ],

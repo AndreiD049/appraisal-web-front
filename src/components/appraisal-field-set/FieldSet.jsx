@@ -207,22 +207,25 @@ const FieldSet = ({
     <Box>
       <h3 className={classes.header}>{labels[type]}</h3>
       <List>
-        {items.map((i, idx) => (
+        {items.map((i, idx) => {
+          const key = i.id === 0 ? idx : i.id;
+          return (
           // eslint-disable-next-line react/no-array-index-key
-          <ListItem className={classes.listItem} key={`appraisal-item-${i.id}-${idx}`}>
-            <AppraisalInput
-              item={i}
-              idx={idx}
-              label={labels[type]}
-              changeHandler={changeHandler}
-              blurHandler={blurHandler}
-              removeHandler={removeHandler}
-              changeTypeHandler={changeTypeHandler}
-              canUpdate={context.Authorize(userId ? 'APPRAISAL DETAILS - OTHER USERS' : 'APPRAISAL DETAILS', 'update')}
-              canDelete={context.Authorize(userId ? 'APPRAISAL DETAILS - OTHER USERS' : 'APPRAISAL DETAILS', 'delete')}
-            />
-          </ListItem>
-        ))}
+            <ListItem className={classes.listItem} key={key}>
+              <AppraisalInput
+                item={i}
+                idx={idx}
+                label={labels[type]}
+                changeHandler={changeHandler}
+                blurHandler={blurHandler}
+                removeHandler={removeHandler}
+                changeTypeHandler={changeTypeHandler}
+                canUpdate={context.Authorize(userId ? 'APPRAISAL DETAILS - OTHER USERS' : 'APPRAISAL DETAILS', 'update')}
+                canDelete={context.Authorize(userId ? 'APPRAISAL DETAILS - OTHER USERS' : 'APPRAISAL DETAILS', 'delete')}
+              />
+            </ListItem>
+          );
+        })}
       </List>
     </Box>
   );
@@ -241,7 +244,11 @@ FieldSet.propTypes = {
     id: PropTypes.string,
   }).isRequired,
   type: PropTypes.string.isRequired,
-  setOtherItems: PropTypes.func.isRequired,
+  setOtherItems: PropTypes.func,
+};
+
+FieldSet.defaultProps = {
+  setOtherItems: null,
 };
 
 export default FieldSet;

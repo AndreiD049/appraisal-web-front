@@ -44,7 +44,6 @@ const NotificationManager = ({
   notifications, notificationRender, onAfterClose, ...props
 }) => {
   const classes = useStyles(props);
-
   return (
     <div className={classes.root}>
       {
