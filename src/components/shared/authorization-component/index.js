@@ -1,3 +1,3 @@
-import AuthorizationComponent from "./AuthorizationComponent";
+import AuthorizationComponent from './AuthorizationComponent';
 
 export default AuthorizationComponent;

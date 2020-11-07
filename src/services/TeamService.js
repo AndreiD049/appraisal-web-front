@@ -2,23 +2,21 @@ import axios from 'axios';
 import NotificationService from './NotificationService';
 
 const TeamService = {
-  getTeamsPath: `/api/teams/`,
-  addTeamPath: `/api/teams`,
+  getTeamsPath: '/api/teams/',
+  addTeamPath: '/api/teams',
 
-  validate: function(team) {
-    if (!team)
-      throw new Error("Team name missing");
+  validate(team) {
+    if (!team) throw new Error('Team name missing');
     return true;
   },
 
-  getTeams: async function() {
+  async getTeams() {
     try {
       const response = await axios.get(this.getTeamsPath);
       if (response.status === 200) {
         return response.data;
-      } else {
-        throw new Error(`Server response: ${response.status} - ${response.statusText}`)
       }
+      throw new Error(`Server response: ${response.status} - ${response.statusText}`);
     } catch (err) {
       NotificationService.notify({
         type: 'error',
@@ -29,15 +27,14 @@ const TeamService = {
     }
   },
 
-  addTeam: async function(team) {
+  async addTeam(team) {
     try {
       this.validate(team);
-      const response = await axios.post(this.addTeamPath, {team});
+      const response = await axios.post(this.addTeamPath, { team });
       if (response.status === 200) {
         return response.data;
-      } else {
-        throw new Error(`Server response: ${response.status} - ${response.statusText}`);
       }
+      throw new Error(`Server response: ${response.status} - ${response.statusText}`);
     } catch (err) {
       NotificationService.notify({
         type: 'error',
@@ -46,7 +43,7 @@ const TeamService = {
       });
       throw err;
     }
-  }
+  },
 };
 
 export default TeamService;

@@ -1,3 +1,3 @@
-import NewPeriodDialog from "./NewPeriodDialog";
+import NewPeriodDialog from './NewPeriodDialog';
 
 export default NewPeriodDialog;

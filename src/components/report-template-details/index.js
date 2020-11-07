@@ -1,3 +1,3 @@
-import ReportTemplateDetails from "./ReportTemplateDetails";
+import ReportTemplateDetails from './ReportTemplateDetails';
 
 export default ReportTemplateDetails;

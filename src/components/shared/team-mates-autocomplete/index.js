@@ -1,3 +1,3 @@
-import TeamMatesAutocomplete from "./TeamMatesAutocomplete";
+import TeamMatesAutocomplete from './TeamMatesAutocomplete';
 
 export default TeamMatesAutocomplete;

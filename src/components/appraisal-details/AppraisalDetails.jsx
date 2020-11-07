@@ -1,31 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import AppraisalDetailsInfo from './components/appraisal-info';
 import AppraisalDetailsDisplay from './components/appraisal-details-display';
 import AppraisalUserInfo from './components/appraisal-user-info';
 import AppraisalUserDetails from './components/appraisal-user-details-display';
-import { useEffect } from 'react';
 
-
-const AppraisalDetails = ({context, ...props}) => {
+const AppraisalDetails = ({ context }) => {
   const [periodDetails, setPeriodDetails] = useState(null);
   const [userDetails, setUserDetails] = useState(null);
-  const periodId = useParams()['id'];
-  const userId = useParams()['userId'];
+  const periodId = useParams().id;
+  const { userId } = useParams();
 
   useEffect(() => {
     setPeriodDetails(null);
     setUserDetails(null);
-  }, [userId])
+  }, [userId]);
 
   let display;
   if (!userId) {
     display = (
       <>
         {
-          periodDetails === null ? 
-            <AppraisalDetailsInfo periodId={periodId} setPeriodDetails={setPeriodDetails}/> :
-            <AppraisalDetailsDisplay context={context} periodDetails={periodDetails} /> 
+          periodDetails === null
+            ? <AppraisalDetailsInfo periodId={periodId} setPeriodDetails={setPeriodDetails} />
+            : <AppraisalDetailsDisplay context={context} periodDetails={periodDetails} />
         }
       </>
     );
@@ -33,20 +31,23 @@ const AppraisalDetails = ({context, ...props}) => {
     display = (
       <>
         {
-          periodDetails === null || userDetails === null ? 
-            <AppraisalUserInfo 
-              periodId={periodId} 
-              userId={userId} 
-              setUserDetails={setUserDetails} 
-              setPeriodDetails={setPeriodDetails}
-            /> 
-            :
-            <AppraisalUserDetails 
-              context={context} 
-              periodDetails={periodDetails} 
-              userDetails={userDetails}
-            /> 
-        }
+          periodDetails === null || userDetails === null
+            ? (
+              <AppraisalUserInfo
+                periodId={periodId}
+                userId={userId}
+                setUserDetails={setUserDetails}
+                setPeriodDetails={setPeriodDetails}
+              />
+            )
+            : (
+              <AppraisalUserDetails
+                context={context}
+                periodDetails={periodDetails}
+                userDetails={userDetails}
+              />
+            )
+}
       </>
     );
   }

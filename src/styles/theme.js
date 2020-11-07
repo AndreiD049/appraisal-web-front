@@ -1,8 +1,6 @@
-import { createMuiTheme } from '@material-ui/core/styles';
-
 const themeDark = {
   palette: {
-    type: 'dark'
+    type: 'dark',
   },
   typography: {
     fontFamily: [
@@ -20,7 +18,7 @@ const themeDark = {
 
 const themeLight = {
   palette: {
-    type: 'light'
+    type: 'light',
   },
   typography: {
     fontFamily: [
@@ -38,5 +36,5 @@ const themeLight = {
 
 export {
   themeDark,
-  themeLight
+  themeLight,
 };

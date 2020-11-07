@@ -1,3 +1,3 @@
-import SettingsRolesPage from "./SettingsRoles";
+import SettingsRolesPage from './SettingsRoles';
 
 export default SettingsRolesPage;

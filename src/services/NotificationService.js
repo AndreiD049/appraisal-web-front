@@ -4,35 +4,35 @@ const getNextId = () => {
   if (nextId > 100000) {
     nextId = 0;
   }
-  nextId++;
+  nextId += 1;
   return nextId;
-}
-const NotificationContextObject = (notifications, setNotifications) => {
-  return {
-    notifications: notifications,
-    setNotifications: setNotifications,
-    addNotification: (notification) => setNotifications(prev => {
-      let copy = prev.slice();
-      notification.id = getNextId();
-      copy.push(notification);
-      return copy;
-    }),
-  }
-}
+};
+const NotificationContextObject = (notifications, setNotifications) => ({
+  notifications,
+  setNotifications,
+  addNotification: (notification) => setNotifications((prev) => {
+    const n = notification;
+    const copy = prev.slice();
+    n.id = getNextId();
+    copy.push(n);
+    return copy;
+  }),
+});
 
 const NotificationService = {
   notificationObject: {
     addNotification: (notification) => {
+      // eslint-disable-next-line no-console
       console.log(notification);
-    }
+    },
   },
-  notify: function (notification) {
+  notify(notification) {
     this.notificationObject.addNotification(notification);
-  }
-}
+  },
+};
 
 export {
-  NotificationContextObject
+  NotificationContextObject,
 };
 
 export default NotificationService;

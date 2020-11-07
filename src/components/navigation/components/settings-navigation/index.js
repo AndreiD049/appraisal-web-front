@@ -1,3 +1,3 @@
-import SettingsNavigation from "./SettingsNavigation";
+import SettingsNavigation from './SettingsNavigation';
 
 export default SettingsNavigation;

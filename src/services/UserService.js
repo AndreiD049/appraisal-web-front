@@ -2,32 +2,32 @@ import axios from 'axios';
 import NotificationService from './NotificationService';
 
 const UserService = {
-  getUsersPath: `/api/users`,
+  getUsersPath: '/api/users',
   updateUsersPath: (id) => `/api/users/${id}`,
   getUserPath: (id) => `/api/users/user/${id}`,
-  getUserOrganizationsPath: `/api/users/organizations`,
-  getUserTeamMembersPath: `/api/users/team-members`,
+  getUserOrganizationsPath: '/api/users/organizations',
+  getUserTeamMembersPath: '/api/users/team-members',
 
-  normalizeUser: function(user) {
-    if (user.role && user.role.id) {
-      user.role = user.role.id
-    };
-    if (user.organization && user.organization.id) {
-      user.organization = user.organization.id
-    };
-    user.organizations = user.organizations.map(o => o.id || o)
-    return user;
+  normalizeUser(user) {
+    const u = user;
+    if (u.role && u.role.id) {
+      u.role = u.role.id;
+    }
+    if (u.organization && u.organization.id) {
+      u.organization = u.organization.id;
+    }
+    u.organizations = u.organizations.map((o) => o.id || o);
+    return u;
   },
 
-  getUsers: async function() {
+  async getUsers() {
     try {
       const response = await axios.get(this.getUsersPath);
       if (response.status === 200) {
         return response.data;
-      } else {
-        throw new Error(`Server response: ${response.status} - ${response.statusText}`);
       }
-    } catch(err) {
+      throw new Error(`Server response: ${response.status} - ${response.statusText}`);
+    } catch (err) {
       NotificationService.notify({
         type: 'error',
         header: 'Error',
@@ -37,14 +37,13 @@ const UserService = {
     }
   },
 
-  getUser: async function(id) {
+  async getUser(id) {
     try {
       const response = await axios.get(this.getUserPath(id));
       if (response.status === 200) {
         return response.data;
-      } else {
-        throw new Error(`Server response: ${response.status} - ${response.statusText}`);
       }
+      throw new Error(`Server response: ${response.status} - ${response.statusText}`);
     } catch (err) {
       NotificationService.notify({
         type: 'error',
@@ -55,14 +54,13 @@ const UserService = {
     }
   },
 
-  updateUser: async function(id, user) {
+  async updateUser(id, user) {
     try {
       const response = await axios.put(this.updateUsersPath(id), this.normalizeUser(user));
       if (response.status === 200) {
         return response.data;
-      } else {
-        throw new Error(`Server response: ${response.status} - ${response.statusText}\n`);
       }
+      throw new Error(`Server response: ${response.status} - ${response.statusText}\n`);
     } catch (err) {
       NotificationService.notify({
         type: 'error',
@@ -73,14 +71,13 @@ const UserService = {
     }
   },
 
-  getUserOrganizations: async function() {
+  async getUserOrganizations() {
     try {
       const response = await axios.get(this.getUserOrganizationsPath);
       if (response.status === 200) {
         return response.data;
-      } else {
-        throw new Error(`Server response: ${response.status} - ${response.statusText}`);
       }
+      throw new Error(`Server response: ${response.status} - ${response.statusText}`);
     } catch (err) {
       NotificationService.notify({
         type: 'error',
@@ -91,7 +88,7 @@ const UserService = {
     }
   },
 
-  getUserTeamMembers: async function() {
+  async getUserTeamMembers() {
     try {
       const response = await axios.get(this.getUserTeamMembersPath);
       return response.data;
@@ -103,7 +100,7 @@ const UserService = {
       });
       throw err;
     }
-  }, 
-  
-}
+  },
+
+};
 export default UserService;

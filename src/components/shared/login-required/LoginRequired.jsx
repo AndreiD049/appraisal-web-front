@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { Redirect } from 'react-router-dom'
+import { Redirect } from 'react-router-dom';
 import GlobalContext from '../../../services/GlobalContext';
 
 const LoginRequired = () => {
@@ -10,24 +10,22 @@ const LoginRequired = () => {
     async function getUser() {
       // const user = await LoginService.getCurrentUser();
 
-      if (!global.userLoaded)
-        return;
+      if (!global.userLoaded) return;
       // There is no user anymore, probably logged out, so we need to remove it from the state
       if (global.user === null) {
         setRedirect(true);
       }
     }
     getUser();
-  }, [global])
+  }, [global]);
 
   return (
     <>
-      {redirect ?
-        <Redirect to='/login'/> :
-        null
-      }
+      {redirect
+        ? <Redirect to="/login" />
+        : null}
     </>
   );
-}
+};
 
 export default LoginRequired;

@@ -1,3 +1,3 @@
-import HomePlannedItems from "./HomePlannedItems";
+import HomePlannedItems from './HomePlannedItems';
 
 export default HomePlannedItems;

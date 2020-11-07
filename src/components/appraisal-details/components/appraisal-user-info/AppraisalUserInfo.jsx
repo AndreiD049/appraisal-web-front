@@ -2,7 +2,9 @@ import { useEffect } from 'react';
 import AppraisalService from '../../../../services/AppraisalService';
 import UserService from '../../../../services/UserService';
 
-const AppraisalUserInfo = ({periodId, userId, setUserDetails, setPeriodDetails}) => {
+const AppraisalUserInfo = ({
+  periodId, userId, setUserDetails, setPeriodDetails,
+}) => {
   useEffect(() => {
     async function run() {
       /*
@@ -16,7 +18,7 @@ const AppraisalUserInfo = ({periodId, userId, setUserDetails, setPeriodDetails})
       setPeriodDetails(periodData);
     }
     run();
-  }, [periodId, userId, setPeriodDetails, setUserDetails]) 
+  }, [periodId, userId, setPeriodDetails, setUserDetails]);
   return null;
 };
 

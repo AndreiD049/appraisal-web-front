@@ -1,9 +1,11 @@
-import React, { useContext, useState, useEffect } from 'react'
+import React, { useContext, useState, useEffect } from 'react';
+import { Redirect } from 'react-router-dom';
 import GlobalContext from '../../../services/GlobalContext';
 import NotificationService from '../../../services/NotificationService';
-import { Redirect } from 'react-router-dom';
 
-const AuthorizationRedirectComponent = ({ code, grant, to, failureNotification, ...props }) => {
+const AuthorizationRedirectComponent = ({
+  code, grant, to, failureNotification, ...props
+}) => {
   const global = useContext(GlobalContext);
   const [access, setAccess] = useState(false);
   const [redirect, setRedirect] = useState(false);
@@ -22,17 +24,16 @@ const AuthorizationRedirectComponent = ({ code, grant, to, failureNotification, 
   }, [global, code, grant, failureNotification, notified]);
 
   let result = null;
-  
+
   if (access) {
     result = props.children;
   }
 
   if (redirect) {
-
-    result = ( <Redirect to={to ? to : '/'} /> );
+    result = (<Redirect to={to || '/'} />);
   }
 
   return result;
 };
 
-export default AuthorizationRedirectComponent
+export default AuthorizationRedirectComponent;

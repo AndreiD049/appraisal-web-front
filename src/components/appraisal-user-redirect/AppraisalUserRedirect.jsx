@@ -1,28 +1,40 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
+import PropTypes from 'prop-types';
 import { useParams, useHistory } from 'react-router-dom';
 import TeamMatesAutocomplete from '../shared/team-mates-autocomplete';
-import { useCallback, useState } from 'react';
 
-const AppraisalUserRedirect = ({defaultValue, ...props}) => {
-  const id = useParams()['id'];
+const AppraisalUserRedirect = ({ defaultValue, className }) => {
+  const { id } = useParams();
   const history = useHistory();
   const [selectedUser, setSelectedUser] = useState(defaultValue || null);
 
   const handleSelect = useCallback((user) => {
-    if (user)
-      return history.push(`/appraisals/${id}/user/${user.id}`);
-    setSelectedUser(user);
-  }, [history, id])
+    if (user) return history.push(`/appraisals/${id}/user/${user.id}`);
+    return setSelectedUser(user);
+  }, [history, id]);
 
   return (
     <>
-      <TeamMatesAutocomplete 
+      <TeamMatesAutocomplete
         value={selectedUser}
         onUserSelect={(user) => handleSelect(user)}
-        {...props}
+        className={className}
+        defaultValue={defaultValue}
       />
     </>
   );
+};
+
+AppraisalUserRedirect.propTypes = {
+  defaultValue: PropTypes.shape({
+    id: PropTypes.string,
+    username: PropTypes.string,
+  }),
+  className: PropTypes.string.isRequired,
+};
+
+AppraisalUserRedirect.defaultProps = {
+  defaultValue: null,
 };
 
 export default AppraisalUserRedirect;

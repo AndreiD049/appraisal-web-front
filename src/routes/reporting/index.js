@@ -1,3 +1,3 @@
-import ReportingPage from "./ReportingPage";
+import ReportingPage from './ReportingPage';
 
 export default ReportingPage;

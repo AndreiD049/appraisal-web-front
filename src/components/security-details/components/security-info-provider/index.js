@@ -1,3 +1,3 @@
-import SecurityInfoProvider from "./SecurityInfoProvider";
+import SecurityInfoProvider from './SecurityInfoProvider';
 
 export default SecurityInfoProvider;

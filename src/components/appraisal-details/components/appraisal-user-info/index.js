@@ -1,3 +1,3 @@
-import AppraisalUserInfo from "./AppraisalUserInfo";
+import AppraisalUserInfo from './AppraisalUserInfo';
 
 export default AppraisalUserInfo;

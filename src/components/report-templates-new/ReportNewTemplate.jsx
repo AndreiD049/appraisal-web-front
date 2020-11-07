@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import {
   Paper,
   Box,
@@ -11,36 +11,36 @@ import {
   FormControl,
   TextField,
   Divider,
-  Grid
+  Grid,
 } from '@material-ui/core';
 import useStyles from './styles';
 import UploadFileComponent from '../shared/upload-file-component';
 
-const ReportNewTemplate = (props) => {
+const ReportNewTemplate = () => {
   const classes = useStyles();
   const [dialogOpen, setDialogOpen] = useState(false);
 
   const handleOpen = () => {
     setDialogOpen(true);
-  }
+  };
 
   const handleClose = () => {
     setDialogOpen(false);
-  }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     handleClose();
-  }
+  };
 
   return (
     <Box mb={3}>
       <Paper className={classes.container}>
-        <Button variant='contained' color='secondary' onClick={handleOpen}>New</Button>
+        <Button variant="contained" color="secondary" onClick={handleOpen}>New</Button>
       </Paper>
-      <Dialog open={dialogOpen} onClose={handleClose} aria-labelledby='form-dialog-title'>
+      <Dialog open={dialogOpen} onClose={handleClose} aria-labelledby="form-dialog-title">
         <form onSubmit={handleSubmit}>
-          <DialogTitle id='form-dialog-title'>New Template</DialogTitle>
+          <DialogTitle id="form-dialog-title">New Template</DialogTitle>
           <DialogContent>
             <DialogContentText>
               Upload template file and use it in Reports.
@@ -51,7 +51,7 @@ const ReportNewTemplate = (props) => {
               </Grid>
               <Grid item xs={12}>
                 <FormControl>
-                  <TextField label='Template Name' variant='outlined' size='small' />
+                  <TextField label="Template Name" variant="outlined" size="small" />
                 </FormControl>
               </Grid>
               <Grid item xs={12}>
@@ -63,8 +63,8 @@ const ReportNewTemplate = (props) => {
             </Grid>
           </DialogContent>
           <DialogActions>
-            <Button type='submit' color='secondary' variant='contained'>Ok</Button>
-            <Button color='secondary' variant='contained' onClick={handleClose}>Cancel</Button>
+            <Button type="submit" color="secondary" variant="contained">Ok</Button>
+            <Button color="secondary" variant="contained" onClick={handleClose}>Cancel</Button>
           </DialogActions>
         </form>
       </Dialog>
@@ -72,4 +72,4 @@ const ReportNewTemplate = (props) => {
   );
 };
 
-export default ReportNewTemplate
+export default ReportNewTemplate;

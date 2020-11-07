@@ -1,3 +1,3 @@
-import SecurityDetails from "./SecurityDetails";
+import SecurityDetails from './SecurityDetails';
 
 export default SecurityDetails;

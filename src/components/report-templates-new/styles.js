@@ -1,6 +1,6 @@
 import { makeStyles } from '@material-ui/core/styles';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   container: {
     display: 'flex',
     flexFlow: 'row nowrap',
@@ -9,9 +9,9 @@ const useStyles = makeStyles(theme => ({
   },
   inputs: {
     '& > * + *': {
-      marginTop: theme.spacing(2)
-    }
-  }
+      marginTop: theme.spacing(2),
+    },
+  },
 }));
 
 export default useStyles;

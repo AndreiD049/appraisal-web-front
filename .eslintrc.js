@@ -1,22 +1,35 @@
+const os = require('os');
+
 module.exports = {
-    "env": {
-        "browser": true,
-        "es2021": true
+  env: {
+    browser: true,
+    es6: true,
+  },
+
+  extends: [
+    'plugin:react/recommended',
+    'airbnb',
+  ],
+  globals: {
+    Atomics: 'readonly',
+    SharedArrayBuffer: 'readonly',
+  },
+
+  parserOptions: {
+    ecmaFeatures: {
+      jsx: true,
     },
-    "extends": [
-        "plugin:react/recommended",
-        "airbnb"
-    ],
-    "parserOptions": {
-        "ecmaFeatures": {
-            "jsx": true
-        },
-        "ecmaVersion": 12,
-        "sourceType": "module"
-    },
-    "plugins": [
-        "react"
-    ],
-    "rules": {
-    }
+    ecmaVersion: 2018,
+    sourceType: 'module',
+  },
+
+  plugins: [
+    'react',
+  ],
+
+  rules: {
+    'linebreak-style': ['error', (os.EOL === '\r\n' ? 'windows' : 'unix')],
+    'no-unused-expressions': ['error', { allowShortCircuit: true }],
+  },
+
 };

@@ -1,46 +1,75 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import useStyles from './styles';
 
-const NotificationContainer = (props) => {
-  const classes = useStyles(props) 
+const NotificationContainer = ({
+  entry, onAfterClose, notificationRender,
+}) => {
+  const classes = useStyles({ entry });
   const [closing, setClosing] = useState(false);
 
   return (
     <div className={clsx(classes.containerTransition, {
       [classes.containerTransitionOff]: closing,
-    })}>
-      {props.notificationRender(props.entry, {
-        entry: props.entry, 
-        closeTimeOffset: 5, 
-        onAfterClose: props.onAfterClose,
-        onBeforeClose: () => {
-          return new Promise((res, rej) => {
-            setClosing(true);
-            setTimeout(() => {
-              res();
-            } ,700)
-          })
-        } 
-       })}
+    })}
+    >
+      {notificationRender(entry, {
+        entry,
+        onAfterClose,
+        closeTimeOffset: 5,
+        onBeforeClose: () => new Promise((res) => {
+          setClosing(true);
+          setTimeout(() => {
+            res();
+          }, 700);
+        }),
+      })}
     </div>
   );
-}
+};
 
-const NotificationManager = (props) => {
+NotificationContainer.propTypes = {
+  entry: PropTypes.shape({
+    type: PropTypes.string,
+    header: PropTypes.string,
+    content: PropTypes.string,
+    duration: PropTypes.number,
+  }).isRequired,
+  notificationRender: PropTypes.func.isRequired,
+  onAfterClose: PropTypes.func.isRequired,
+};
+
+const NotificationManager = ({
+  notifications, notificationRender, onAfterClose, ...props
+}) => {
   const classes = useStyles(props);
 
   return (
     <div className={classes.root}>
       {
-        props.notifications.map((n, idx) => {
-          return (
-            <NotificationContainer key={n.id} {...props} entry={n} />
-          );
-        })
+        notifications.map((n) => (
+          <NotificationContainer
+            key={n.id}
+            notificationRender={notificationRender}
+            onAfterClose={onAfterClose}
+            entry={n}
+          />
+        ))
       }
     </div>
   );
-}
+};
+
+NotificationManager.propTypes = {
+  notifications: PropTypes.arrayOf(PropTypes.shape({
+    type: PropTypes.string,
+    header: PropTypes.string,
+    content: PropTypes.string,
+    duration: PropTypes.number,
+  })).isRequired,
+  notificationRender: PropTypes.func.isRequired,
+  onAfterClose: PropTypes.func.isRequired,
+};
 
 export default NotificationManager;

@@ -12,14 +12,13 @@ const AuthorizationService = {
   updatePermissionPath: (id) => `/api/security/permissions/${id}`,
   deletePermissionPath: (id) => `/api/security/permissions/${id}`,
 
-  getRoles: async function() {
+  async getRoles() {
     try {
       const result = await axios.get(this.getRolesPath);
       if (result.status === 200) {
         return result.data;
-      } else {
-        return null;
       }
+      return null;
     } catch (err) {
       NotificationService.notify({
         type: 'error',
@@ -30,14 +29,13 @@ const AuthorizationService = {
     }
   },
 
-  getSecurities: async function() {
+  async getSecurities() {
     try {
       const result = await axios.get(this.getCurrentUserSecuritiesPath);
       if (result.status === 200) {
         return result.data;
-      } else {
-        return null;
       }
+      return null;
     } catch (err) {
       NotificationService.notify({
         type: 'error',
@@ -48,14 +46,13 @@ const AuthorizationService = {
     }
   },
 
-  getUserSecurities: async function(id) {
+  async getUserSecurities(id) {
     try {
       const result = await axios.get(this.getUserSecuritiesPath(id));
       if (result.status === 200) {
         return result.data;
-      } else {
-        return null;
       }
+      return null;
     } catch (err) {
       NotificationService.notify({
         type: 'error',
@@ -66,14 +63,13 @@ const AuthorizationService = {
     }
   },
 
-  getOrganizationUsersSecurities: async function() {
+  async getOrganizationUsersSecurities() {
     try {
       const result = await axios.get(this.getOrganizationUsersSecuritiesPath);
       if (result.status === 200) {
         return result.data;
-      } else {
-        return null;
       }
+      return null;
     } catch (err) {
       NotificationService.notify({
         type: 'error',
@@ -84,14 +80,13 @@ const AuthorizationService = {
     }
   },
 
-  getRolesSecurities: async function() {
+  async getRolesSecurities() {
     try {
       const result = await axios.get(this.getRolesSecuritiesPath);
       if (result.status === 200) {
         return result.data;
-      } else {
-        return null;
       }
+      return null;
     } catch (err) {
       NotificationService.notify({
         type: 'error',
@@ -102,14 +97,13 @@ const AuthorizationService = {
     }
   },
 
-  getPermissionCodes: async function() {
+  async getPermissionCodes() {
     try {
       const result = await axios.get(this.getPermissionCodesPath);
       if (result.status === 200) {
         return result.data;
-      } else {
-        return null;
       }
+      return null;
     } catch (err) {
       NotificationService.notify({
         type: 'error',
@@ -120,14 +114,13 @@ const AuthorizationService = {
     }
   },
 
-  addPermission: async function(permission) {
+  async addPermission(permission) {
     try {
       const result = await axios.post(this.addPermissionPath, permission);
       if (result.status === 200) {
         return result.data;
-      } else {
-        return null;
       }
+      return null;
     } catch (err) {
       NotificationService.notify({
         type: 'error',
@@ -138,14 +131,13 @@ const AuthorizationService = {
     }
   },
 
-  updatePermission: async function(id, permission) {
+  async updatePermission(id, permission) {
     try {
       const result = await axios.put(this.updatePermissionPath(id), permission);
       if (result.status === 200) {
         return result.data;
-      } else {
-        return null;
       }
+      return null;
     } catch (err) {
       NotificationService.notify({
         type: 'error',
@@ -156,14 +148,13 @@ const AuthorizationService = {
     }
   },
 
-  deletePermission: async function(id) {
+  async deletePermission(id) {
     try {
       const result = await axios.delete(this.deletePermissionPath(id));
       if (result.status === 200) {
         return result.data;
-      } else {
-        return null;
       }
+      return null;
     } catch (err) {
       NotificationService.notify({
         type: 'error',
@@ -175,10 +166,10 @@ const AuthorizationService = {
   },
 
   // this function is meant to be injected in the context in order to have access to 'this'
-  Authorize: function(code, grant) {
+  Authorize(code, grant) {
     try {
       if (this.security) {
-        const codes = this.security.map(el => el.code);
+        const codes = this.security.map((el) => el.code);
         const index = codes.indexOf(code);
         if (index !== -1) {
           return this.security[index].grants.indexOf(grant) !== -1;
@@ -194,6 +185,6 @@ const AuthorizationService = {
       return false;
     }
   },
-}
+};
 
 export default AuthorizationService;

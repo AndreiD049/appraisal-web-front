@@ -1,46 +1,55 @@
-import React from 'react'
+import React from 'react';
 import { useHistory, useRouteMatch } from 'react-router-dom';
-import { tableIcons } from '../../utils/material-table-utils';
 import {
   Container,
 } from '@material-ui/core';
 import MaterialTable from 'material-table';
+import materialTableUtils from '../../utils/material-table-utils';
 import ReportNewTemplate from '../report-templates-new';
 
-const ReportTemplatesList = (props) => {
+const ReportTemplatesList = () => {
   const history = useHistory();
   const { path } = useRouteMatch();
 
   return (
-    <Container maxWidth='lg'>
-      <h1 style={{textAlign: 'center'}}>Templates</h1>
+    <Container maxWidth="lg">
+      <h1 style={{ textAlign: 'center' }}>Templates</h1>
       <ReportNewTemplate />
-      <MaterialTable 
-        icons={ tableIcons }
-        title='List'
+      <MaterialTable
+        icons={materialTableUtils.tableIcons}
+        title="List"
         columns={[
           {
-            title: 'Name', field: 'name'
+            title: 'Name', field: 'name',
           },
           {
-            title: 'Filename', field: 'filename'
+            title: 'Filename', field: 'filename',
           },
           {
-            title: 'User created', field: 'createdUser'
-          }
+            title: 'User created', field: 'createdUser',
+          },
         ]}
         data={[
-          {id: 1234, name: 'Test', filename: 'test.xlsx', createdUser: 'me@you.com'},
-          {id: 41231, name: 'Test1', filename: 'test.xlsx', createdUser: 'me@you.com'},
-          {id: 123124, name: 'Test2', filename: 'test.xlsx', createdUser: 'me@you.com'},
-          {id: 12345, name: 'Test3', filename: 'test.xlsx', createdUser: 'me@you.com'},
+          {
+            id: 1234, name: 'Test', filename: 'test.xlsx', createdUser: 'me@you.com',
+          },
+          {
+            id: 41231, name: 'Test1', filename: 'test.xlsx', createdUser: 'me@you.com',
+          },
+          {
+            id: 123124, name: 'Test2', filename: 'test.xlsx', createdUser: 'me@you.com',
+          },
+          {
+            id: 12345, name: 'Test3', filename: 'test.xlsx', createdUser: 'me@you.com',
+          },
         ]}
         actions={[
           {
-            icon: tableIcons.Download,
+            icon: materialTableUtils.tableIcons.Download,
             tooltip: 'Download Template',
-            onClick: (event, rowData) => alert('Download file')
-          }
+            // eslint-disable-next-line no-alert
+            onClick: () => alert('Download file'),
+          },
         ]}
         onRowClick={(evt, rowData) => history.push(`${path}/${rowData.id}`)}
       />
@@ -48,4 +57,4 @@ const ReportTemplatesList = (props) => {
   );
 };
 
-export default ReportTemplatesList
+export default ReportTemplatesList;

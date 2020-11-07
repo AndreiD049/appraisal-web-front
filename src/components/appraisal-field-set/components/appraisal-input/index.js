@@ -1,3 +1,3 @@
-import AppraisalInput from "./AppraisalInput";
+import AppraisalInput from './AppraisalInput';
 
 export default AppraisalInput;

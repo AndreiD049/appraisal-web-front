@@ -7,14 +7,14 @@ const styles = makeStyles((theme) => ({
     display: 'flex',
   },
   title: {
-    flexGrow: 1
+    flexGrow: 1,
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
     flexGrow: 1,
     transition: theme.transitions.create(['width', 'margin'], {
       easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen
+      duration: theme.transitions.duration.leavingScreen,
     }),
   },
   appBarShift: {
@@ -22,7 +22,7 @@ const styles = makeStyles((theme) => ({
     width: `calc(100% - ${drawerWidth}px)`,
     transition: theme.transitions.create(['width', 'margin'], {
       easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen
+      duration: theme.transitions.duration.enteringScreen,
     }),
   },
   menuButton: {
@@ -34,7 +34,7 @@ const styles = makeStyles((theme) => ({
   drawer: {
     width: drawerWidth,
     flexShrink: 0,
-    whiteSpace: "nowrap"
+    whiteSpace: 'nowrap',
   },
   drawerOpen: {
     width: drawerWidth,
@@ -46,17 +46,17 @@ const styles = makeStyles((theme) => ({
   drawerClose: {
     transition: theme.transitions.create('width', {
       easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen
+      duration: theme.transitions.duration.leavingScreen,
     }),
     overflowX: 'hidden',
     width: 0,
     [theme.breakpoints.up('sm')]: {
       width: theme.spacing(7) + 1,
-    }
+    },
   },
   avatar: {
-    cursor: 'pointer'
-  }
+    cursor: 'pointer',
+  },
 }));
 
 export default styles;

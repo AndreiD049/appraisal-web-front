@@ -3,13 +3,13 @@ import { Item, validate, validateId } from '../models/AppraisalItemModel';
 import NotificationService from './NotificationService';
 
 const AppraisalService = {
-  getPeriodsPath: `/api/periods`,
-  addPeriodsPath: `/api/periods`,
+  getPeriodsPath: '/api/periods',
+  addPeriodsPath: '/api/periods',
   getItemsPath: (id) => `/api/periods/${id}`,
   getUserItemsPath: (id, userId) => `/api/periods/${id}/users/${userId}`,
   getItemPath: (periodId, itemId) => `/api/periods/${periodId}/items/${itemId}`,
-  getOrphansPath: `/api/appraisal-items`,
-  addItemPath: `/api/appraisal-items`,
+  getOrphansPath: '/api/appraisal-items',
+  addItemPath: '/api/appraisal-items',
   updateItemPath: (id) => `/api/appraisal-items/${id}`,
   deleteItemPath: (id) => `/api/appraisal-items/${id}`,
   addItemToPeriodPath: (periodId) => `/api/periods/${periodId}/items`,
@@ -22,14 +22,13 @@ const AppraisalService = {
   updateItemTypePath: (periodId, itemId) => `/api/periods/${periodId}/items/${itemId}/change-type`,
   updateUserItemTypePath: (periodId, userId, itemId) => `/api/periods/${periodId}/users/${userId}/items/${itemId}/change-type`,
 
-  getPeriods: async function() {
+  async getPeriods() {
     try {
       const response = await axios.get(this.getPeriodsPath);
       if (response.status === 200) {
         return response.data;
-      } else {
-        throw new Error(`Server response: ${response.status} - ${response.statusText}`);
       }
+      throw new Error(`Server response: ${response.status} - ${response.statusText}`);
     } catch (err) {
       NotificationService.notify({
         type: 'error',
@@ -40,14 +39,13 @@ const AppraisalService = {
     }
   },
 
-  getItems: async function(periodId) {
+  async getItems(periodId) {
     try {
       const response = await axios.get(this.getItemsPath(periodId));
       if (response.status === 200) {
         return response.data;
-      } else {
-        throw new Error(`Server response: ${response.status} - ${response.statusText}`);
       }
+      throw new Error(`Server response: ${response.status} - ${response.statusText}`);
     } catch (err) {
       NotificationService.notify({
         type: 'error',
@@ -56,16 +54,15 @@ const AppraisalService = {
       });
       throw err;
     }
-  }, 
+  },
 
-  getOrphans: async function() {
+  async getOrphans() {
     try {
       const response = await axios.get(this.getOrphansPath);
       if (response.status === 200) {
         return response.data;
-      } else {
-        throw new Error(`Server response: ${response.status} - ${response.statusText}`);
       }
+      throw new Error(`Server response: ${response.status} - ${response.statusText}`);
     } catch (err) {
       NotificationService.notify({
         type: 'error',
@@ -76,14 +73,13 @@ const AppraisalService = {
     }
   },
 
-  getUserItems: async function(periodId, userId) {
+  async getUserItems(periodId, userId) {
     try {
       const response = await axios.get(this.getUserItemsPath(periodId, userId));
       if (response.status === 200) {
         return response.data;
-      } else {
-        throw new Error(`Server response: ${response.status} - ${response.statusText}`);
       }
+      throw new Error(`Server response: ${response.status} - ${response.statusText}`);
     } catch (err) {
       NotificationService.notify({
         type: 'error',
@@ -94,35 +90,14 @@ const AppraisalService = {
     }
   },
 
-  getItem: async function(periodId, itemId) {
+  async getItem(periodId, itemId) {
     try {
       const response = await axios.get(this.getItemPath(periodId, itemId));
       if (response.status === 200) {
         return response.data;
-      } else {
-        throw new Error(`Server response: ${response.status} - ${response.statusText}`);
       }
+      throw new Error(`Server response: ${response.status} - ${response.statusText}`);
     } catch (err) {
-      NotificationService.notify({
-        type: 'error',
-        header: 'Error',
-        content: (err.response.data && err.response.data.error) || err.message,
-      });
-      throw err;
-    }
-  }, 
-
-  addItem: async function(periodId, item) {
-    try {
-      validate(item);
-      const response = await axios.post(this.addItemToPeriodPath(periodId), {...item});
-      if (response.status === 200) {
-        return response.data;
-      } else {
-        throw new Error(`Server response: ${response.status} - ${response.statusText}`);
-      }
-    } catch (err) {
-      console.log(err);
       NotificationService.notify({
         type: 'error',
         header: 'Error',
@@ -132,14 +107,31 @@ const AppraisalService = {
     }
   },
 
-  addOrphan: async function(item) {
+  async addItem(periodId, item) {
+    try {
+      validate(item);
+      const response = await axios.post(this.addItemToPeriodPath(periodId), { ...item });
+      if (response.status === 200) {
+        return response.data;
+      }
+      throw new Error(`Server response: ${response.status} - ${response.statusText}`);
+    } catch (err) {
+      NotificationService.notify({
+        type: 'error',
+        header: 'Error',
+        content: (err.response.data && err.response.data.error) || err.message,
+      });
+      throw err;
+    }
+  },
+
+  async addOrphan(item) {
     try {
       const response = await axios.post(this.addItemPath, item);
       if (response.status === 200) {
         return response.data;
-      } else {
-        throw new Error(`Server response: ${response.status} - ${response.statusText}`);
       }
+      throw new Error(`Server response: ${response.status} - ${response.statusText}`);
     } catch (err) {
       NotificationService.notify({
         type: 'error',
@@ -150,15 +142,14 @@ const AppraisalService = {
     }
   },
 
-  addUserItem: async function(periodId, userId, item) {
+  async addUserItem(periodId, userId, item) {
     try {
       validate(item);
-      const response = await axios.post(this.addUserItemPath(periodId, userId), {...item});
+      const response = await axios.post(this.addUserItemPath(periodId, userId), { ...item });
       if (response.status === 200) {
         return response.data;
-      } else {
-        throw new Error(`Server response: ${response.status} - ${response.statusText}`);
       }
+      throw new Error(`Server response: ${response.status} - ${response.statusText}`);
     } catch (err) {
       NotificationService.notify({
         type: 'error',
@@ -169,16 +160,15 @@ const AppraisalService = {
     }
   },
 
-  updateItemInPeriod: async function(periodId, item) {
+  async updateItemInPeriod(periodId, item) {
     try {
       validate(item);
       validateId(item);
-      const response = await axios.put(this.updateItemInPeriodPath(periodId, item.id), {...item});
+      const response = await axios.put(this.updateItemInPeriodPath(periodId, item.id), { ...item });
       if (response.status === 200) {
         return response.data;
-      } else {
-        throw new Error(`Server response: ${response.status} - ${response.statusText}`);
       }
+      throw new Error(`Server response: ${response.status} - ${response.statusText}`);
     } catch (err) {
       NotificationService.notify({
         type: 'error',
@@ -187,18 +177,17 @@ const AppraisalService = {
       });
       throw err;
     }
-  }, 
+  },
 
-  updateItem: async function(item) {
+  async updateItem(item) {
     try {
       validate(item);
       validateId(item);
       const response = await axios.put(this.updateItemPath(item.id), item);
       if (response.status === 200) {
         return response.data;
-      } else {
-        throw new Error(`Server response: ${response.status} - ${response.statusText}`);
       }
+      throw new Error(`Server response: ${response.status} - ${response.statusText}`);
     } catch (err) {
       NotificationService.notify({
         type: 'error',
@@ -209,16 +198,17 @@ const AppraisalService = {
     }
   },
 
-  updateUserItem: async function(periodId, userId, item) {
+  async updateUserItem(periodId, userId, item) {
     try {
       validate(item);
       validateId(item);
-      const response = await axios.put(this.updateUserItemPath(periodId, userId, item.id), {...item});
+      const response = await axios.put(
+        this.updateUserItemPath(periodId, userId, item.id), { ...item },
+      );
       if (response.status === 200) {
         return response.data;
-      } else {
-        throw new Error(`Server response: ${response.status} - ${response.statusText}`);
       }
+      throw new Error(`Server response: ${response.status} - ${response.statusText}`);
     } catch (err) {
       NotificationService.notify({
         type: 'error',
@@ -229,16 +219,17 @@ const AppraisalService = {
     }
   },
 
-  updateItemType: async function(periodId, item) {
+  async updateItemType(periodId, item) {
     try {
       validate(item);
       validateId(item);
-      const response = await axios.post(this.updateItemTypePath(periodId, item.id), {type: item.type});
+      const response = await axios.post(
+        this.updateItemTypePath(periodId, item.id), { type: item.type },
+      );
       if (response.status === 200) {
         return response.data;
-      } else {
-        throw new Error(`Server response: ${response.status} - ${response.statusText}`);
       }
+      throw new Error(`Server response: ${response.status} - ${response.statusText}`);
     } catch (err) {
       NotificationService.notify({
         type: 'error',
@@ -249,16 +240,17 @@ const AppraisalService = {
     }
   },
 
-  updateUserItemType: async function(periodId, userId, item) {
+  async updateUserItemType(periodId, userId, item) {
     try {
       validate(item);
       validateId(item);
-      const response = await axios.post(this.updateUserItemTypePath(periodId, userId, item.id), {type: item.type});
+      const response = await axios.post(
+        this.updateUserItemTypePath(periodId, userId, item.id), { type: item.type },
+      );
       if (response.status === 200) {
         return response.data;
-      } else {
-        throw new Error(`Server response: ${response.status} - ${response.statusText}`);
       }
+      throw new Error(`Server response: ${response.status} - ${response.statusText}`);
     } catch (err) {
       NotificationService.notify({
         type: 'error',
@@ -269,14 +261,13 @@ const AppraisalService = {
     }
   },
 
-  deleteItemFromPeriod: async function(periodId, itemId) {
+  async deleteItemFromPeriod(periodId, itemId) {
     try {
       const response = await axios.delete(this.deleteItemFromPeriodPath(periodId, itemId));
       if (response.status === 204) {
         return response.data;
-      } else {
-        throw new Error(`Server response: ${response.status} - ${response.statusText}`);
       }
+      throw new Error(`Server response: ${response.status} - ${response.statusText}`);
     } catch (err) {
       NotificationService.notify({
         type: 'error',
@@ -287,14 +278,13 @@ const AppraisalService = {
     }
   },
 
-  deleteItem: async function(itemId) {
+  async deleteItem(itemId) {
     try {
       const response = await axios.delete(this.deleteItemPath(itemId));
       if (response.status === 204) {
         return response.data;
-      } else {
-        throw new Error(`Server response: ${response.status} - ${response.statusText}`);
       }
+      throw new Error(`Server response: ${response.status} - ${response.statusText}`);
     } catch (err) {
       NotificationService.notify({
         type: 'error',
@@ -305,14 +295,13 @@ const AppraisalService = {
     }
   },
 
-  deleteUserItem: async function(periodId, userId, itemId) {
+  async deleteUserItem(periodId, userId, itemId) {
     try {
       const response = await axios.delete(this.deleteUserItemPath(periodId, userId, itemId));
       if (response.status === 204) {
         return response.data;
-      } else {
-        throw new Error(`Server response: ${response.status} - ${response.statusText}`);
       }
+      throw new Error(`Server response: ${response.status} - ${response.statusText}`);
     } catch (err) {
       NotificationService.notify({
         type: 'error',
@@ -323,14 +312,13 @@ const AppraisalService = {
     }
   },
 
-  addPeriod: async function(body) {
+  async addPeriod(body) {
     try {
       const response = await axios.post(this.addPeriodsPath, body);
       if (response.status === 200) {
         return response.data;
-      } else {
-        throw new Error(`Server response: ${response.status} - ${response.statusText}`);
       }
+      throw new Error(`Server response: ${response.status} - ${response.statusText}`);
     } catch (err) {
       NotificationService.notify({
         type: 'error',
@@ -341,14 +329,13 @@ const AppraisalService = {
     }
   },
 
-  finishPeriod: async function(periodId) {
+  async finishPeriod(periodId) {
     try {
       const response = await axios.post(this.finishPeriodPath(periodId));
       if (response.status === 200) {
         return true;
-      } else {
-        throw new Error(`Server response: ${response.status} - ${response.statusText}`);
       }
+      throw new Error(`Server response: ${response.status} - ${response.statusText}`);
     } catch (err) {
       NotificationService.notify({
         type: 'error',
@@ -359,15 +346,15 @@ const AppraisalService = {
     }
   },
 
-  blankItem: function(periodId, user, type, status = 'Active') {
-    return new Item ({
-      type: type,
-      status: status,
-      periodId: periodId,
+  blankItem(periodId, user, type, status = 'Active') {
+    return new Item({
+      type,
+      status,
+      periodId,
       user: user ? user.id : null,
     });
   },
-  
+
   /*
    * Given the items, minimum amount and their type:
    * this function should return back the adjusted items collection:
@@ -375,60 +362,60 @@ const AppraisalService = {
    * 2. if number of items > min and blank items > 1 => remove blank items until
    * blank items = 1 or number of items = min
    */
-  normalizeSet: function(periodId, user, items, min, type, period) {
-    const copy = items.slice().filter(i => i.user !== null);
+  normalizeSet(periodId, user, items, min, type, period) {
+    const copy = items.slice().filter((i) => i.user !== null);
     if ((period && period.status !== 'Active') || !user) {
-      return copy
+      return copy;
     }
     // array of empty indexes ex: [1, 4, 5]
-    const empty = copy.map((i, idx) => idx).filter(i => copy[i].content === '');
+    const empty = copy.map((i, idx) => idx).filter((i) => copy[i].content === '');
     if (empty.length === 0) {
       copy.push(this.blankItem(periodId, user, type));
     }
     let dif = min - copy.length;
     while (dif > 0) {
       copy.push(this.blankItem(periodId, user, type));
-      dif--;
+      dif -= 1;
     }
     return copy;
   },
 
-  addItemToSet: async function(periodId, item) {
+  async addItemToSet(periodId, item) {
     try {
       const result = await this.addItem(periodId, item);
       return {
         value: result,
-        error: null
+        error: null,
       };
     } catch (err) {
       return {
         value: null,
-        error: err
+        error: err,
       };
     }
   },
 
-  addUserItemToSet: async function(periodId, userId, item) {
+  async addUserItemToSet(periodId, userId, item) {
     try {
       const result = await this.addUserItem(periodId, userId, item);
       return {
         value: result,
-        error: null
+        error: null,
       };
     } catch (err) {
       return {
         value: null,
-        error: err
+        error: err,
       };
     }
   },
 
-  deleteItemFromSet: async function(periodId, item) {
+  async deleteItemFromSet(periodId, item) {
     try {
       const result = await this.deleteItemFromPeriod(periodId, item.id);
       return {
         value: result,
-        error: null
+        error: null,
       };
     } catch (err) {
       return {
@@ -438,12 +425,12 @@ const AppraisalService = {
     }
   },
 
-  deleteUserItemFromSet: async function(periodId, userId, item) {
+  async deleteUserItemFromSet(periodId, userId, item) {
     try {
       const result = await this.deleteUserItem(periodId, userId, item.id);
       return {
         value: result,
-        error: null
+        error: null,
       };
     } catch (err) {
       return {
@@ -453,35 +440,35 @@ const AppraisalService = {
     }
   },
 
-  updateItemInSet: async function(periodId, item) {
+  async updateItemInSet(periodId, item) {
     try {
       const result = await this.updateItemInPeriod(periodId, item);
       return {
         value: result,
-        error: null
+        error: null,
       };
     } catch (err) {
       return {
         value: await this.getItem(periodId, item.id),
-        error: err
+        error: err,
       };
     }
   },
 
-  updateUserItemInSet: async function(periodId, userId, item) {
+  async updateUserItemInSet(periodId, userId, item) {
     try {
       const result = await this.updateUserItem(periodId, userId, item);
       return {
         value: result,
-        error: null
+        error: null,
       };
     } catch (err) {
       return {
         value: await this.getItem(periodId, item.id),
-        error: err
+        error: err,
       };
     }
   },
-}
+};
 
 export default AppraisalService;

@@ -5,7 +5,7 @@ import React, { useContext, useState } from 'react';
 import GlobalContext from '../../services/GlobalContext';
 import { themeDark, themeLight } from '../../styles/theme';
 
-const SettingsGeneral = (props) => {
+const SettingsGeneral = () => {
   const global = useContext(GlobalContext);
   const [theme, setTheme] = useState(global.userPreferences.theme.palette.type);
 
@@ -18,24 +18,24 @@ const SettingsGeneral = (props) => {
     }
     setTheme(type);
     localStorage.setItem('theme', type);
-    global.setContext(prev => ({
+    global.setContext((prev) => ({
       ...prev,
       userPreferences: {
         ...global.userPreferences,
-        theme: type === 'light' ? createMuiTheme(themeLight) : createMuiTheme(themeDark)
-      }
+        theme: type === 'light' ? createMuiTheme(themeLight) : createMuiTheme(themeDark),
+      },
     }));
-  }
+  };
 
   return (
     <Grid container>
       <Grid item xs={12}>
-        <Typography variant='h4'>
+        <Typography variant="h4">
           General Settings
         </Typography>
       </Grid>
       <Grid item xs={12}>
-        <Typography variant='h6'>
+        <Typography variant="h6">
           Appearence:
         </Typography>
       </Grid>
@@ -50,6 +50,6 @@ const SettingsGeneral = (props) => {
       </Grid>
     </Grid>
   );
-}
+};
 
 export default SettingsGeneral;

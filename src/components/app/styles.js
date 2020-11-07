@@ -7,7 +7,7 @@ const useStyle = makeStyles((theme) => ({
     },
     [theme.breakpoints.between('sm', 'md')]: {
       marginLeft: theme.spacing(7) + 1,
-    }
+    },
   },
 }));
 

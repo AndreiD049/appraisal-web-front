@@ -1,24 +1,24 @@
 import React, { useState, useContext } from 'react';
-import { 
-  Dialog, 
-  DialogTitle, 
-  DialogContent, 
-  FormControl, 
-  InputLabel, 
-  Input, 
+import PropTypes from 'prop-types';
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  FormControl,
+  InputLabel,
+  Input,
   FormGroup,
-  Select,  
+  Select,
   MenuItem,
-  Button
+  Button,
 } from '@material-ui/core';
 import GlobalContext from '../../../../services/GlobalContext';
 
 const DialogDisplay = ({
-    open,
-    selectValues,
-    handleSubmit,
-    handleClose,
-    ...props
+  open,
+  selectValues,
+  handleSubmit,
+  handleClose,
 }) => {
   const global = useContext(GlobalContext);
   const [name, setName] = useState('');
@@ -26,52 +26,52 @@ const DialogDisplay = ({
 
   const handleNameChange = (e) => {
     setName(e.target.value);
-  }
-  
+  };
+
   const handleStatusChange = (e) => {
     setStatus(e.target.value);
-  }
+  };
 
-	const handleSubmitWrapper = async (e) => {
+  const handleSubmitWrapper = async (e) => {
     e.persist();
     e.preventDefault();
-		await handleSubmit(name, status, global.user.organization.id);
-	}
+    await handleSubmit(name, status, global.user.organization.id);
+  };
 
   const handleCloseWrapper = (e) => {
     setStatus(selectValues[0]);
     handleClose(e);
-  }
+  };
 
   return (
     <>
-      <Dialog 
-        open={open} 
-        onClose={handleCloseWrapper} 
+      <Dialog
+        open={open}
+        onClose={handleCloseWrapper}
         aria-labelledby="new-period-dialog"
-        >
+      >
         <DialogTitle id="new-period-dialog">Create new period</DialogTitle>
         <DialogContent>
           <form onSubmit={handleSubmitWrapper}>
-            <FormGroup >
-              <FormControl color='primary' required={true}>
+            <FormGroup>
+              <FormControl color="primary" required>
                 <InputLabel htmlFor="new-period-name">Period name</InputLabel>
-                <Input id='new-period-name' name='name' value={name} onChange={handleNameChange}/>
+                <Input id="new-period-name" name="name" value={name} onChange={handleNameChange} />
               </FormControl>
-              <FormControl color='primary' required={true}>
+              <FormControl color="primary" required>
                 <InputLabel htmlFor="new-period-status">Status</InputLabel>
-                <Select id='new-period-status' name='status' value={status} onChange={handleStatusChange}>
+                <Select id="new-period-status" name="status" value={status} onChange={handleStatusChange}>
                   {
-                    selectValues ?
-                    selectValues.map(e => (
-                      <MenuItem key={e} value={e}>{e}</MenuItem>
-                    )) :
-                    null
+                    selectValues
+                      ? selectValues.map((e) => (
+                        <MenuItem key={e} value={e}>{e}</MenuItem>
+                      ))
+                      : null
                   }
                 </Select>
               </FormControl>
-              <FormControl style={{margin: 20}}>
-                <Button type='submit' color='primary' variant='contained' >
+              <FormControl style={{ margin: 20 }}>
+                <Button type="submit" color="primary" variant="contained">
                   Save
                 </Button>
               </FormControl>
@@ -81,7 +81,13 @@ const DialogDisplay = ({
       </Dialog>
     </>
   );
+};
 
+DialogDisplay.propTypes = {
+  open: PropTypes.bool.isRequired,
+  selectValues: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  handleSubmit: PropTypes.func.isRequired,
+  handleClose: PropTypes.func.isRequired,
 };
 
 export default DialogDisplay;

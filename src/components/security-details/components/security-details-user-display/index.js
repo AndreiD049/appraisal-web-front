@@ -1,3 +1,3 @@
-import SecurityDetailsUserDisplay from "./SecurityDetailsUserDisplay";
+import SecurityDetailsUserDisplay from './SecurityDetailsUserDisplay';
 
 export default SecurityDetailsUserDisplay;

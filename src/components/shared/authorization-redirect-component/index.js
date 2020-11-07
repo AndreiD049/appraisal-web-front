@@ -1,3 +1,3 @@
-import AuthorizationRedirectComponent from "./AuthorizationRedirectComponent";
+import AuthorizationRedirectComponent from './AuthorizationRedirectComponent';
 
 export default AuthorizationRedirectComponent;

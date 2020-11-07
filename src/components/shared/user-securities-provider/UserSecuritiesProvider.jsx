@@ -1,27 +1,26 @@
-import { useEffect, useContext } from 'react'
+import { useEffect, useContext } from 'react';
 import AuthorizationService from '../../../services/AuthorizationService';
 import GlobalContext from '../../../services/GlobalContext';
 
-const UserSecuritiesProvider = (props) => {
+const UserSecuritiesProvider = () => {
   const global = useContext(GlobalContext);
 
   useEffect(() => {
     async function run() {
       if (!global.security && global.user !== null) {
-
         const result = await AuthorizationService.getSecurities();
         if (result) {
-          global.setContext(prev => ({
+          global.setContext((prev) => ({
             ...prev,
-            security: result
+            security: result,
           }));
         }
       }
     }
     run();
-  }, [global])
+  }, [global]);
 
   return null;
 };
 
-export default UserSecuritiesProvider
+export default UserSecuritiesProvider;

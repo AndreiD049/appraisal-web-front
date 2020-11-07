@@ -1,7 +1,9 @@
-import { useContext, useState, useEffect } from 'react'
+import { useContext, useState, useEffect } from 'react';
 import GlobalContext from '../../../services/GlobalContext';
 
-const AuthorizationComponent = ({ code, grant, onReject, ...props }) => {
+const AuthorizationComponent = ({
+  code, grant, onReject, ...props
+}) => {
   const global = useContext(GlobalContext);
   const [access, setAccess] = useState(false);
 
@@ -9,7 +11,12 @@ const AuthorizationComponent = ({ code, grant, onReject, ...props }) => {
     setAccess(global.Authorize(code, grant));
   }, [global, code, grant]);
 
-  return ( access ? props.children : (onReject ? onReject() : null) );
+  if (access) {
+    return props.children;
+  } if (onReject) {
+    return onReject();
+  }
+  return null;
 };
 
-export default AuthorizationComponent
+export default AuthorizationComponent;

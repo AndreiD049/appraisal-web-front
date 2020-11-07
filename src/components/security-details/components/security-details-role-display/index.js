@@ -1,3 +1,3 @@
-import SecurityDetailsRoleDisplay from "./SecurityDetailsRoleDisplay";
+import SecurityDetailsRoleDisplay from './SecurityDetailsRoleDisplay';
 
 export default SecurityDetailsRoleDisplay;

@@ -1,11 +1,9 @@
-import React from 'react'
+import React from 'react';
 
-const ReportsPage = (props) => {
-  return (
-    <>
-      Reports
-    </>
-  );
-};
+const ReportsPage = () => (
+  <>
+    Reports
+  </>
+);
 
-export default ReportsPage
+export default ReportsPage;

@@ -1,3 +1,3 @@
-import NotificationManager from "./NotificationManager";
+import NotificationManager from './NotificationManager';
 
 export default NotificationManager;

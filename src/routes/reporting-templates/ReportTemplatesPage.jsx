@@ -1,9 +1,9 @@
-import React from 'react'
-import { useRouteMatch, Switch, Route } from 'react-router-dom'
+import React from 'react';
+import { useRouteMatch, Switch, Route } from 'react-router-dom';
 import ReportTemplatesList from '../../components/report-templates-list';
 import ReportTemplateDetails from '../../components/report-template-details/ReportTemplateDetails';
 
-const ReportTemplatesPage = (props) => {
+const ReportTemplatesPage = () => {
   const { path } = useRouteMatch();
   return (
     <Switch>
@@ -17,4 +17,4 @@ const ReportTemplatesPage = (props) => {
   );
 };
 
-export default ReportTemplatesPage
+export default ReportTemplatesPage;

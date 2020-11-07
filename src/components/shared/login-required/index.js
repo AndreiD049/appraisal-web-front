@@ -1,3 +1,3 @@
-import LoginRequired from "./LoginRequired";
+import LoginRequired from './LoginRequired';
 
 export default LoginRequired;

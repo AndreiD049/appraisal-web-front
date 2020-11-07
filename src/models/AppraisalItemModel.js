@@ -1,18 +1,18 @@
 const validItemTypes = [
-  'Planned', 
-  'Achieved', 
+  'Planned',
+  'Achieved',
   'Training',
   'Training_Suggested',
   'SWOT_S',
   'SWOT_W',
   'SWOT_O',
-  'SWOT_T'
+  'SWOT_T',
 ];
 
 const validItemStatuses = [
   'Active',
   'Finished',
-  'InProgress'
+  'InProgress',
 ];
 
 export function Item(item) {
@@ -30,23 +30,18 @@ export function Item(item) {
 }
 
 export function validate(item) {
-  if (validItemTypes.indexOf(item.type) === -1)
-    throw new Error("Item type not valid: " + item.type);
-  if (validItemStatuses.indexOf(item.status) === -1)
-    throw new Error("Item status not valid: " + item.status);
-  if (item.periodId === 0)
-    throw new Error("Item periodId not valid: " + item.periodId);
-  if (!item.user)
-    throw new Error("Item user not valid: " + item.user);
+  if (validItemTypes.indexOf(item.type) === -1) throw new Error(`Item type not valid: ${item.type}`);
+  if (validItemStatuses.indexOf(item.status) === -1) throw new Error(`Item status not valid: ${item.status}`);
+  if (item.periodId === 0) throw new Error(`Item periodId not valid: ${item.periodId}`);
+  if (!item.user) throw new Error(`Item user not valid: ${item.user}`);
 }
 
 export function validateId(item) {
-  if (!item.id || item.id === 0)
-    throw new Error("Item id not valid: " + item.type);
+  if (!item.id || item.id === 0) throw new Error(`Item id not valid: ${item.type}`);
 }
 
 export default {
   Item,
   validate,
-  validateId
+  validateId,
 };

@@ -1,3 +1,3 @@
-import UserSecuritiesProvider from "./UserSecuritiesProvider";
+import UserSecuritiesProvider from './UserSecuritiesProvider';
 
 export default UserSecuritiesProvider;

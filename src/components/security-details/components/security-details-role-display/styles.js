@@ -7,29 +7,29 @@ const useStyles = makeStyles((theme) => ({
       marginTop: theme.spacing(3),
     },
     '& > *:last-child': {
-      marginBottom: theme.spacing(5)
-    }
+      marginBottom: theme.spacing(5),
+    },
   },
   selector: {
     maxWidth: '300px',
-    margin: '0 auto'
+    margin: '0 auto',
   },
   toolBar: {
     padding: theme.spacing(3),
     display: 'flex',
     flexFlow: 'row nowrap',
     '& > * + *': {
-      marginLeft: theme.spacing(3)
-    }
+      marginLeft: theme.spacing(3),
+    },
   },
   permissionDescription: {
     display: 'flex',
-    flexFlow: 'column nowrap'
+    flexFlow: 'column nowrap',
   },
   permissionBox: {
     display: 'flex',
-    flexFlow: 'column nowrap'
-  }
+    flexFlow: 'column nowrap',
+  },
 }));
 
 export default useStyles;

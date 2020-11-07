@@ -1,3 +1,3 @@
-import HomePlannedItemsInfoProvider from "./HomePlannedItemsInfoProvider";
+import HomePlannedItemsInfoProvider from './HomePlannedItemsInfoProvider';
 
 export default HomePlannedItemsInfoProvider;

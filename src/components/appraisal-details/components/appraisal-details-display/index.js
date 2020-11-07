@@ -1,3 +1,3 @@
-import AppraisalDetailsDisplay from "./AppraisalDetailsDisplay";
+import AppraisalDetailsDisplay from './AppraisalDetailsDisplay';
 
 export default AppraisalDetailsDisplay;

@@ -1,3 +1,3 @@
-import ReportsNavigation from "./ReportsNavigation";
+import ReportsNavigation from './ReportsNavigation';
 
 export default ReportsNavigation;

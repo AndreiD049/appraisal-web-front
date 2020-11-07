@@ -1,3 +1,3 @@
-import AppraisalUserDetails from "./AppraisalUserDetails";
+import AppraisalUserDetails from './AppraisalUserDetails';
 
 export default AppraisalUserDetails;
