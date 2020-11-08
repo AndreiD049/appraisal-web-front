@@ -1,75 +1,94 @@
-import React, { useState } from 'react';
 import {
-  Paper,
-  Box,
-  Button,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
-  FormControl,
-  TextField,
-  Divider,
-  Grid,
+  Typography,
+  Stepper,
+  Step,
+  StepLabel,
+  StepContent,
+  Container,
 } from '@material-ui/core';
+import React, { useState } from 'react';
+import AggregationStep from './components/AggregationStep';
 import useStyles from './styles';
-import UploadFileComponent from '../shared/upload-file-component';
 
-const ReportNewTemplate = () => {
+const ReportTemplateNew = () => {
   const classes = useStyles();
-  const [dialogOpen, setDialogOpen] = useState(false);
+  const [activeStep, setActiveStep] = useState(0);
 
-  const handleOpen = () => {
-    setDialogOpen(true);
+  const stepLabels = [
+    'Create your database aggregation',
+    'Add you template file',
+    'Try it out',
+  ];
+
+  const nextStep = () => {
+    setActiveStep((prev) => (prev + 1) % stepLabels.length);
   };
 
-  const handleClose = () => {
-    setDialogOpen(false);
+  const prevStep = () => {
+    setActiveStep((prev) => ((prev > 0) ? prev - 1 : 0));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    handleClose();
-  };
+  const stepContents = [
+    <AggregationStep advanceStep={nextStep} />,
+    null,
+    null,
+  ];
 
   return (
-    <Box mb={3}>
-      <Paper className={classes.container}>
-        <Button variant="contained" color="secondary" onClick={handleOpen}>New</Button>
-      </Paper>
-      <Dialog open={dialogOpen} onClose={handleClose} aria-labelledby="form-dialog-title">
-        <form onSubmit={handleSubmit}>
-          <DialogTitle id="form-dialog-title">New Template</DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              Upload template file and use it in Reports.
-            </DialogContentText>
-            <Grid container className={classes.inputs}>
-              <Grid item xs={12}>
-                <Divider />
+    <div className={classes.root}>
+      <Container maxWidth="lg">
+        <Typography variant="h4" component="h1" className={classes.header}>
+          New Template
+        </Typography>
+        <Stepper elevation={2} activeStep={activeStep} orientation="vertical">
+          {stepLabels.map((label, index) => (
+            <Step key={label}>
+              <StepLabel>{label}</StepLabel>
+              <StepContent>
+                {stepContents[index]}
+              </StepContent>
+            </Step>
+          ))}
+        </Stepper>
+      </Container>
+      {/* <Grid container>
+        <Grid item xs={12}>
+          <Typography variant="h4" component="h1">
+            New Template
+          </Typography>
+        </Grid>
+        <Grid item xs={12} component={Paper}>
+          <Box p={3}>
+            <form onSubmit={() => alert('submit')}>
+              <Grid container className={classes.formContainer}>
+                <Grid item xs={12}>
+                  <TextField
+                    variant="outlined"
+                    color="secondary"
+                    label="Template Name"
+                    id="new-template-name"
+                    name="new-template-name"
+                    size="small"
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <UploadFileComponent label="Template File" />
+                </Grid>
+                <Grid item xs={12}>
+                  <Divider />
+                </Grid>
+                <Grid item xs={12}>
+                  <Typography variant="h6">
+                    Aggregation
+                  </Typography>
+                </Grid>
               </Grid>
-              <Grid item xs={12}>
-                <FormControl>
-                  <TextField label="Template Name" variant="outlined" size="small" />
-                </FormControl>
-              </Grid>
-              <Grid item xs={12}>
-                <UploadFileComponent />
-              </Grid>
-              <Grid item xs={12}>
-                <Divider />
-              </Grid>
-            </Grid>
-          </DialogContent>
-          <DialogActions>
-            <Button type="submit" color="secondary" variant="contained">Ok</Button>
-            <Button color="secondary" variant="contained" onClick={handleClose}>Cancel</Button>
-          </DialogActions>
-        </form>
-      </Dialog>
-    </Box>
+            </form>
+          </Box>
+        </Grid>
+      </Grid> */}
+    </div>
   );
 };
 
-export default ReportNewTemplate;
+export default ReportTemplateNew;

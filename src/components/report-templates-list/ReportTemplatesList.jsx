@@ -1,20 +1,31 @@
 import React from 'react';
-import { useHistory, useRouteMatch } from 'react-router-dom';
+import { useHistory, useRouteMatch, Link } from 'react-router-dom';
 import {
-  Container,
+  Button,
+  Container, Paper,
 } from '@material-ui/core';
 import MaterialTable from 'material-table';
 import materialTableUtils from '../../utils/material-table-utils';
-import ReportNewTemplate from '../report-templates-new';
+import useStyles from './styles';
 
 const ReportTemplatesList = () => {
+  const classes = useStyles();
   const history = useHistory();
   const { path } = useRouteMatch();
 
   return (
     <Container maxWidth="lg">
       <h1 style={{ textAlign: 'center' }}>Templates</h1>
-      <ReportNewTemplate />
+      <Paper className={classes.container}>
+        <Link
+          to={`${path}/new`}
+          color="secondary"
+          variant="contained"
+          component={Button}
+        >
+          Create Template
+        </Link>
+      </Paper>
       <MaterialTable
         icons={materialTableUtils.tableIcons}
         title="List"

@@ -7,32 +7,24 @@ const getNextId = () => {
   nextId += 1;
   return nextId;
 };
-const NotificationContextObject = (notifications, setNotifications) => ({
-  notifications,
-  setNotifications,
-  addNotification: (notification) => setNotifications((prev) => {
-    const n = notification;
-    const copy = prev.slice();
-    n.id = getNextId();
-    copy.push(n);
-    return copy;
-  }),
-});
 
 const NotificationService = {
-  notificationObject: {
-    addNotification: (notification) => {
-      // eslint-disable-next-line no-console
-      console.log(notification);
-    },
+  notifications: [],
+  setNotifications(func) {
+    this.notifications = func(this.notifications);
+  },
+  addNotification(notification) { 
+    this.setNotifications((prev) => {
+      const n = notification;
+      const copy = prev.slice();
+      n.id = getNextId();
+      copy.push(n);
+      return copy;
+    });
   },
   notify(notification) {
-    this.notificationObject.addNotification(notification);
+    this.addNotification(notification);
   },
-};
-
-export {
-  NotificationContextObject,
 };
 
 export default NotificationService;

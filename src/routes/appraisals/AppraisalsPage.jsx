@@ -110,14 +110,14 @@ const AppraisalsPage = () => {
                     <CardHeader
                       action={(
                         <>
-                          <IconButton aria-label="menu" color="inherit" tabIndex={-1} onClick={handleClickPeriodMenu}>
+                          <IconButton data-itemid={item.id} aria-label="menu" color="inherit" tabIndex={-1} onClick={handleClickPeriodMenu}>
                             <MoreVertIcon />
                           </IconButton>
                           <Menu
                             id={`item-menu-${item.id}`}
                             anchorEl={itemMenuAnchorEl}
                             keepMounted
-                            open={Boolean(itemMenuAnchorEl)}
+                            open={Boolean(itemMenuAnchorEl) && itemMenuAnchorEl.dataset.itemid === item.id}
                             onClose={handleClose}
                             getContentAnchorEl={null}
                             anchorOrigin={{

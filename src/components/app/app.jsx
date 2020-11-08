@@ -14,8 +14,6 @@ import ReportingPage from '../../routes/reporting';
 import LoginPage from '../../routes/login';
 import GlobalContext from '../../services/GlobalContext';
 import NotificationManager from '../shared/notification-manager';
-import NotificationService, { NotificationContextObject } from '../../services/NotificationService';
-import PopUp from '../shared/pop-up';
 import UserSecuritiesProvider from '../shared/user-securities-provider';
 import AuthorizationService from '../../services/AuthorizationService';
 import UserInfoProvider from '../shared/user-info-provider';
@@ -45,29 +43,10 @@ function App() {
     }));
   }, []);
 
-  const [notifications, setNotifications] = useState([]);
-  const notificationObject = NotificationContextObject(notifications, setNotifications);
-  // set the notification object so we can notify the user
-  NotificationService.notificationObject = notificationObject;
-
   return (
-  // <GlobalContext.Provider value={{context: context, setContext: setContext}}>
     <GlobalContext.Provider value={context}>
       <ThemeProvider theme={theme}>
-        <NotificationManager
-          notifications={notifications}
-          notificationRender={(notification, props) => (
-            <PopUp
-              type={notification.type}
-              entry={props.entry}
-              onBeforeClose={props.onBeforeClose}
-              onAfterClose={props.onAfterClose}
-            />
-          )}
-          onAfterClose={(entry) => {
-            setNotifications((prev) => prev.filter((n) => n !== entry));
-          }}
-        />
+        <NotificationManager />
         <UserInfoProvider ctx={context} setCtx={setContext} />
         <CssBaseline />
         <UserSecuritiesProvider />
@@ -86,7 +65,7 @@ function App() {
                 <ReportingPage ctx={context} setCtx={setContext} />
               </Route>
               <Route path="/settings">
-                <SettingsPage ctx={context} setCtx={setContext} />
+                <SettingsPage />
               </Route>
               <Route path="/login">
                 <LoginPage ctx={context} setCtx={setContext} />

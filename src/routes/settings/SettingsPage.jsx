@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { useRouteMatch, Switch, Route } from 'react-router-dom';
 import { Container } from '@material-ui/core';
 import LoginRequired from '../../components/shared/login-required';
@@ -14,13 +13,13 @@ import AuthorizationRedirectComponent from '../../components/shared/authorizatio
 /*
  * On the settings page the navigation will be done via a
  */
-const SettingsPage = ({ ctx, setCtx }) => {
+const SettingsPage = () => {
   const { path } = useRouteMatch();
   const classes = styles();
 
   return (
     <>
-      <LoginRequired ctx={ctx} setCtx={setCtx} />
+      <LoginRequired />
       <Container maxWidth="lg" className={classes.root}>
         <Switch>
           <Route exact path={path}>
@@ -92,15 +91,6 @@ const SettingsPage = ({ ctx, setCtx }) => {
       </Container>
     </>
   );
-};
-
-SettingsPage.propTypes = {
-  ctx: PropTypes.shape({
-    user: PropTypes.shape({
-      username: PropTypes.string,
-    }),
-  }).isRequired,
-  setCtx: PropTypes.func.isRequired,
 };
 
 export default SettingsPage;

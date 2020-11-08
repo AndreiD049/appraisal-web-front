@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import clsx from 'clsx';
+import PropTypes from 'prop-types';
+import React, { useState } from 'react';
+import NotificationService from '../../../services/NotificationService';
+import PopUp from '../pop-up';
 import useStyles from './styles';
 
 const NotificationContainer = ({
@@ -41,17 +43,28 @@ NotificationContainer.propTypes = {
 };
 
 const NotificationManager = ({
-  notifications, notificationRender, onAfterClose, ...props
+  notificationRender, onAfterClose, ...props
 }) => {
   const classes = useStyles(props);
+  const [notifications, setNotifications] = useState([]);
+  NotificationService.notifications = notifications;
+  NotificationService.setNotifications = setNotifications;
+
   return (
     <div className={classes.root}>
       {
         notifications.map((n) => (
           <NotificationContainer
             key={n.id}
-            notificationRender={notificationRender}
-            onAfterClose={onAfterClose}
+            notificationRender={(notification, props) => (
+              <PopUp
+                type={notification.type}
+                entry={props.entry}
+                onBeforeClose={props.onBeforeClose}
+                onAfterClose={props.onAfterClose}
+              />
+            )}
+            onAfterClose={(entry) => setNotifications((prev) => prev.filter((n) => n !== entry))}
             entry={n}
           />
         ))

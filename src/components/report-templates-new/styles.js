@@ -1,13 +1,14 @@
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
-  container: {
-    display: 'flex',
-    flexFlow: 'row nowrap',
-    justifyContent: 'center',
-    padding: theme.spacing(2),
+  root: {
+    padding: theme.spacing(3),
   },
-  inputs: {
+  header: {
+    textAlign: 'center',
+    marginBottom: theme.spacing(3),
+  },
+  formContainer: {
     '& > * + *': {
       marginTop: theme.spacing(2),
     },
