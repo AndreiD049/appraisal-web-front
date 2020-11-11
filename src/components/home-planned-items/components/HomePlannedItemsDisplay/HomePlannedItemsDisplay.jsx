@@ -11,6 +11,8 @@ import {
   Button,
   ListItemSecondaryAction,
   IconButton,
+  Typography,
+  Divider,
 } from '@material-ui/core';
 import {
   Clear,
@@ -19,6 +21,7 @@ import {
 import clsx from 'clsx';
 import useStyles from './styles';
 import AppraisalService from '../../../../services/AppraisalService';
+import ListItemsDisplay from '../../../shared/list-items-display/ListItemsDisplay';
 
 const HomePlannedItemsDisplay = ({ items, setItems }) => {
   const classes = useStyles();
@@ -68,29 +71,34 @@ const HomePlannedItemsDisplay = ({ items, setItems }) => {
 
   return (
     <Box border={1} borderColor="secondary.main" borderRadius={3} p={3}>
-      <List>
-        {
-          items.map((item) => (
-            <ListItem dense>
-              <FormControlLabel
-                className={clsx({
-                  [classes.itemAchievedText]: item.type === 'Achieved',
-                })}
-                control={<Checkbox name={item.content} checked={item.type === 'Achieved'} onChange={checkboxChangeHandler(item)} />}
-                label={item.content}
-              />
-              <ListItemSecondaryAction>
-                <IconButton
-                  disabled={item.relatedItemId !== null}
-                  onClick={() => removeItem(item)}
-                >
-                  <Clear />
-                </IconButton>
-              </ListItemSecondaryAction>
-            </ListItem>
-          ))
-        }
-      </List>
+      <Typography className={classes.header} variant="h6">Planned items</Typography>
+      <Typography className={classes.subheader} variant="subtitle2">Here you will see items planned over past periods</Typography>
+      <Divider className={classes.divider} />
+      <ListItemsDisplay collection={items}>
+        <List>
+          {
+            items.map((item) => (
+              <ListItem dense>
+                <FormControlLabel
+                  className={clsx({
+                    [classes.itemAchievedText]: item.type === 'Achieved',
+                  })}
+                  control={<Checkbox name={item.content} checked={item.type === 'Achieved'} onChange={checkboxChangeHandler(item)} />}
+                  label={item.content}
+                />
+                <ListItemSecondaryAction>
+                  <IconButton
+                    disabled={item.relatedItemId !== null}
+                    onClick={() => removeItem(item)}
+                  >
+                    <Clear />
+                  </IconButton>
+                </ListItemSecondaryAction>
+              </ListItem>
+            ))
+          }
+        </List>
+      </ListItemsDisplay>
       <Grid container className={classes.grid}>
         <Grid item xs={6}>
           <TextField className={classes.addInput} variant="filled" size="small" label="Add New" color="secondary" value={newItemVal} onChange={handleInputChange} />

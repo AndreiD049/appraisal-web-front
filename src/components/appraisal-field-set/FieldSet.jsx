@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import {
   makeStyles, Box, List, ListItem,
@@ -52,10 +52,16 @@ const FieldSet = ({
   const periodId = details.id;
   const classes = useStyles();
   const min = minItems[type] || 0;
+  const [allowedPeriodStatuses, setAllowedPeriodStatuses] = useState(['Active']);
   const { userId } = useParams();
   const { user } = context;
 
   useEffect(() => {
+    const allowedStatuses = allowedPeriodStatuses;
+    if (context.Authorize(userId ? 'APPRAISAL DETAILS - OTHER USERS' : 'APPRAISAL DETAILS', 'update finished')) {
+      allowedStatuses.push('Finished');
+      setAllowedPeriodStatuses(allowedStatuses);
+    }
     setItems(AppraisalService.normalizeSet(
       periodId,
       context.user,
@@ -63,6 +69,7 @@ const FieldSet = ({
       min,
       type,
       details,
+      allowedStatuses,
     ));
     // eslint-disable-next-line
 	}, []);
@@ -94,10 +101,12 @@ const FieldSet = ({
       setItems((prev) => {
         const copy = prev.slice();
         copy[idx].content = item.content;
-        return AppraisalService.normalizeSet(periodId, user, copy, min, type, details);
+        return AppraisalService.normalizeSet(
+          periodId, user, copy, min, type, details, allowedPeriodStatuses,
+        );
       });
     }
-  }, [user, details, periodId, type, min, setItems]);
+  }, [user, details, periodId, type, min, setItems, allowedPeriodStatuses]);
 
   const changeTypeHandler = useCallback(async (itemId, itemType) => {
     if (itemId !== 0 && setOtherItems) {
@@ -111,12 +120,13 @@ const FieldSet = ({
               periodId,
               user,
               prev.filter((i) => i.id !== result.value.id), min, itemType, details,
+              allowedPeriodStatuses,
             )));
-          setOtherItems((prev) => AppraisalService.normalizeSet(periodId, user, prev.filter((i) => i.content !== '').concat(result.value), min, itemType, details));
+          setOtherItems((prev) => AppraisalService.normalizeSet(periodId, user, prev.filter((i) => i.content !== '').concat(result.value), min, itemType, details, allowedPeriodStatuses));
         }
       }
     }
-  }, [user, setOtherItems, details, min, items, periodId, setItems, updateItem]);
+  }, [user, setOtherItems, details, min, items, periodId, setItems, updateItem, allowedPeriodStatuses]);
 
   // Handle the remove button press
   const removeHandler = useCallback(async (item, idx) => {
@@ -130,17 +140,21 @@ const FieldSet = ({
         }
         setItems((prev) => {
           const copy = prev.filter((i) => i.id !== item.id);
-          return AppraisalService.normalizeSet(periodId, user, copy, min, type, details);
+          return AppraisalService.normalizeSet(
+            periodId, user, copy, min, type, details, allowedPeriodStatuses,
+          );
         });
       }
     } catch (err) {
       setItems((prev) => {
         const copy = prev.slice();
         copy[idx] = item;
-        return AppraisalService.normalizeSet(periodId, user, copy, min, type, details);
+        return AppraisalService.normalizeSet(
+          periodId, user, copy, min, type, details, allowedPeriodStatuses,
+        );
       });
     }
-  }, [user, details, items, periodId, type, min, deleteItem, setItems]);
+  }, [user, details, items, periodId, type, min, deleteItem, setItems, allowedPeriodStatuses]);
 
   /*
       Following procedure needs to syncronize the current
@@ -171,7 +185,9 @@ const FieldSet = ({
             copy[idx] = item;
             copy[idx].content = '';
           }
-          return AppraisalService.normalizeSet(periodId, user, copy, min, type, details);
+          return AppraisalService.normalizeSet(
+            periodId, user, copy, min, type, details, allowedPeriodStatuses,
+          );
         });
       } else if (isToBeDeleted) {
         // I try to delete the item from the database:
@@ -184,7 +200,9 @@ const FieldSet = ({
           } else {
             copy[idx] = result.value;
           }
-          return AppraisalService.normalizeSet(periodId, user, copy, min, type, details);
+          return AppraisalService.normalizeSet(
+            periodId, user, copy, min, type, details, allowedPeriodStatuses,
+          );
         });
       } else if (!isNew && !isToBeDeleted && modified && item.content !== '') {
         // I try to modify item in the database
@@ -197,11 +215,13 @@ const FieldSet = ({
             }
             return i;
           });
-          return AppraisalService.normalizeSet(periodId, user, copy, min, type, details);
+          return AppraisalService.normalizeSet(
+            periodId, user, copy, min, type, details, allowedPeriodStatuses,
+          );
         });
       }
     }
-  }, [user, details, items, periodId, type, min, addItem, deleteItem, updateItem, setItems]);
+  }, [user, details, items, periodId, type, min, addItem, deleteItem, updateItem, setItems, allowedPeriodStatuses]);
 
   return (
     <Box>

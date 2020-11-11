@@ -27,6 +27,7 @@ import GlobalContext from '../../services/GlobalContext';
 import NewPeriodDialog from '../../components/new-period-dialog';
 import LoginRequired from '../../components/shared/login-required';
 import AppraisalDetailsPage from '../appraisal-details';
+import ListItemsDisplay from '../../components/shared/list-items-display/ListItemsDisplay';
 
 const useStyles = makeStyles((theme) => ({
   header: {
@@ -105,96 +106,100 @@ const AppraisalsPage = () => {
                 <h2 className={classes.header}>Opened</h2>
               </Grid>
               <Grid item xs={12} className={classes.gridFlex}>
-                {items.filter((item) => item.status === 'Active').map((item) => (
-                  <Card key={item.id} className={classes.card}>
-                    <CardHeader
-                      action={(
-                        <>
-                          <IconButton data-itemid={item.id} aria-label="menu" color="inherit" tabIndex={-1} onClick={handleClickPeriodMenu}>
-                            <MoreVertIcon />
-                          </IconButton>
-                          <Menu
-                            id={`item-menu-${item.id}`}
-                            anchorEl={itemMenuAnchorEl}
-                            keepMounted
-                            open={Boolean(itemMenuAnchorEl) && itemMenuAnchorEl.dataset.itemid === item.id}
-                            onClose={handleClose}
-                            getContentAnchorEl={null}
-                            anchorOrigin={{
-                              vertical: 'bottom',
-                              horizontal: 'center',
-                            }}
-                            transformOrigin={{
-                              vertical: 'top',
-                              horizontal: 'center',
-                            }}
-                          >
-                            <MenuItem onClick={clickFinishHandler(item)}>
-                              <ListItemIcon>
-                                <LockIcon fontSize="small" />
-                              </ListItemIcon>
-                              <ListItemText primary="Finish" />
-                            </MenuItem>
-                          </Menu>
-                        </>
+                <ListItemsDisplay collection={items.filter((item) => item.status === 'Active')}>
+                  {items.filter((item) => item.status === 'Active').map((item) => (
+                    <Card key={item.id} className={classes.card}>
+                      <CardHeader
+                        action={(
+                          <>
+                            <IconButton data-itemid={item.id} aria-label="menu" color="inherit" tabIndex={-1} onClick={handleClickPeriodMenu}>
+                              <MoreVertIcon />
+                            </IconButton>
+                            <Menu
+                              id={`item-menu-${item.id}`}
+                              anchorEl={itemMenuAnchorEl}
+                              keepMounted
+                              open={Boolean(itemMenuAnchorEl) && itemMenuAnchorEl.dataset.itemid === item.id}
+                              onClose={handleClose}
+                              getContentAnchorEl={null}
+                              anchorOrigin={{
+                                vertical: 'bottom',
+                                horizontal: 'center',
+                              }}
+                              transformOrigin={{
+                                vertical: 'top',
+                                horizontal: 'center',
+                              }}
+                            >
+                              <MenuItem onClick={clickFinishHandler(item)}>
+                                <ListItemIcon>
+                                    <LockIcon fontSize="small" />
+                                  </ListItemIcon>
+                                <ListItemText primary="Finish" />
+                              </MenuItem>
+                            </Menu>
+                          </>
                       )}
-                      title={item.name}
-                      subheader={item.status}
-                    />
-                    <CardContent>
-                      <Typography variant="body1" component="p">
-                        Created by:
-                        {' '}
-                        {item.createdUser.username}
-                      </Typography>
-                      <Typography variant="body2" color="textSecondary" component="p">
-                        {(new Date(item.createdDate)).toLocaleString()}
-                      </Typography>
-                    </CardContent>
-                    <CardActions className={classes.cardActions}>
-                      <Link to={`/appraisals/${item.id}`} className={classes.linkDecoration}>
-                        <Button variant="contained" color="primary">
-                          Open
-                        </Button>
-                      </Link>
-                    </CardActions>
-                  </Card>
-                ))}
+                        title={item.name}
+                        subheader={item.status}
+                      />
+                      <CardContent>
+                        <Typography variant="body1" component="p">
+                          Created by:
+                          {' '}
+                          {item.createdUser.username}
+                        </Typography>
+                        <Typography variant="body2" color="textSecondary" component="p">
+                          {(new Date(item.createdDate)).toLocaleString()}
+                        </Typography>
+                      </CardContent>
+                      <CardActions className={classes.cardActions}>
+                        <Link to={`/appraisals/${item.id}`} className={classes.linkDecoration}>
+                          <Button variant="contained" color="primary">
+                            Open
+                          </Button>
+                        </Link>
+                      </CardActions>
+                    </Card>
+                  ))}
+                </ListItemsDisplay>
               </Grid>
               <Grid item xs={12}>
-                <h2 hidden={items.filter((i) => i.status !== 'Active').length === 0} className={classes.header}>Closed</h2>
+                <h2 className={classes.header}>Closed</h2>
               </Grid>
               <Grid item xs={12} className={classes.gridFlex}>
-                {items.filter((item) => item.status !== 'Active').map((item) => (
-                  <Card key={item.id} className={classes.card}>
-                    <CardHeader
-                      action={(
-                        <IconButton aria-label="actions">
-                          <MoreVertIcon />
-                        </IconButton>
+                <ListItemsDisplay collection={items.filter((item) => item.status !== 'Active')}>
+                  {items.filter((item) => item.status !== 'Active').map((item) => (
+                    <Card key={item.id} className={classes.card}>
+                      <CardHeader
+                        action={(
+                          <IconButton aria-label="actions">
+                            <MoreVertIcon />
+                          </IconButton>
                         )}
-                      title={item.name}
-                      subheader={item.status}
-                    />
-                    <CardContent>
-                      <Typography variant="body1" component="p">
-                        Created by:
-                        {' '}
-                        {item.createdUser.username}
-                      </Typography>
-                      <Typography variant="body2" color="textSecondary" component="p">
-                        {(new Date(item.createdDate)).toLocaleString()}
-                      </Typography>
-                    </CardContent>
-                    <CardActions className={classes.cardActions}>
-                      <Link to={`/appraisals/${item.id}`} className={classes.linkDecoration}>
-                        <Button variant="contained" color="primary">
-                          Open
-                        </Button>
-                      </Link>
-                    </CardActions>
-                  </Card>
-                ))}
+                        title={item.name}
+                        subheader={item.status}
+                      />
+                      <CardContent>
+                        <Typography variant="body1" component="p">
+                          Created by:
+                          {' '}
+                          {item.createdUser.username}
+                        </Typography>
+                        <Typography variant="body2" color="textSecondary" component="p">
+                          {(new Date(item.createdDate)).toLocaleString()}
+                        </Typography>
+                      </CardContent>
+                      <CardActions className={classes.cardActions}>
+                        <Link to={`/appraisals/${item.id}`} className={classes.linkDecoration}>
+                          <Button variant="contained" color="primary">
+                            Open
+                          </Button>
+                        </Link>
+                      </CardActions>
+                    </Card>
+                  ))}
+                </ListItemsDisplay>
               </Grid>
               <Grid item xs={12} className={classes.centerButton}>
                 <Button onClick={() => setDialogOpen(true)} variant="contained" color="primary">
