@@ -209,12 +209,17 @@ const FieldSet = ({
         const result = await updateItem(periodId, item);
         // Depending whether the addition succeeded or not, i update the input field accordingly
         setItems((prev) => {
-          const copy = prev.map((i) => {
-            if (i.id === item.id) {
-              return result.value;
-            }
-            return i;
-          });
+          let copy;
+          if (result.error) {
+            copy = prev.slice();
+          } else {
+            copy = prev.map((i) => {
+              if (i.id === item.id) {
+                return result.value;
+              }
+              return i;
+            });
+          }
           return AppraisalService.normalizeSet(
             periodId, user, copy, min, type, details, allowedPeriodStatuses,
           );
