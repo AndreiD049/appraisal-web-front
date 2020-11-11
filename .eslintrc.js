@@ -28,7 +28,7 @@ module.exports = {
   ],
 
   rules: {
-    'linebreak-style': ['error', (os.EOL === '\r\n' ? 'windows' : 'unix')],
+    'linebreak-style': [0, (os.EOL === '\r\n' ? 'windows' : '\n')],
     'no-unused-expressions': ['error', { allowShortCircuit: true }],
   },
 

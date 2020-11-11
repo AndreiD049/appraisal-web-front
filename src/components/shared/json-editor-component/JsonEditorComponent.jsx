@@ -1,10 +1,10 @@
 import { OutlinedInput } from '@material-ui/core';
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
-const JsonEditorComponent = ({ Component, className }) => {
-  const [value, setValue] = useState('');
-
+const JsonEditorComponent = ({
+  value, setValue, Component, className,
+}) => {
   const handleKeyPress = (evt) => {
     if (evt.key === 'Enter') {
       console.log(evt.key);
@@ -12,7 +12,6 @@ const JsonEditorComponent = ({ Component, className }) => {
   };
 
   const handleChange = (evt) => {
-    evt.persist();
     setValue(evt.target.value);
   };
 
@@ -30,6 +29,8 @@ const JsonEditorComponent = ({ Component, className }) => {
 };
 
 JsonEditorComponent.propTypes = {
+  value: PropTypes.string.isRequired,
+  setValue: PropTypes.func.isRequired,
   Component: PropTypes.element.isRequired,
   className: PropTypes.string,
 };

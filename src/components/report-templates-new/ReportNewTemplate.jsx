@@ -7,12 +7,18 @@ import {
   Container,
 } from '@material-ui/core';
 import React, { useState } from 'react';
+import ReportingService from '../../services/ReportingService';
+import AddTemplateStep from './components/AddTemplateStep';
 import AggregationStep from './components/AggregationStep';
+import TryOutStep from './components/TryOutStep';
 import useStyles from './styles';
 
 const ReportTemplateNew = () => {
   const classes = useStyles();
   const [activeStep, setActiveStep] = useState(0);
+  const [aggregation, setAggregation] = useState('');
+  const [name, setName] = useState('');
+  const [selectedFile, setSelectedFile] = useState(null);
 
   const stepLabels = [
     'Create your database aggregation',
@@ -28,10 +34,45 @@ const ReportTemplateNew = () => {
     setActiveStep((prev) => ((prev > 0) ? prev - 1 : 0));
   };
 
+  const handleSubmit = async () => {
+    const formData = new FormData();
+    formData.append('aggregation', aggregation);
+    formData.append('name', name);
+    formData.append('template', selectedFile);
+
+    await ReportingService.createTemplate(formData);
+  };
+
+  const handleGenerate = async () => {
+    const formData = new FormData();
+    formData.append('aggregation', aggregation);
+    formData.append('name', name);
+    formData.append('template', selectedFile);
+
+    const result = await ReportingService.generateTemplate(formData);
+    window.open(`/api/reporting/template/generate?filepath=${result.filepath}`);
+  };
+
   const stepContents = [
-    <AggregationStep advanceStep={nextStep} />,
-    null,
-    null,
+    <AggregationStep
+      advanceStep={nextStep}
+      value={aggregation}
+      setValue={setAggregation}
+      setAggregation={setAggregation}
+    />,
+    <AddTemplateStep
+      name={name}
+      setName={setName}
+      file={selectedFile}
+      setFile={setSelectedFile}
+      advanceStep={nextStep}
+      prevStep={prevStep}
+    />,
+    <TryOutStep
+      prevStep={prevStep}
+      handleSubmit={handleSubmit}
+      handleGenerate={handleGenerate}
+    />,
   ];
 
   return (
@@ -51,42 +92,6 @@ const ReportTemplateNew = () => {
           ))}
         </Stepper>
       </Container>
-      {/* <Grid container>
-        <Grid item xs={12}>
-          <Typography variant="h4" component="h1">
-            New Template
-          </Typography>
-        </Grid>
-        <Grid item xs={12} component={Paper}>
-          <Box p={3}>
-            <form onSubmit={() => alert('submit')}>
-              <Grid container className={classes.formContainer}>
-                <Grid item xs={12}>
-                  <TextField
-                    variant="outlined"
-                    color="secondary"
-                    label="Template Name"
-                    id="new-template-name"
-                    name="new-template-name"
-                    size="small"
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <UploadFileComponent label="Template File" />
-                </Grid>
-                <Grid item xs={12}>
-                  <Divider />
-                </Grid>
-                <Grid item xs={12}>
-                  <Typography variant="h6">
-                    Aggregation
-                  </Typography>
-                </Grid>
-              </Grid>
-            </form>
-          </Box>
-        </Grid>
-      </Grid> */}
     </div>
   );
 };

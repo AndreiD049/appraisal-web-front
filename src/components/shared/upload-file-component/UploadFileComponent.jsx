@@ -22,16 +22,18 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const UploadFileComponent = ({ label }) => {
+const UploadFileComponent = ({ label, file, setFile }) => {
   const classes = useStyles();
-  const [filename, setFilename] = useState('...');
+  const [filename, setFilename] = useState(file ? file.name : '...');
 
   const handleChange = (evt) => {
     const filelist = evt.target.files;
     if (filelist.length > 0) {
       setFilename(filelist[0].name);
+      setFile(filelist[0]);
     } else {
       setFilename('...');
+      setFile(null);
     }
   };
 
@@ -58,6 +60,10 @@ const UploadFileComponent = ({ label }) => {
 };
 
 UploadFileComponent.propTypes = {
+  file: PropTypes.shape({
+    name: PropTypes.string,
+  }).isRequired,
+  setFile: PropTypes.func.isRequired,
   label: PropTypes.string.isRequired,
 };
 
