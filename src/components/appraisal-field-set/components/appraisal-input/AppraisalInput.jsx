@@ -20,10 +20,12 @@ import {
 
 import { useParams } from 'react-router-dom';
 import useStyles from './styles';
-import Validate from '../../../../services/validators/AppraisalValidators';
+import {
+  validate, performSync, notSync, andSync, orSync,
+} from '../../../../services/validators';
 
 const AppraisalInput = ({
-  item, idx, changeHandler, blurHandler, removeHandler, changeTypeHandler, canUpdate, canDelete,
+  item, idx, changeHandler, blurHandler, removeHandler, changeTypeHandler, canInsert, canUpdate, canDelete,
 }) => {
   const classes = useStyles();
   const [value, setValue] = useState({ ...item });
@@ -36,18 +38,22 @@ const AppraisalInput = ({
     isFinished: false,
     inputEditable: false,
   });
-  // const isRelated = Boolean(item.relatedItemId);
-  // const isDeletable = isRelated ? false : item.status === 'Active';
-  // const isFinished = Boolean(item.status === 'Finished');
-  // const isTrainingSuggestedAllowed = item.type === 'Training_Suggested' ? !userId : false;
 
   useEffect(() => {
-    const isRelated = new Validate.ItemIsRelated(item).validateChain().valid;
-    const isDeletable = canDelete && (new Validate.ItemIsNotRelated(item).validateChain().valid);
-    const isFinished = new Validate.ItemStatus(item, 'Finished').validateChain().valid;
-    const inputEditable = canUpdate
-    && (new Validate.ItemInputEnabled(item, userId)
-      .and(new Validate.ItemIsNotRelated(item)).validateChain().valid);
+    const isRelated = performSync(validate.itemRelated(item), false).result;
+    const isDeletable = canDelete && performSync(notSync(validate.itemRelated(item)), false).result;
+    const isFinished = performSync(validate.itemStatus(item, 'Finished'), false).result;
+    const inputEditable = (canInsert || canUpdate)
+    && performSync(andSync([
+      notSync(validate.itemRelated(item)),
+      orSync([
+        andSync([
+          notSync(validate.isTruthy(userId)),
+          notSync(validate.itemType(item, 'Training_Suggested')),
+        ]),
+        validate.isTruthy(userId),
+      ]),
+    ]), false).result;
     setValidations({
       isRelated,
       isDeletable,
@@ -55,7 +61,7 @@ const AppraisalInput = ({
       inputEditable,
     });
     setValue({ ...item });
-  }, [item, canUpdate, canDelete, userId]);
+  }, [item, canInsert, canUpdate, canDelete, userId]);
 
   const handleClickUserMenu = (evt) => {
     setItemMenuAnchorEl(evt.currentTarget);
@@ -67,8 +73,9 @@ const AppraisalInput = ({
 
   const handleBlur = async (e) => {
     e.persist();
-    await blurHandler(value, idx, modified);
+    const mod = modified;
     setModified(false);
+    await blurHandler(value, idx, mod);
   };
 
   const handleChange = (e) => {
@@ -170,7 +177,7 @@ const AppraisalInput = ({
       disabled={!validations.inputEditable}
       InputProps={{
         startAdornment,
-        endAdornment: (canUpdate || canDelete) ? endAdornment : null,
+        endAdornment: [canInsert, canUpdate, canDelete].some(e => e) ? endAdornment : null,
       }}
     />
   );
@@ -189,6 +196,7 @@ AppraisalInput.propTypes = {
   blurHandler: PropTypes.func.isRequired,
   removeHandler: PropTypes.func.isRequired,
   changeTypeHandler: PropTypes.func.isRequired,
+  canInsert: PropTypes.bool.isRequired,
   canUpdate: PropTypes.bool.isRequired,
   canDelete: PropTypes.bool.isRequired,
 };

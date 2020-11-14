@@ -20,7 +20,7 @@ const ListItemsDisplay = ({ collection, children }) => {
 
 ListItemsDisplay.propTypes = {
   collection: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-  children: PropTypes.element.isRequired,
+  children: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
 };
 
 export default ListItemsDisplay;

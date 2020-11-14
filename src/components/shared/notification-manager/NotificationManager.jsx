@@ -42,10 +42,8 @@ NotificationContainer.propTypes = {
   onAfterClose: PropTypes.func.isRequired,
 };
 
-const NotificationManager = ({
-  notificationRender, onAfterClose, ...props
-}) => {
-  const classes = useStyles(props);
+const NotificationManager = () => {
+  const classes = useStyles();
   const [notifications, setNotifications] = useState([]);
   NotificationService.notifications = notifications;
   NotificationService.setNotifications = setNotifications;
@@ -56,12 +54,12 @@ const NotificationManager = ({
         notifications.map((n) => (
           <NotificationContainer
             key={n.id}
-            notificationRender={(notification, props) => (
+            notificationRender={(notification, p) => (
               <PopUp
                 type={notification.type}
-                entry={props.entry}
-                onBeforeClose={props.onBeforeClose}
-                onAfterClose={props.onAfterClose}
+                entry={p.entry}
+                onBeforeClose={p.onBeforeClose}
+                onAfterClose={p.onAfterClose}
               />
             )}
             onAfterClose={(entry) => setNotifications((prev) => prev.filter((n) => n !== entry))}
@@ -71,17 +69,6 @@ const NotificationManager = ({
       }
     </div>
   );
-};
-
-NotificationManager.propTypes = {
-  notifications: PropTypes.arrayOf(PropTypes.shape({
-    type: PropTypes.string,
-    header: PropTypes.string,
-    content: PropTypes.string,
-    duration: PropTypes.number,
-  })).isRequired,
-  notificationRender: PropTypes.func.isRequired,
-  onAfterClose: PropTypes.func.isRequired,
 };
 
 export default NotificationManager;

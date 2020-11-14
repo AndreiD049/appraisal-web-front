@@ -1,6 +1,7 @@
 import axios from 'axios';
-import { Item, validate, validateId } from '../models/AppraisalItemModel';
+import { Item, validateId } from '../models/AppraisalItemModel';
 import NotificationService from './NotificationService';
+import { and, or, not, perform, validate } from './validators';
 
 const AppraisalService = {
   getPeriodsPath: '/api/periods',
@@ -33,7 +34,7 @@ const AppraisalService = {
       NotificationService.notify({
         type: 'error',
         header: 'Error',
-        content: (err.response.data && err.response.data.error) || err.message,
+        content: (err.response && err.response.data.error) || err.message,
       });
       throw err;
     }
@@ -50,7 +51,7 @@ const AppraisalService = {
       NotificationService.notify({
         type: 'error',
         header: 'Error',
-        content: (err.response.data && err.response.data.error) || err.message,
+        content: (err.response && err.response.data.error) || err.message,
       });
       throw err;
     }
@@ -67,7 +68,7 @@ const AppraisalService = {
       NotificationService.notify({
         type: 'error',
         header: 'Error',
-        content: (err.response.data && err.response.data.error) || err.message,
+        content: (err.response && err.response.data.error) || err.message,
       });
       throw err;
     }
@@ -84,7 +85,7 @@ const AppraisalService = {
       NotificationService.notify({
         type: 'error',
         header: 'Error',
-        content: (err.response.data && err.response.data.error) || err.message,
+        content: (err.response && err.response.data.error) || err.message,
       });
       throw err;
     }
@@ -101,7 +102,7 @@ const AppraisalService = {
       NotificationService.notify({
         type: 'error',
         header: 'Error',
-        content: (err.response.data && err.response.data.error) || err.message,
+        content: (err.response && err.response.data.error) || err.message,
       });
       throw err;
     }
@@ -109,7 +110,11 @@ const AppraisalService = {
 
   async addItem(periodId, item) {
     try {
-      validate(item);
+      const validations = and([
+        validate.itemContentNotNull(item),
+        validate.isTruthy(item.user),
+      ]);
+      await perform(validations);
       const response = await axios.post(this.addItemToPeriodPath(periodId), { ...item });
       if (response.status === 200) {
         return response.data;
@@ -119,7 +124,7 @@ const AppraisalService = {
       NotificationService.notify({
         type: 'error',
         header: 'Error',
-        content: (err.response.data && err.response.data.error) || err.message,
+        content: (err.response && err.response.data.error) || err.message,
       });
       throw err;
     }
@@ -136,7 +141,7 @@ const AppraisalService = {
       NotificationService.notify({
         type: 'error',
         header: 'Error',
-        content: (err.response.data && err.response.data.error) || err.message,
+        content: (err.response && err.response.data.error) || err.message,
       });
       throw err;
     }
@@ -144,7 +149,11 @@ const AppraisalService = {
 
   async addUserItem(periodId, userId, item) {
     try {
-      validate(item);
+      const validations = and([
+        validate.itemContentNotNull(item),
+        validate.isTruthy(item.user),
+      ]);
+      await perform(validations);
       const response = await axios.post(this.addUserItemPath(periodId, userId), { ...item });
       if (response.status === 200) {
         return response.data;
@@ -154,7 +163,7 @@ const AppraisalService = {
       NotificationService.notify({
         type: 'error',
         header: 'Error',
-        content: (err.response.data && err.response.data.error) || err.message,
+        content: (err.response && err.response.data.error) || err.message,
       });
       throw err;
     }
@@ -162,8 +171,12 @@ const AppraisalService = {
 
   async updateItemInPeriod(periodId, item) {
     try {
-      validate(item);
-      validateId(item);
+      const validations = and([
+        validate.itemContentNotNull(item),
+        validate.isTruthy(item.user),
+        validate.isTruthy(item.periodId),
+      ]);
+      await perform(validations);
       const response = await axios.put(this.updateItemInPeriodPath(periodId, item.id), { ...item });
       if (response.status === 200) {
         return response.data;
@@ -173,7 +186,7 @@ const AppraisalService = {
       NotificationService.notify({
         type: 'error',
         header: 'Error',
-        content: (err.response.data && err.response.data.error) || err.message,
+        content: (err.response && err.response.data.error) || err.message,
       });
       throw err;
     }
@@ -181,8 +194,11 @@ const AppraisalService = {
 
   async updateItem(item) {
     try {
-      validate(item);
-      validateId(item);
+      const validations = and([
+        validate.itemContentNotNull(item),
+        validate.isTruthy(item.user),
+      ]);
+      await perform(validations);
       const response = await axios.put(this.updateItemPath(item.id), item);
       if (response.status === 200) {
         return response.data;
@@ -192,7 +208,7 @@ const AppraisalService = {
       NotificationService.notify({
         type: 'error',
         header: 'Error',
-        content: (err.response.data && err.response.data.error) || err.message,
+        content: (err.response && err.response.data.error) || err.message,
       });
       throw err;
     }
@@ -200,8 +216,11 @@ const AppraisalService = {
 
   async updateUserItem(periodId, userId, item) {
     try {
-      validate(item);
-      validateId(item);
+      const validations = and([
+        validate.itemContentNotNull(item),
+        validate.isTruthy(item.user),
+      ]);
+      await perform(validations);
       const response = await axios.put(
         this.updateUserItemPath(periodId, userId, item.id), { ...item },
       );
@@ -213,7 +232,7 @@ const AppraisalService = {
       NotificationService.notify({
         type: 'error',
         header: 'Error',
-        content: (err.response.data && err.response.data.error) || err.message,
+        content: (err.response && err.response.data.error) || err.message,
       });
       throw err;
     }
@@ -221,8 +240,11 @@ const AppraisalService = {
 
   async updateItemType(periodId, item) {
     try {
-      validate(item);
-      validateId(item);
+      const validations = and([
+        validate.itemContentNotNull(item),
+        validate.isTruthy(item.user),
+      ]);
+      await perform(validations);
       const response = await axios.post(
         this.updateItemTypePath(periodId, item.id), { type: item.type },
       );
@@ -234,7 +256,7 @@ const AppraisalService = {
       NotificationService.notify({
         type: 'error',
         header: 'Error',
-        content: (err.response.data && err.response.data.error) || err.message,
+        content: (err.response && err.response.data.error) || err.message,
       });
       throw err;
     }
@@ -242,8 +264,11 @@ const AppraisalService = {
 
   async updateUserItemType(periodId, userId, item) {
     try {
-      validate(item);
-      validateId(item);
+      const validations = and([
+        validate.itemContentNotNull(item),
+        validate.isTruthy(item.user),
+      ]);
+      await perform(validations);
       const response = await axios.post(
         this.updateUserItemTypePath(periodId, userId, item.id), { type: item.type },
       );
@@ -255,7 +280,7 @@ const AppraisalService = {
       NotificationService.notify({
         type: 'error',
         header: 'Error',
-        content: (err.response.data && err.response.data.error) || err.message,
+        content: (err.response && err.response.data.error) || err.message,
       });
       throw err;
     }
@@ -272,7 +297,7 @@ const AppraisalService = {
       NotificationService.notify({
         type: 'error',
         header: 'Error',
-        content: (err.response.data && err.response.data.error) || err.message,
+        content: (err.response && err.response.data.error) || err.message,
       });
       throw err;
     }
@@ -289,7 +314,7 @@ const AppraisalService = {
       NotificationService.notify({
         type: 'error',
         header: 'Error',
-        content: (err.response.data && err.response.data.error) || err.message,
+        content: (err.response && err.response.data.error) || err.message,
       });
       throw err;
     }
@@ -306,7 +331,7 @@ const AppraisalService = {
       NotificationService.notify({
         type: 'error',
         header: 'Error',
-        content: (err.response.data && err.response.data.error) || err.message,
+        content: (err.response && err.response.data.error) || err.message,
       });
       throw err;
     }
@@ -323,7 +348,7 @@ const AppraisalService = {
       NotificationService.notify({
         type: 'error',
         header: 'Error',
-        content: (err.response.data && err.response.data.error) || err.message,
+        content: (err.response && err.response.data.error) || err.message,
       });
       throw err;
     }
@@ -340,7 +365,7 @@ const AppraisalService = {
       NotificationService.notify({
         type: 'error',
         header: 'Error',
-        content: (err.response.data && err.response.data.error) || err.message,
+        content: (err.response && err.response.data.error) || err.message,
       });
       throw err;
     }

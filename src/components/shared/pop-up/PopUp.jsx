@@ -15,9 +15,9 @@ const PopUp = ({
 }) => {
   // default fields
   const type = entry.type || 'error';
-  const entry_local = {...entry, type};
+  const entryLocal = {...entry, type};
 
-  const classes = useStyles({ entry: entry_local });
+  const classes = useStyles({ entry: entryLocal });
   const [open, setOpen] = useState(true);
   const [paused, setPaused] = useState(false);
   const [timerId, setTimerId] = useState(0);

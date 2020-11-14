@@ -6,7 +6,7 @@ import {
 import { useParams } from 'react-router-dom';
 import AppraisalInput from './components/appraisal-input';
 import AppraisalService from '../../services/AppraisalService';
-import { andSync, orSync, notSync, validate } from '../../services/validators';
+import { validate, performSync } from '../../services/validators';
 
 const useStyles = makeStyles({
   header: {
@@ -54,6 +54,7 @@ const FieldSet = ({
   const classes = useStyles();
   const min = minItems[type] || 0;
   const [validations, setValidations] = useState({
+    canInsert: false,
     canUpdate: false,
     canDelete: false,
   });
@@ -61,20 +62,12 @@ const FieldSet = ({
   const { user } = context;
 
   useEffect(() => {
-    const canUpdate = (
-      (new Validate.PeriodStatus(details, 'Active')
-        .and(new Validate.CanUpdateItems(details, context, userId)).validateChain().valid)
-      || (new Validate.PeriodStatus(details, 'Finished')
-        .and(new Validate.CanUpdateFinishedItems(details, context, userId)).validateChain().valid)
-    );
-    const canDelete = (
-      (new Validate.PeriodStatus(details, 'Active')
-        .and(new Validate.CanDeleteItems(details, context, userId)).validateChain().valid)
-      || (new Validate.PeriodStatus(details, 'Finished')
-        .and(new Validate.CanDeleteFinishedItems(details, context, userId)).validateChain().valid)
-    );
+    const canInsert = performSync(validate.canInsert(context, details, userId), false).result;
+    const canUpdate = performSync(validate.canUpdate(context, details, userId), false).result;
+    const canDelete = performSync(validate.canDelete(context, details, userId), false).result;
     setValidations((prev) => ({
       ...prev,
+      canInsert,
       canUpdate,
       canDelete,
     }));
@@ -249,6 +242,7 @@ const FieldSet = ({
           let copy;
           if (result.error) {
             copy = prev.slice();
+            if (result.value) copy[idx] = result.value;
           } else {
             copy = prev.map((i) => {
               if (i.id === item.id) {
@@ -276,7 +270,6 @@ const FieldSet = ({
         {items.map((i, idx) => {
           const key = i.id === 0 ? idx : i.id;
           return (
-          // eslint-disable-next-line react/no-array-index-key
             <ListItem className={classes.listItem} key={key}>
               <AppraisalInput
                 item={i}
@@ -286,6 +279,7 @@ const FieldSet = ({
                 blurHandler={blurHandler}
                 removeHandler={removeHandler}
                 changeTypeHandler={changeTypeHandler}
+                canInsert={validations.canInsert}
                 canUpdate={validations.canUpdate}
                 canDelete={validations.canDelete}
               />
