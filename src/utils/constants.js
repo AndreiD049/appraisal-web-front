@@ -1,7 +1,36 @@
-const SECURITY_APPRAISAL_DETAILS = 'APPRAISAL DETAILS';
-const SECURITY_REPORTS = 'REPORTS';
-
-export {
-  SECURITY_APPRAISAL_DETAILS,
-  SECURITY_REPORTS,
+const constants = {
+  securities: {
+    APPRAISAL_DETAILS: {
+      code: 'APPRAISAL DETAILS',
+      grants: {
+        read: 'read',
+        create: 'create',
+        update: 'update',
+        delete: 'delete',
+        createFinished: 'create-finished',
+        updateFinished: 'update-finished',
+        deleteFinished: 'delete-finished',
+      },
+    },
+    APPRAISAL_DETAILS_OTHER: {
+      code: 'APPRAISAL DETAILS - OTHER USERS',
+      grants: {
+        read: 'read',
+        create: 'create',
+        update: 'update',
+        delete: 'delete',
+        createFinished: 'create-finished',
+        updateFinished: 'update-finished',
+        deleteFinished: 'delete-finished',
+      },
+    },
+    REPORTS: {
+      code: 'REPORTS',
+      grants: {
+        read: 'read',
+      },
+    },
+  },
 };
+
+export default constants;

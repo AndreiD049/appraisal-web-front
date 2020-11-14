@@ -191,15 +191,11 @@ const FieldSet = ({
         });
       } else if (isToBeDeleted) {
         // I try to delete the item from the database:
-        const result = await deleteItem(periodId, item);
+        await deleteItem(periodId, item);
         // Depending whether the addition succeeded or not, i update the input field accordingly
         setItems((prev) => {
           let copy = prev.slice();
-          if (!result.error) {
-            copy = copy.filter((i) => i.id !== item.id);
-          } else {
-            copy[idx] = result.value;
-          }
+          copy = copy.filter((i) => i.id !== item.id);
           return AppraisalService.normalizeSet(
             periodId, user, copy, min, type, details, allowedPeriodStatuses,
           );

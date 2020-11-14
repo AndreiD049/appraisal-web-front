@@ -4,7 +4,7 @@ import AppraisalDetails from '../../components/appraisal-details';
 import LoginRequired from '../../components/shared/login-required';
 import GlobalContext from '../../services/GlobalContext';
 import AuthorizationRedirectComponent from '../../components/shared/authorization-redirect-component';
-import { SECURITY_APPRAISAL_DETAILS } from '../../utils/constants';
+import constants from '../../utils/constants';
 
 const AppraisalDetailsPage = () => {
   const global = useContext(GlobalContext);
@@ -12,8 +12,8 @@ const AppraisalDetailsPage = () => {
     <Container maxWidth="md">
       <LoginRequired />
       <AuthorizationRedirectComponent
-        code={SECURITY_APPRAISAL_DETAILS}
-        grant="read"
+        code={constants.securities.APPRAISAL_DETAILS.code}
+        grant={constants.securities.APPRAISAL_DETAILS.grants.read}
         to="/appraisals"
         failureNotification={{
           type: 'info',
