@@ -362,7 +362,7 @@ const AppraisalService = {
    * 2. if number of items > min and blank items > 1 => remove blank items until
    * blank items = 1 or number of items = min
    */
-  normalizeSet(periodId, user, items, min, type, valid) {
+  normalizeSet(periodId, user, items, min, type) {
     const copy = items.slice().filter((i) => i.user !== null);
     if (!user) {
       return copy;

@@ -6,7 +6,7 @@ import {
 import { useParams } from 'react-router-dom';
 import AppraisalInput from './components/appraisal-input';
 import AppraisalService from '../../services/AppraisalService';
-import Validate from '../../services/validators/AppraisalValidators';
+import { andSync, orSync, notSync, validate } from '../../services/validators';
 
 const useStyles = makeStyles({
   header: {
