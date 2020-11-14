@@ -20,6 +20,7 @@ import {
 
 import { useParams } from 'react-router-dom';
 import useStyles from './styles';
+import Validate from '../../../../services/validators/AppraisalValidators';
 
 const AppraisalInput = ({
   item, idx, changeHandler, blurHandler, removeHandler, changeTypeHandler, canUpdate, canDelete,
@@ -28,15 +29,33 @@ const AppraisalInput = ({
   const [value, setValue] = useState({ ...item });
   const [modified, setModified] = useState(false);
   const [itemMenuAnchorEl, setItemMenuAnchorEl] = useState(null);
-  const isRelated = Boolean(item.relatedItemId);
-  const isDeletable = isRelated ? false : item.status === 'Active';
-  const isFinished = Boolean(item.status === 'Finished');
   const { userId } = useParams();
-  const isTrainingSuggestedAllowed = item.type === 'Training_Suggested' ? !userId : false;
+  const [validations, setValidations] = useState({
+    isRelated: false,
+    isDeletable: false,
+    isFinished: false,
+    inputEditable: false,
+  });
+  // const isRelated = Boolean(item.relatedItemId);
+  // const isDeletable = isRelated ? false : item.status === 'Active';
+  // const isFinished = Boolean(item.status === 'Finished');
+  // const isTrainingSuggestedAllowed = item.type === 'Training_Suggested' ? !userId : false;
 
   useEffect(() => {
+    const isRelated = new Validate.ItemIsRelated(item).validateChain().valid;
+    const isDeletable = canDelete && (new Validate.ItemIsNotRelated(item).validateChain().valid);
+    const isFinished = new Validate.ItemStatus(item, 'Finished').validateChain().valid;
+    const inputEditable = canUpdate
+    && (new Validate.ItemInputEnabled(item, userId)
+      .and(new Validate.ItemIsNotRelated(item)).validateChain().valid);
+    setValidations({
+      isRelated,
+      isDeletable,
+      isFinished,
+      inputEditable,
+    });
     setValue({ ...item });
-  }, [item]);
+  }, [item, canUpdate, canDelete, userId]);
 
   const handleClickUserMenu = (evt) => {
     setItemMenuAnchorEl(evt.currentTarget);
@@ -72,7 +91,7 @@ const AppraisalInput = ({
   };
 
   const startAdornment = (
-    isRelated
+    validations.isRelated
       ? (
         <InputAdornment position="start" className={classes.startAdornment}>
           <Tooltip title="This item was added automatically from your previous appraisals" aria-label="historical item">
@@ -104,7 +123,7 @@ const AppraisalInput = ({
           horizontal: 'center',
         }}
       >
-        <MenuItem disabled={canDelete ? !isDeletable : true} aria-label="delete appraisal item" onClick={handleDelete}>
+        <MenuItem disabled={!validations.isDeletable} aria-label="delete appraisal item" onClick={handleDelete}>
           <ListItemIcon>
             <Delete fontSize="small" />
           </ListItemIcon>
@@ -148,10 +167,10 @@ const AppraisalInput = ({
       multiline
       onChange={handleChange}
       onBlur={handleBlur}
-      disabled={canUpdate ? (isRelated || isFinished || isTrainingSuggestedAllowed) : true}
+      disabled={!validations.inputEditable}
       InputProps={{
         startAdornment,
-        endAdornment: isFinished ? null : endAdornment,
+        endAdornment: (canUpdate || canDelete) ? endAdornment : null,
       }}
     />
   );

@@ -10,6 +10,10 @@ class BaseValidator {
     this.opType = '';
     this.next = null;
     this.head = this;
+    this.result = {
+      valid: true,
+      error: ''
+    };
   }
 
   get nextValidator() {
@@ -38,7 +42,7 @@ class BaseValidator {
    * move to the next validator, or return to the client.
    * @param {{valid: boolean, error: string}} result - result of the validation
    */
-  async advance(result) {
+  advance(result) {
     if (!this.nextValidator) {
       return result;
     }
@@ -66,7 +70,7 @@ class BaseValidator {
    * @returns {{valid: boolean, error: string}} result of the validation
    */
   // eslint-disable-next-line no-unused-vars
-  async validate() {
+  validate() {
     const result = this;
     return {
       valid: false,
@@ -77,8 +81,8 @@ class BaseValidator {
   /**
    * Validate the chain and throw an error if it fails
    */
-  async validateThrow() {
-    const result = await this.head.validate();
+  validateThrow() {
+    const result = this.head.validate();
     if (!result.valid) {
       throw new Error(result.error);
     }
@@ -87,7 +91,7 @@ class BaseValidator {
   /**
    * Validate the whole chain, starting from HEAD
    */
-  async validateChain() {
+  validateChain() {
     return this.head.validate();
   }
 

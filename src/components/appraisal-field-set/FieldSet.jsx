@@ -6,6 +6,7 @@ import {
 import { useParams } from 'react-router-dom';
 import AppraisalInput from './components/appraisal-input';
 import AppraisalService from '../../services/AppraisalService';
+import Validate from '../../services/validators/AppraisalValidators';
 
 const useStyles = makeStyles({
   header: {
@@ -52,27 +53,40 @@ const FieldSet = ({
   const periodId = details.id;
   const classes = useStyles();
   const min = minItems[type] || 0;
-  const [allowedPeriodStatuses, setAllowedPeriodStatuses] = useState(['Active']);
+  const [validations, setValidations] = useState({
+    canUpdate: false,
+    canDelete: false,
+  });
   const { userId } = useParams();
   const { user } = context;
 
   useEffect(() => {
-    const allowedStatuses = allowedPeriodStatuses;
-    if (context.Authorize(userId ? 'APPRAISAL DETAILS - OTHER USERS' : 'APPRAISAL DETAILS', 'update finished')) {
-      allowedStatuses.push('Finished');
-      setAllowedPeriodStatuses(allowedStatuses);
-    }
+    const canUpdate = (
+      (new Validate.PeriodStatus(details, 'Active')
+        .and(new Validate.CanUpdateItems(details, context, userId)).validateChain().valid)
+      || (new Validate.PeriodStatus(details, 'Finished')
+        .and(new Validate.CanUpdateFinishedItems(details, context, userId)).validateChain().valid)
+    );
+    const canDelete = (
+      (new Validate.PeriodStatus(details, 'Active')
+        .and(new Validate.CanDeleteItems(details, context, userId)).validateChain().valid)
+      || (new Validate.PeriodStatus(details, 'Finished')
+        .and(new Validate.CanDeleteFinishedItems(details, context, userId)).validateChain().valid)
+    );
+    setValidations((prev) => ({
+      ...prev,
+      canUpdate,
+      canDelete,
+    }));
     setItems(AppraisalService.normalizeSet(
       periodId,
       context.user,
       items,
       min,
       type,
-      details,
-      allowedStatuses,
     ));
     // eslint-disable-next-line
-	}, []);
+  }, []);
 
   // CRUD functions
   const addItem = useCallback(async (id, item) => {
@@ -102,11 +116,11 @@ const FieldSet = ({
         const copy = prev.slice();
         copy[idx].content = item.content;
         return AppraisalService.normalizeSet(
-          periodId, user, copy, min, type, details, allowedPeriodStatuses,
+          periodId, user, copy, min, type,
         );
       });
     }
-  }, [user, details, periodId, type, min, setItems, allowedPeriodStatuses]);
+  }, [user, periodId, type, min, setItems]);
 
   const changeTypeHandler = useCallback(async (itemId, itemType) => {
     if (itemId !== 0 && setOtherItems) {
@@ -119,14 +133,21 @@ const FieldSet = ({
             AppraisalService.normalizeSet(
               periodId,
               user,
-              prev.filter((i) => i.id !== result.value.id), min, itemType, details,
-              allowedPeriodStatuses,
+              prev.filter((i) => i.id !== result.value.id),
+              min,
+              itemType,
             )));
-          setOtherItems((prev) => AppraisalService.normalizeSet(periodId, user, prev.filter((i) => i.content !== '').concat(result.value), min, itemType, details, allowedPeriodStatuses));
+          setOtherItems((prev) => AppraisalService.normalizeSet(
+            periodId,
+            user,
+            prev.filter((i) => i.content !== '').concat(result.value),
+            min,
+            itemType,
+          ));
         }
       }
     }
-  }, [user, setOtherItems, details, min, items, periodId, setItems, updateItem, allowedPeriodStatuses]);
+  }, [user, setOtherItems, min, items, periodId, setItems, updateItem]);
 
   // Handle the remove button press
   const removeHandler = useCallback(async (item, idx) => {
@@ -141,7 +162,11 @@ const FieldSet = ({
         setItems((prev) => {
           const copy = prev.filter((i) => i.id !== item.id);
           return AppraisalService.normalizeSet(
-            periodId, user, copy, min, type, details, allowedPeriodStatuses,
+            periodId,
+            user,
+            copy,
+            min,
+            type,
           );
         });
       }
@@ -150,11 +175,15 @@ const FieldSet = ({
         const copy = prev.slice();
         copy[idx] = item;
         return AppraisalService.normalizeSet(
-          periodId, user, copy, min, type, details, allowedPeriodStatuses,
+          periodId,
+          user,
+          copy,
+          min,
+          type,
         );
       });
     }
-  }, [user, details, items, periodId, type, min, deleteItem, setItems, allowedPeriodStatuses]);
+  }, [user, items, periodId, type, min, deleteItem, setItems]);
 
   /*
       Following procedure needs to syncronize the current
@@ -186,18 +215,30 @@ const FieldSet = ({
             copy[idx].content = '';
           }
           return AppraisalService.normalizeSet(
-            periodId, user, copy, min, type, details, allowedPeriodStatuses,
+            periodId,
+            user,
+            copy,
+            min,
+            type,
           );
         });
       } else if (isToBeDeleted) {
         // I try to delete the item from the database:
-        await deleteItem(periodId, item);
+        const result = await deleteItem(periodId, item);
         // Depending whether the addition succeeded or not, i update the input field accordingly
         setItems((prev) => {
           let copy = prev.slice();
-          copy = copy.filter((i) => i.id !== item.id);
+          if (!result.error) {
+            copy = copy.filter((i) => i.id !== item.id);
+          } else if (result.value) {
+            copy[idx] = result.value;
+          }
           return AppraisalService.normalizeSet(
-            periodId, user, copy, min, type, details, allowedPeriodStatuses,
+            periodId,
+            user,
+            copy,
+            min,
+            type,
           );
         });
       } else if (!isNew && !isToBeDeleted && modified && item.content !== '') {
@@ -217,12 +258,16 @@ const FieldSet = ({
             });
           }
           return AppraisalService.normalizeSet(
-            periodId, user, copy, min, type, details, allowedPeriodStatuses,
+            periodId,
+            user,
+            copy,
+            min,
+            type,
           );
         });
       }
     }
-  }, [user, details, items, periodId, type, min, addItem, deleteItem, updateItem, setItems, allowedPeriodStatuses]);
+  }, [user, items, periodId, type, min, addItem, deleteItem, updateItem, setItems]);
 
   return (
     <Box>
@@ -241,8 +286,8 @@ const FieldSet = ({
                 blurHandler={blurHandler}
                 removeHandler={removeHandler}
                 changeTypeHandler={changeTypeHandler}
-                canUpdate={context.Authorize(userId ? 'APPRAISAL DETAILS - OTHER USERS' : 'APPRAISAL DETAILS', 'update')}
-                canDelete={context.Authorize(userId ? 'APPRAISAL DETAILS - OTHER USERS' : 'APPRAISAL DETAILS', 'delete')}
+                canUpdate={validations.canUpdate}
+                canDelete={validations.canDelete}
               />
             </ListItem>
           );
