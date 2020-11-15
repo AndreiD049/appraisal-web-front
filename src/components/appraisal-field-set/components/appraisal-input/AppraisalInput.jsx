@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import clsx from 'clsx';
 import {
   InputAdornment,
   IconButton,
@@ -25,7 +26,15 @@ import {
 } from '../../../../services/validators';
 
 const AppraisalInput = ({
-  item, idx, changeHandler, blurHandler, removeHandler, changeTypeHandler, canInsert, canUpdate, canDelete,
+  item,
+  idx,
+  changeHandler,
+  blurHandler,
+  removeHandler,
+  changeTypeHandler,
+  canInsert,
+  canUpdate,
+  canDelete,
 }) => {
   const classes = useStyles();
   const [value, setValue] = useState({ ...item });
@@ -62,6 +71,11 @@ const AppraisalInput = ({
     });
     setValue({ ...item });
   }, [item, canInsert, canUpdate, canDelete, userId]);
+
+  const showEndAdornment = () => {
+    if (item.type === 'Feedback') return false;
+    return [canInsert, canUpdate, canDelete].some((e) => e);
+  };
 
   const handleClickUserMenu = (evt) => {
     setItemMenuAnchorEl(evt.currentTarget);
@@ -166,7 +180,10 @@ const AppraisalInput = ({
 
   return (
     <TextField
-      className={classes.root}
+      className={clsx(
+        // classes.root,
+        item.type === 'Feedback' ? classes.feedBackInput : classes.root,
+      )}
       id={`app-item-${item.type.toLowerCase()}-${idx}`}
       value={value.content}
       size="small"
@@ -177,7 +194,7 @@ const AppraisalInput = ({
       disabled={!validations.inputEditable}
       InputProps={{
         startAdornment,
-        endAdornment: [canInsert, canUpdate, canDelete].some(e => e) ? endAdornment : null,
+        endAdornment: showEndAdornment() ? endAdornment : null,
       }}
     />
   );

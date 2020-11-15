@@ -1,7 +1,9 @@
 import axios from 'axios';
 import { Item, validateId } from '../models/AppraisalItemModel';
 import NotificationService from './NotificationService';
-import { and, or, not, perform, validate } from './validators';
+import {
+  and, or, not, perform, validate,
+} from './validators';
 
 const AppraisalService = {
   getPeriodsPath: '/api/periods',
@@ -390,6 +392,8 @@ const AppraisalService = {
   normalizeSet(periodId, user, items, min, type) {
     const copy = items.slice().filter((i) => i.user !== null);
     if (!user) {
+      return copy;
+    } if (type === 'Feedback' && items.length > 0) {
       return copy;
     }
     // array of empty indexes ex: [1, 4, 5]

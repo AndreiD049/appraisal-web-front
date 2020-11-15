@@ -38,6 +38,7 @@ const FieldSet = ({
     SWOT_W: 5,
     SWOT_O: 5,
     SWOT_T: 5,
+    Feedback: 1,
   };
 
   const labels = {
@@ -49,6 +50,7 @@ const FieldSet = ({
     SWOT_W: 'Weaknesses',
     SWOT_O: 'Opportunities',
     SWOT_T: 'Threats',
+    Feedback: 'Remarks / Other feedback',
   };
   const periodId = details.id;
   const classes = useStyles();

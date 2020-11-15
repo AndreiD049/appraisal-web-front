@@ -7,10 +7,15 @@ const TeamMatesAutocomplete = ({ onUserSelect, defaultValue, className }) => {
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
+    let mounted = true;
     async function run() {
-      setUsers(await UserService.getUserTeamMembers());
+      const data = await UserService.getUserTeamMembers();
+      if (mounted) setUsers(data);
     }
     run();
+    return () => {
+      mounted = false;
+    };
   }, []);
 
   const handleSelect = (event, value) => {

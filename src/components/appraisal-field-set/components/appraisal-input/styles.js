@@ -4,6 +4,12 @@ const useStyles = makeStyles((theme) => ({
   root: {
     width: '80%',
   },
+  feedBackInput: {
+    width: '90%',
+    '& textarea': {
+      minHeight: 300,
+    },
+  },
   startAdornment: {
     cursor: 'pointer',
     '& > *:last-child': {
