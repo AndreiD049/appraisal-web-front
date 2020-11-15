@@ -66,18 +66,18 @@ const AppraisalUserDetails = ({ context, periodDetails, userDetails }) => {
           <Grid item xs={12} className={classes.middleFlex}>
             <AppraisalUserRedirect defaultValue={userDetails} className={classes.userInput} />
           </Grid>
-          <Grid item xs={12} className={classes.middleFlex}>
-            {userDetails
-              ? (
-                <Chip
-                  avatar={<Avatar />}
-                  label={userDetails.username}
-                  color="primary"
-                />
-              )
-              : null}
-          </Grid>
         </AuthorizationComponent>
+        <Grid item xs={12} className={classes.middleFlex}>
+          {userDetails
+            ? (
+              <Chip
+                avatar={<Avatar />}
+                label={userDetails.username}
+                color="primary"
+              />
+            )
+            : null}
+        </Grid>
         <Grid container item xs={12} component={Paper} className={classes.inputBlock}>
           <Grid item xs={12} sm={6}>
             <FieldSet context={context} details={periodDetails} items={achieved} setItems={setAchieved} type="Achieved" setOtherItems={setPlanned} />
