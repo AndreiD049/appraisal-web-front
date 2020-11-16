@@ -9,7 +9,7 @@ const useStyles = makeStyles((theme) => ({
   multilineInput: {
     width: '100%',
     '& textarea': {
-      minHeight: 400,
+      // minHeight: 400,
     },
   },
 }));

@@ -6,7 +6,7 @@ import {
 import { useParams } from 'react-router-dom';
 import AppraisalInput from './components/appraisal-input';
 import AppraisalService from '../../services/AppraisalService';
-import { validate, performSync } from '../../services/validators';
+import { validate, perform } from '../../services/validators';
 
 const useStyles = makeStyles({
   header: {
@@ -64,15 +64,17 @@ const FieldSet = ({
   const { user } = context;
 
   useEffect(() => {
-    const canInsert = performSync(validate.canInsert(context, details, userId), false).result;
-    const canUpdate = performSync(validate.canUpdate(context, details, userId), false).result;
-    const canDelete = performSync(validate.canDelete(context, details, userId), false).result;
-    setValidations((prev) => ({
-      ...prev,
-      canInsert,
-      canUpdate,
-      canDelete,
-    }));
+    async function run() {
+      const canInsert = (await perform(validate.canInsert(context, details, userId), false)).result;
+      const canUpdate = (await perform(validate.canUpdate(context, details, userId), false)).result;
+      const canDelete = (await perform(validate.canDelete(context, details, userId), false)).result;
+      setValidations((prev) => ({
+        ...prev,
+        canInsert,
+        canUpdate,
+        canDelete,
+      }));
+    }
     setItems(AppraisalService.normalizeSet(
       periodId,
       context.user,
@@ -80,6 +82,7 @@ const FieldSet = ({
       min,
       type,
     ));
+    run();
     // eslint-disable-next-line
   }, []);
 

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import DocumentTitle from 'react-document-title';
 import AppraisalDetailsInfo from './components/appraisal-info';
 import AppraisalDetailsDisplay from './components/appraisal-details-display';
 import AppraisalUserInfo from './components/appraisal-user-info';
@@ -52,7 +53,11 @@ const AppraisalDetails = ({ context }) => {
     );
   }
 
-  return display;
+  return (
+    <DocumentTitle title={periodDetails && periodDetails.name}>
+      {display}
+    </DocumentTitle>
+  );
 };
 
 export default AppraisalDetails;

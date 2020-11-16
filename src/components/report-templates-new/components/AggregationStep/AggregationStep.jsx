@@ -2,12 +2,19 @@ import {
   Box, Button, Typography,
 } from '@material-ui/core';
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useState } from 'react';
 import useStyles from './style';
 import JsonEditorComponent from '../../../shared/json-editor-component';
+import ReportingService from '../../../../services/ReportingService';
 
 const AggregationStep = ({ value, setValue, advanceStep }) => {
   const classes = useStyles();
+  const [sample, setSample] = useState('');
+
+  const handleSample = async () => {
+    const data = await ReportingService.getSample(value);
+    setSample(data);
+  };
 
   return (
     <Box className={classes.root}>
@@ -24,6 +31,21 @@ const AggregationStep = ({ value, setValue, advanceStep }) => {
         setValue={setValue}
         className={classes.multilineInput}
       />
+      <div>
+        {
+          sample
+            ? (
+              <JsonEditorComponent
+                value={JSON.stringify(sample, null, 2)}
+                setValue={setSample}
+                readOnly
+                className={classes.multilineInput}
+              />
+            )
+            : null
+        }
+      </div>
+      <Button variant="container" color="primary" onClick={handleSample}>Get sample</Button>
       <Button variant="contained" color="primary" onClick={advanceStep}>Next</Button>
     </Box>
   );

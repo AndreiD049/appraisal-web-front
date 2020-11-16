@@ -4,6 +4,7 @@ import NotificationService from './NotificationService';
 const ReportingService = {
   postTemplatePath: '/api/reporting/templates',
   GenerateTemplatePath: '/api/reporting/template/generate',
+  postGetSamplePath: '/api/reporting/template/sample',
 
   async createTemplate(formdata) {
     try {
@@ -52,6 +53,23 @@ const ReportingService = {
         type: 'error',
         header: 'Error',
         content: (err.response && err.response.data && err.response.data.error) || err.message,
+      });
+      throw err;
+    }
+  },
+
+  async getSample(aggregation) {
+    try {
+      const response = await axios.post(this.postGetSamplePath, { aggregation });
+      if (response.status === 200) {
+        return response.data;
+      }
+      throw new Error(`Server response: ${response.status} - ${response.statusText}`);
+    } catch (err) {
+      NotificationService.notify({
+        type: 'error',
+        header: 'Error',
+        content: (err.response && err.response.data.error) || err.message,
       });
       throw err;
     }

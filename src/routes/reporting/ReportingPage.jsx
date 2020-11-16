@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Container } from '@material-ui/core';
 import { useRouteMatch, Switch, Route } from 'react-router-dom';
+import DocumentTitle from 'react-document-title';
 import LoginRequired from '../../components/shared/login-required';
 import AuthorizationRedirectComponent from '../../components/shared/authorization-redirect-component';
 import ReportsPage from '../reporting-reports';
@@ -37,7 +38,9 @@ const ReportingPage = ({ ctx, setCtx }) => {
                 content: 'No permission to access this page. Please contact your administrator.',
               }}
             >
-              <ReportingTemplatesPage />
+              <DocumentTitle title="Reporting Templates">
+                <ReportingTemplatesPage />
+              </DocumentTitle>
             </AuthorizationRedirectComponent>
           </Route>
         </Switch>

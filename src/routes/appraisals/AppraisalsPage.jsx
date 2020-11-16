@@ -119,7 +119,8 @@ const AppraisalsPage = () => {
                               id={`item-menu-${item.id}`}
                               anchorEl={itemMenuAnchorEl}
                               keepMounted
-                              open={Boolean(itemMenuAnchorEl) && itemMenuAnchorEl.dataset.itemid === item.id}
+                              open={Boolean(itemMenuAnchorEl)
+                                && itemMenuAnchorEl.dataset.itemid === item.id}
                               onClose={handleClose}
                               getContentAnchorEl={null}
                               anchorOrigin={{
@@ -133,8 +134,8 @@ const AppraisalsPage = () => {
                             >
                               <MenuItem onClick={clickFinishHandler(item)}>
                                 <ListItemIcon>
-                                    <LockIcon fontSize="small" />
-                                  </ListItemIcon>
+                                  <LockIcon fontSize="small" />
+                                </ListItemIcon>
                                 <ListItemText primary="Finish" />
                               </MenuItem>
                             </Menu>

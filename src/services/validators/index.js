@@ -3,8 +3,9 @@ import userValidators from './UserValidators';
 import generalValidators from './General';
 import operators from './operators';
 
-
-const { and, andSync, or, orSync, not, notSync, perform, performSync } = operators;
+const {
+  and, andSync, or, orSync, not, notSync, perform, performSync,
+} = operators;
 
 const validate = {
   ...appraisalValidators,

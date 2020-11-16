@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import DocumentTitle from 'react-document-title';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import {
   BrowserRouter as Router,
@@ -56,19 +57,29 @@ function App() {
             {/* The page switch */}
             <Switch>
               <Route path="/appraisals">
-                <AppraisalsPage ctx={context} setCtx={setContext} />
+                <DocumentTitle title="Appraisals">
+                  <AppraisalsPage ctx={context} setCtx={setContext} />
+                </DocumentTitle>
               </Route>
               <Route path="/audits">
-                <h1>IN PROGRESS</h1>
+                <DocumentTitle title="Audits">
+                  <h1>IN PROGRESS</h1>
+                </DocumentTitle>
               </Route>
               <Route path="/reporting">
-                <ReportingPage ctx={context} setCtx={setContext} />
+                <DocumentTitle title="Reporting">
+                  <ReportingPage ctx={context} setCtx={setContext} />
+                </DocumentTitle>
               </Route>
               <Route path="/settings">
-                <SettingsPage />
+                <DocumentTitle title="Settings">
+                  <SettingsPage />
+                </DocumentTitle>
               </Route>
               <Route path="/login">
-                <LoginPage ctx={context} setCtx={setContext} />
+                <DocumentTitle title="Sign in">
+                  <LoginPage ctx={context} setCtx={setContext} />
+                </DocumentTitle>
               </Route>
               <Route path="/">
                 <HomePage ctx={context} setCtx={setContext} />

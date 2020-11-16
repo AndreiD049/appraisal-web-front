@@ -1,6 +1,7 @@
 import React from 'react';
 import { useRouteMatch, Switch, Route } from 'react-router-dom';
 import { Container } from '@material-ui/core';
+import DocumentTitle from 'react-document-title';
 import LoginRequired from '../../components/shared/login-required';
 import styles from './styles';
 import SettingsGeneral from '../settings-general';
@@ -45,7 +46,9 @@ const SettingsPage = () => {
                 content: 'No permission to access this page. Please contact your administrator.',
               }}
             >
-              <SettingsUsers />
+              <DocumentTitle title="Users">
+                <SettingsUsers />
+              </DocumentTitle>
             </AuthorizationRedirectComponent>
           </Route>
           <Route path={`${path}/appraisal-periods`}>
@@ -58,7 +61,9 @@ const SettingsPage = () => {
                 content: 'No permission to access this page. Please contact your administrator.',
               }}
             >
-              <SettingsAppraisalPeriods />
+              <DocumentTitle title="Settings - appraisal periods">
+                <SettingsAppraisalPeriods />
+              </DocumentTitle>
             </AuthorizationRedirectComponent>
           </Route>
           <Route path={`${path}/appraisal-items`}>
@@ -71,7 +76,9 @@ const SettingsPage = () => {
                 content: 'No permission to access this page. Please contact your administrator.',
               }}
             >
-              <SettingsAppraisalItems />
+              <DocumentTitle title="Settings - appraisal items">
+                <SettingsAppraisalItems />
+              </DocumentTitle>
             </AuthorizationRedirectComponent>
           </Route>
           <Route path={`${path}/permissions`}>
@@ -84,7 +91,9 @@ const SettingsPage = () => {
                 content: 'No permission to access this page. Please contact your administrator.',
               }}
             >
-              <SettingsRolesPage />
+              <DocumentTitle title="Settings - Securities">
+                <SettingsRolesPage />
+              </DocumentTitle>
             </AuthorizationRedirectComponent>
           </Route>
         </Switch>

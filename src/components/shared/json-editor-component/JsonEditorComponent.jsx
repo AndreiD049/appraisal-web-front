@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const JsonEditorComponent = ({
-  value, setValue, Component, className,
+  value, setValue, Component, readOnly, className,
 }) => {
   const handleKeyPress = (evt) => {
     if (evt.key === 'Enter') {
@@ -20,6 +20,9 @@ const JsonEditorComponent = ({
   return (
     <Wrapper
       multiline
+      rows={20}
+      rowsMax={30}
+      readOnly={readOnly}
       value={value}
       className={className}
       onKeyPress={handleKeyPress}
@@ -30,12 +33,14 @@ const JsonEditorComponent = ({
 
 JsonEditorComponent.propTypes = {
   value: PropTypes.string.isRequired,
+  readOnly: PropTypes.bool,
   setValue: PropTypes.func.isRequired,
   Component: PropTypes.element.isRequired,
   className: PropTypes.string,
 };
 
 JsonEditorComponent.defaultProps = {
+  readOnly: false,
   className: '',
 };
 

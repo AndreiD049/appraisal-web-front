@@ -49,27 +49,37 @@ const AppraisalInput = ({
   });
 
   useEffect(() => {
-    const isRelated = performSync(validate.itemRelated(item), false).result;
-    const isDeletable = canDelete && performSync(notSync(validate.itemRelated(item)), false).result;
-    const isFinished = performSync(validate.itemStatus(item, 'Finished'), false).result;
-    const inputEditable = (canInsert || canUpdate)
-    && performSync(andSync([
-      notSync(validate.itemRelated(item)),
-      orSync([
-        andSync([
-          notSync(validate.isTruthy(userId)),
-          notSync(validate.itemType(item, 'Training_Suggested')),
+    let mounted = true;
+    async function run() {
+      const isRelated = performSync(validate.itemRelated(item), false).result;
+      const isDeletable = canDelete
+      && performSync(notSync(validate.itemRelated(item)), false).result;
+      const isFinished = performSync(validate.itemStatus(item, 'Finished'), false).result;
+      const inputEditable = (canInsert || canUpdate)
+      && performSync(andSync([
+        notSync(validate.itemRelated(item)),
+        orSync([
+          andSync([
+            notSync(validate.isTruthy(userId)),
+            notSync(validate.itemType(item, 'Training_Suggested')),
+          ]),
+          validate.isTruthy(userId),
         ]),
-        validate.isTruthy(userId),
-      ]),
-    ]), false).result;
-    setValidations({
-      isRelated,
-      isDeletable,
-      isFinished,
-      inputEditable,
-    });
+      ]), false).result;
+      if (mounted) {
+        setValidations({
+          isRelated,
+          isDeletable,
+          isFinished,
+          inputEditable,
+        });
+      }
+    }
     setValue({ ...item });
+    run();
+    return () => {
+      mounted = false;
+    };
   }, [item, canInsert, canUpdate, canDelete, userId]);
 
   const showEndAdornment = () => {
