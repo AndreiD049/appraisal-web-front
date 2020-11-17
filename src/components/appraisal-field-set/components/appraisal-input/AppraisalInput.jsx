@@ -22,7 +22,7 @@ import {
 import { useParams } from 'react-router-dom';
 import useStyles from './styles';
 import {
-  validate, performSync, notSync, andSync, orSync,
+  validate, perform, not, and, or,
 } from '../../../../services/validators';
 
 const AppraisalInput = ({
@@ -51,21 +51,26 @@ const AppraisalInput = ({
   useEffect(() => {
     let mounted = true;
     async function run() {
-      const isRelated = performSync(validate.itemRelated(item), false).result;
-      const isDeletable = canDelete
-      && performSync(notSync(validate.itemRelated(item)), false).result;
-      const isFinished = performSync(validate.itemStatus(item, 'Finished'), false).result;
-      const inputEditable = (canInsert || canUpdate)
-      && performSync(andSync([
-        notSync(validate.itemRelated(item)),
-        orSync([
-          andSync([
-            notSync(validate.isTruthy(userId)),
-            notSync(validate.itemType(item, 'Training_Suggested')),
+      const calls = [
+        perform(validate.itemRelated(item), false),
+        perform(validate.itemStatus(item, 'Finished'), false),
+        perform(and([
+          not(validate.itemRelated(item)),
+          or([
+            and([
+              not(validate.isTruthy(userId)),
+              not(validate.itemType(item, 'Training_Suggested')),
+            ]),
+            validate.isTruthy(userId),
           ]),
-          validate.isTruthy(userId),
-        ]),
-      ]), false).result;
+        ]), false),
+      ];
+      const [checkRelated, checkFinished, checkEditable] = await Promise.all(calls);
+      const isRelated = checkRelated.result;
+      const isFinished = checkFinished.result;
+      const inputEditable = (canInsert || canUpdate)
+      && checkEditable.result;
+      const isDeletable = canDelete && !isRelated;
       if (mounted) {
         setValidations({
           isRelated,
