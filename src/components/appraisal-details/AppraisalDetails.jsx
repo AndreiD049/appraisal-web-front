@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { useParams } from 'react-router-dom';
 import DocumentTitle from 'react-document-title';
 import AppraisalDetailsInfo from './components/appraisal-info';
 import AppraisalDetailsDisplay from './components/appraisal-details-display';
 import AppraisalUserInfo from './components/appraisal-user-info';
 import AppraisalUserDetails from './components/appraisal-user-details-display';
+import AppraisalService from '../../services/AppraisalService';
 
 const AppraisalDetails = ({ context }) => {
   const [periodDetails, setPeriodDetails] = useState(null);
@@ -16,6 +18,24 @@ const AppraisalDetails = ({ context }) => {
     setPeriodDetails(null);
     setUserDetails(null);
   }, [userId]);
+
+  /**
+   * Handle locking button for user period
+   */
+  const handleLockButton = async () => {
+    if (userId) {
+      const result = await AppraisalService.toggleLockPeriod(periodDetails.id, userId);
+      setPeriodDetails((prev) => {
+        if (prev) {
+          return {
+            ...prev,
+            users: result.users.slice(),
+          };
+        }
+        return prev;
+      });
+    }
+  };
 
   let display;
   if (!userId) {
@@ -46,6 +66,7 @@ const AppraisalDetails = ({ context }) => {
                 context={context}
                 periodDetails={periodDetails}
                 userDetails={userDetails}
+                handleLockButton={handleLockButton}
               />
             )
 }
@@ -58,6 +79,10 @@ const AppraisalDetails = ({ context }) => {
       {display}
     </DocumentTitle>
   );
+};
+
+AppraisalDetails.propTypes = {
+  context: PropTypes.shape({}).isRequired,
 };
 
 export default AppraisalDetails;

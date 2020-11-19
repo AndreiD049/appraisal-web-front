@@ -65,15 +65,28 @@ const FieldSet = ({
 
   useEffect(() => {
     async function run() {
-      const canInsert = (await perform(validate.canInsert(context, details, userId), false)).result;
-      const canUpdate = (await perform(validate.canUpdate(context, details, userId), false)).result;
-      const canDelete = (await perform(validate.canDelete(context, details, userId), false)).result;
-      setValidations((prev) => ({
-        ...prev,
-        canInsert,
-        canUpdate,
-        canDelete,
-      }));
+      // if we have no userid, we need to check if the period is locked
+      let isLocked = !userId
+        ? (await validate.periodLocked(details, user.id)()).result
+        : false;
+      const isFinished = (await validate.periodStatus(details, 'Finished')()).result;
+      // Locked is false by default for finished periods
+      if (isFinished) isLocked = false;
+      // if period is locked, we cannot insert, update or delete items
+      if (!isLocked) {
+        const canInsert = (await perform(validate
+          .canInsert(context, details, userId), false)).result;
+        const canUpdate = (await perform(validate
+          .canUpdate(context, details, userId), false)).result;
+        const canDelete = (await perform(validate
+          .canDelete(context, details, userId), false)).result;
+        setValidations((prev) => ({
+          ...prev,
+          canInsert,
+          canUpdate,
+          canDelete,
+        }));
+      }
     }
     setItems(AppraisalService.normalizeSet(
       periodId,
@@ -299,6 +312,7 @@ const FieldSet = ({
 FieldSet.propTypes = {
   context: PropTypes.shape({
     user: PropTypes.shape({
+      id: PropTypes.string,
       username: PropTypes.string,
     }),
     Authorize: PropTypes.func,

@@ -10,6 +10,7 @@ const AppraisalService = {
   addPeriodsPath: '/api/periods',
   getItemsPath: (id) => `/api/periods/${id}`,
   getUserItemsPath: (id, userId) => `/api/periods/${id}/users/${userId}`,
+  toggleLockPeriodPath: (id, userId) => `/api/periods/${id}/users/${userId}/toggle-lock`,
   getItemPath: (periodId, itemId) => `/api/periods/${periodId}/items/${itemId}`,
   getOrphansPath: '/api/appraisal-items',
   addItemPath: '/api/appraisal-items',
@@ -361,6 +362,30 @@ const AppraisalService = {
       const response = await axios.post(this.finishPeriodPath(periodId));
       if (response.status === 200) {
         return true;
+      }
+      throw new Error(`Server response: ${response.status} - ${response.statusText}`);
+    } catch (err) {
+      NotificationService.notify({
+        type: 'error',
+        header: 'Error',
+        content: (err.response && err.response.data.error) || err.message,
+      });
+      throw err;
+    }
+  },
+
+  /**
+   *
+   * @param {String} periodId
+   * @param {String} userId
+   * @returns {any} the updated period
+   */
+  async toggleLockPeriod(periodId, userId) {
+    try {
+      if (!userId) throw new Error('User is unknown');
+      const response = await axios.post(this.toggleLockPeriodPath(periodId, userId));
+      if (response.status === 200) {
+        return response.data;
       }
       throw new Error(`Server response: ${response.status} - ${response.statusText}`);
     } catch (err) {

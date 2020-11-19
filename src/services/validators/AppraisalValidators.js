@@ -20,6 +20,24 @@ const periodExists = (period) => async () => ({
   message: 'Period doesn\'t exist.',
 });
 
+const periodLocked = (period, userId, message = null) => async () => {
+  const { users } = period;
+  if (users) {
+    // eslint-disable-next-line no-underscore-dangle
+    const userPeriod = users.find((u) => u._id === userId);
+    if (userPeriod) {
+      return {
+        result: Boolean(userPeriod.locked),
+        message: message || 'Period is not locked',
+      };
+    }
+  }
+  return {
+    result: false,
+    message: message || 'Period is not locked',
+  };
+};
+
 const itemExists = (item) => async () => ({
   result: Boolean(item),
   message: 'Item doesn\'t exist.',
@@ -155,6 +173,7 @@ export default {
   periodExists,
   itemExists,
   periodStatus,
+  periodLocked,
   itemStatus,
   itemType,
   itemSameUser,

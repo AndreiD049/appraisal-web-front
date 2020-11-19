@@ -1,11 +1,17 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import {
-  Container, makeStyles, Grid, Paper, Chip, Avatar,
+  Container, makeStyles, Grid, Paper, Chip, Avatar, Button,
 } from '@material-ui/core';
+import {
+  Lock,
+  LockOpen,
+} from '@material-ui/icons';
 import FieldSet from '../../../appraisal-field-set';
 import AppraisalUserRedirect from '../../../appraisal-user-redirect';
 import AuthorizationComponent from '../../../shared/authorization-component';
+import constants from '../../../../utils/constants';
+import { validate } from '../../../../services/validators';
 
 const userStyles = makeStyles((theme) => ({
   header: {
@@ -41,9 +47,15 @@ const userStyles = makeStyles((theme) => ({
   userInput: {
     width: '50%',
   },
+  buttonsCenter: {
+    flexFlow: 'column nowrap',
+    alignItems: 'center',
+  },
 }));
 
-const AppraisalUserDetails = ({ context, periodDetails, userDetails }) => {
+const AppraisalUserDetails = ({
+  context, periodDetails, userDetails, handleLockButton,
+}) => {
   const classes = userStyles();
   const [achieved, setAchieved] = useState(periodDetails.items.filter((el) => el.type === 'Achieved'));
   const [planned, setPlanned] = useState(periodDetails.items.filter((el) => el.type === 'Planned'));
@@ -54,6 +66,24 @@ const AppraisalUserDetails = ({ context, periodDetails, userDetails }) => {
   const [swotO, setSWOTO] = useState(periodDetails.items.filter((el) => el.type === 'SWOT_O'));
   const [swotT, setSWOTT] = useState(periodDetails.items.filter((el) => el.type === 'SWOT_T'));
   const [feedBack, setFeedBack] = useState(periodDetails.items.filter((el) => el.type === 'Feedback'));
+  const [locked, setLocked] = useState(false);
+  const [finished, setFinished] = useState(false);
+
+  useEffect(() => {
+    let mounted = true;
+    async function run() {
+      const isLocked = (await validate.periodLocked(periodDetails, userDetails.id)()).result;
+      const isFinished = (await validate.periodStatus(periodDetails, 'Finished')()).result;
+      if (mounted) {
+        setLocked(isLocked);
+        setFinished(isFinished);
+      }
+    }
+    run();
+    return () => {
+      mounted = false;
+    };
+  }, [periodDetails, userDetails.id]);
 
   return (
     <Container maxWidth="md" className={classes.conatiner}>
@@ -121,6 +151,30 @@ const AppraisalUserDetails = ({ context, periodDetails, userDetails }) => {
             <FieldSet context={context} details={periodDetails} items={feedBack} setItems={setFeedBack} type="Feedback" />
           </Grid>
         </Grid>
+
+        <AuthorizationComponent
+          code={constants.securities.APPRAISAL_DETAILS_OTHER.code}
+          grant={constants.securities.APPRAISAL_DETAILS_OTHER.grants.toggleLock}
+        >
+          {
+            !finished
+              ? (
+                <Grid container item xs={12} className={classes.buttonsCenter}>
+                  <Grid item xs={12} className={classes.topMargin}>
+                    <Button
+                      startIcon={locked ? <LockOpen /> : <Lock />}
+                      variant="contained"
+                      color="secondary"
+                      onClick={handleLockButton}
+                    >
+                      { locked ? 'Unlock' : 'Lock' }
+                    </Button>
+                  </Grid>
+                </Grid>
+              )
+              : null
+          }
+        </AuthorizationComponent>
       </Grid>
     </Container>
   );
@@ -131,13 +185,18 @@ AppraisalUserDetails.propTypes = {
 
   }).isRequired,
   // eslint-disable-next-line react/forbid-prop-types
-  userDetails: PropTypes.object.isRequired,
+  userDetails: PropTypes.shape({
+    id: PropTypes.string,
+    username: PropTypes.string,
+  }).isRequired,
   periodDetails: PropTypes.shape({
+    id: PropTypes.string,
     name: PropTypes.string,
     items: PropTypes.arrayOf(PropTypes.shape({
       type: PropTypes.string,
     })),
   }).isRequired,
+  handleLockButton: PropTypes.func.isRequired,
 };
 
 export default AppraisalUserDetails;
