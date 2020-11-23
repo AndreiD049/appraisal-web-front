@@ -1,8 +1,8 @@
 import axios from 'axios';
-import { Item, validateId } from '../models/AppraisalItemModel';
+import { Item } from '../models/AppraisalItemModel';
 import NotificationService from './NotificationService';
 import {
-  and, or, not, perform, validate,
+  and, perform, validate,
 } from './validators';
 
 const AppraisalService = {

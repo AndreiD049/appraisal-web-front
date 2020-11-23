@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { Lock } from '@material-ui/icons';
 import {
   Container, makeStyles, Grid, Paper, Chip, Avatar,
 } from '@material-ui/core';
 import FieldSet from '../../../appraisal-field-set';
 import AppraisalUserRedirect from '../../../appraisal-user-redirect';
 import AuthorizationComponent from '../../../shared/authorization-component';
+import { validate } from '../../../../services/validators';
 
 const userStyles = makeStyles((theme) => ({
   header: {
@@ -54,7 +56,22 @@ const AppraisalDetailsDisplay = ({ context, periodDetails }) => {
   const [swotO, setSWOTO] = useState(periodDetails.items.filter((el) => el.type === 'SWOT_O'));
   const [swotT, setSWOTT] = useState(periodDetails.items.filter((el) => el.type === 'SWOT_T'));
   const [feedBack, setFeedBack] = useState(periodDetails.items.filter((el) => el.type === 'Feedback'));
+  const [locked, setLocked] = useState(false);
   const { user } = context;
+
+  useEffect(() => {
+    let mounted = true;
+    async function run() {
+      const isLocked = (await validate.periodLocked(periodDetails, user.id)()).result;
+      if (mounted) {
+        setLocked(isLocked);
+      }
+    }
+    run();
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   return (
     <Container maxWidth="md" className={classes.conatiner}>
@@ -78,6 +95,19 @@ const AppraisalDetailsDisplay = ({ context, periodDetails }) => {
               />
             )
             : null}
+        </Grid>
+        <Grid item xs={12} className={classes.middleFlex}>
+          {
+            locked
+              ? (
+                <Chip
+                  icon={<Lock />}
+                  label="Locked"
+                  color="text-secondary"
+                />
+              )
+              : null
+          }
         </Grid>
         <Grid container item xs={12} component={Paper} className={classes.inputBlock}>
           <Grid item xs={12} sm={6}>

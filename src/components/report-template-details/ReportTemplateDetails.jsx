@@ -9,7 +9,6 @@ const ReportTemplateDetails = () => {
   return (
     <Container maxWidth="lg">
       <h1 style={{ textAlign: 'center' }}>Details</h1>
-      Details
       {' '}
       {id}
     </Container>

@@ -108,6 +108,19 @@ const AppraisalUserDetails = ({
             )
             : null}
         </Grid>
+        <Grid item xs={12} className={classes.middleFlex}>
+          {
+            locked
+              ? (
+                <Chip
+                  icon={<Lock />}
+                  label="Locked"
+                  color="text-secondary"
+                />
+              )
+              : null
+          }
+        </Grid>
         <Grid container item xs={12} component={Paper} className={classes.inputBlock}>
           <Grid item xs={12} sm={6}>
             <FieldSet context={context} details={periodDetails} items={achieved} setItems={setAchieved} type="Achieved" setOtherItems={setPlanned} />
