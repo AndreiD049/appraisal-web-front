@@ -57,10 +57,7 @@ const AppraisalInput = ({
         perform(and([
           not(validate.itemRelated(item)),
           or([
-            and([
-              not(validate.isTruthy(userId)),
-              not(validate.itemType(item, 'Training_Suggested')),
-            ]),
+            not(validate.isTruthy(userId)),
             validate.isTruthy(userId),
           ]),
         ]), false),
@@ -166,9 +163,9 @@ const AppraisalInput = ({
           <ListItemText primary="Delete" />
         </MenuItem>
         {
-          item.type === 'Planned'
+          item.type.indexOf('Planned') !== -1
             ? (
-              <MenuItem aria-label="Move item to Achieved" onClick={handleTypeChange('Achieved')}>
+              <MenuItem aria-label="Move item to Achieved" onClick={handleTypeChange(item.type.replace('Planned', 'Achieved'))}>
                 <ListItemIcon>
                   <ChevronLeft fontSize="small" />
                 </ListItemIcon>
@@ -178,9 +175,9 @@ const AppraisalInput = ({
             : null
         }
         {
-          item.type === 'Achieved'
+          item.type.indexOf('Achieved') !== -1
             ? (
-              <MenuItem aria-label="move item to Planned" onClick={handleTypeChange('Planned')}>
+              <MenuItem aria-label="move item to Planned" onClick={handleTypeChange(item.type.replace('Achieved', 'Planned'))}>
                 <ListItemIcon>
                   <ChevronRight fontSize="small" />
                 </ListItemIcon>

@@ -1,8 +1,8 @@
 const validItemTypes = [
   'Planned',
   'Achieved',
-  'Training',
-  'Training_Suggested',
+  'Training_Planned',
+  'Training_Achieved',
   'SWOT_S',
   'SWOT_W',
   'SWOT_O',

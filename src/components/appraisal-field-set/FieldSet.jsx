@@ -32,8 +32,8 @@ const FieldSet = ({
   const minItems = {
     Achieved: 5,
     Planned: 5,
-    Training: 3,
-    Training_Suggested: 3,
+    Training_Planned: 3,
+    Training_Achieved: 3,
     SWOT_S: 5,
     SWOT_W: 5,
     SWOT_O: 5,
@@ -44,8 +44,8 @@ const FieldSet = ({
   const labels = {
     Achieved: 'Achieved',
     Planned: 'Planned',
-    Training: 'Trainings',
-    Training_Suggested: 'Suggested Trainings',
+    Training_Planned: 'Planned',
+    Training_Achieved: 'Achieved',
     SWOT_S: 'Strengths',
     SWOT_W: 'Weaknesses',
     SWOT_O: 'Opportunities',

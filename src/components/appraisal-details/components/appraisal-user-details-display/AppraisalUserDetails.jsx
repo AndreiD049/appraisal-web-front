@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import {
-  Container, makeStyles, Grid, Paper, Chip, Avatar, Button,
+  Container, makeStyles, Grid, Paper, Chip, Avatar, Button, Typography,
 } from '@material-ui/core';
 import {
   Lock,
@@ -16,6 +16,8 @@ import { validate } from '../../../../services/validators';
 const userStyles = makeStyles((theme) => ({
   header: {
     textAlign: 'center',
+    marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(2),
   },
   middleFlex: {
     display: 'flex',
@@ -59,8 +61,8 @@ const AppraisalUserDetails = ({
   const classes = userStyles();
   const [achieved, setAchieved] = useState(periodDetails.items.filter((el) => el.type === 'Achieved'));
   const [planned, setPlanned] = useState(periodDetails.items.filter((el) => el.type === 'Planned'));
-  const [training, setTraining] = useState(periodDetails.items.filter((el) => el.type === 'Training'));
-  const [trainingSuggested, setTrainingSuggested] = useState(periodDetails.items.filter((el) => el.type === 'Training_Suggested'));
+  const [trainingPlanned, setTrainingPlanned] = useState(periodDetails.items.filter((el) => el.type === 'Training_Planned'));
+  const [trainingAchieved, setTrainingAchieved] = useState(periodDetails.items.filter((el) => el.type === 'Training_Achieved'));
   const [swotS, setSWOTS] = useState(periodDetails.items.filter((el) => el.type === 'SWOT_S'));
   const [swotW, setSWOTW] = useState(periodDetails.items.filter((el) => el.type === 'SWOT_W'));
   const [swotO, setSWOTO] = useState(periodDetails.items.filter((el) => el.type === 'SWOT_O'));
@@ -87,10 +89,10 @@ const AppraisalUserDetails = ({
 
   return (
     <Container maxWidth="md" className={classes.conatiner}>
-      <h1 className={classes.header}>
+      <Typography variant="h4" className={classes.header}>
         Details
         {periodDetails.name ? ` '${periodDetails.name}'` : null}
-      </h1>
+      </Typography>
       <Grid container>
         <AuthorizationComponent code="APPRAISAL DETAILS - OTHER USERS" grant="read">
           <Grid item xs={12} className={classes.middleFlex}>
@@ -122,6 +124,9 @@ const AppraisalUserDetails = ({
           }
         </Grid>
         <Grid container item xs={12} component={Paper} className={classes.inputBlock}>
+          <Grid item xs={12}>
+            <Typography className={classes.middleFlex} variant="h6">Objectives</Typography>
+          </Grid>
           <Grid item xs={12} sm={6}>
             <FieldSet context={context} details={periodDetails} items={achieved} setItems={setAchieved} type="Achieved" setOtherItems={setPlanned} />
           </Grid>
@@ -132,12 +137,15 @@ const AppraisalUserDetails = ({
         </Grid>
 
         <Grid container item xs={12} component={Paper} className={`${classes.inputBlock} ${classes.topMargin}`}>
+          <Grid item xs={12}>
+            <Typography className={classes.middleFlex} variant="h6" align="center">Trainings</Typography>
+          </Grid>
           <Grid item xs={12} sm={6}>
-            <FieldSet context={context} details={periodDetails} items={training} setItems={setTraining} type="Training" />
+            <FieldSet context={context} details={periodDetails} items={trainingAchieved} setItems={setTrainingAchieved} type="Training_Achieved" setOtherItems={setTrainingPlanned} />
           </Grid>
 
           <Grid item xs={12} sm={6}>
-            <FieldSet context={context} details={periodDetails} items={trainingSuggested} setItems={setTrainingSuggested} type="Training_Suggested" />
+            <FieldSet context={context} details={periodDetails} items={trainingPlanned} setItems={setTrainingPlanned} type="Training_Planned" setOtherItems={setTrainingAchieved} />
           </Grid>
         </Grid>
 
