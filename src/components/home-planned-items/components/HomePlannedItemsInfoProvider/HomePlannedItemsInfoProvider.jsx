@@ -4,7 +4,7 @@ import AppraisalService from '../../../../services/AppraisalService';
 const HomePlannedItemsInfoProvider = ({ setItems }) => {
   useEffect(() => {
     async function run() {
-      setItems(await AppraisalService.getOrphans());
+      setItems(await AppraisalService.getOrphans('Planned'));
     }
     run();
   }, [setItems]);

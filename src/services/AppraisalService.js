@@ -60,9 +60,13 @@ const AppraisalService = {
     }
   },
 
-  async getOrphans() {
+  async getOrphans(type = null) {
     try {
-      const response = await axios.get(this.getOrphansPath);
+      const response = await axios.get(this.getOrphansPath, {
+        params: {
+          type,
+        },
+      });
       if (response.status === 200) {
         return response.data;
       }
