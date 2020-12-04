@@ -10,6 +10,7 @@ import {
   MenuItem,
   ListItemIcon,
   ListItemText,
+  Typography,
 } from '@material-ui/core';
 import {
   Delete,
@@ -190,25 +191,77 @@ const AppraisalInput = ({
     </InputAdornment>
   );
 
+  const tooltip = (
+    <>
+      <Typography variant="caption">
+        <strong>Created user:</strong>
+        {' '}
+        {item.createdUser && item.createdUser.username}
+      </Typography>
+      <br />
+      <Typography variant="caption">
+        <strong>Created date:</strong>
+        {' '}
+        {item.createdDate && new Date(item.createdDate).toLocaleString()}
+      </Typography>
+      {
+        item.modifiedUser
+          ? (
+            <>
+              <br />
+              <Typography variant="caption">
+                <strong>Modified user:</strong>
+                {' '}
+                {item.modifiedUser && item.modifiedUser.username}
+              </Typography>
+            </>
+          )
+          : null
+      }
+      {
+        item.modifiedUser
+          ? (
+            <>
+              <br />
+              <Typography variant="caption">
+                <strong>Modified date:</strong>
+                {' '}
+                {item.modifiedDate && new Date(item.modifiedDate).toLocaleString()}
+              </Typography>
+            </>
+          )
+          : null
+      }
+    </>
+  );
+
   return (
-    <TextField
-      className={clsx(
+    <Tooltip
+      title={tooltip}
+      enterDelay={500}
+      disableHoverListener={item.id === 0}
+      disableFocusListener
+      disableTouchListener
+    >
+      <TextField
+        className={clsx(
         // classes.root,
-        item.type === 'Feedback' ? classes.feedBackInput : classes.root,
-      )}
-      id={`app-item-${item.type.toLowerCase()}-${idx}`}
-      value={value.content}
-      size="small"
-      variant="outlined"
-      multiline
-      onChange={handleChange}
-      onBlur={handleBlur}
-      disabled={!validations.inputEditable}
-      InputProps={{
-        startAdornment,
-        endAdornment: showEndAdornment() ? endAdornment : null,
-      }}
-    />
+          item.type === 'Feedback' ? classes.feedBackInput : classes.root,
+        )}
+        id={`app-item-${item.type.toLowerCase()}-${idx}`}
+        value={value.content}
+        size="small"
+        variant="outlined"
+        multiline
+        onChange={handleChange}
+        onBlur={handleBlur}
+        disabled={!validations.inputEditable}
+        InputProps={{
+          startAdornment,
+          endAdornment: showEndAdornment() ? endAdornment : null,
+        }}
+      />
+    </Tooltip>
   );
 };
 
@@ -219,6 +272,16 @@ AppraisalInput.propTypes = {
     type: PropTypes.string,
     content: PropTypes.string,
     relatedItemId: PropTypes.string,
+    createdUser: PropTypes.shape({
+      id: PropTypes.string,
+      username: PropTypes.string,
+    }).isRequired,
+    createdDate: PropTypes.string,
+    modifiedUser: PropTypes.shape({
+      id: PropTypes.string,
+      username: PropTypes.string,
+    }).isRequired,
+    modifiedDate: PropTypes.string,
   }).isRequired,
   idx: PropTypes.number.isRequired,
   changeHandler: PropTypes.func.isRequired,

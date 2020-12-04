@@ -8,7 +8,7 @@ import AppraisalInput from './components/appraisal-input';
 import AppraisalService from '../../services/AppraisalService';
 import { validate, perform } from '../../services/validators';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   header: {
     textAlign: 'center',
   },
@@ -19,7 +19,13 @@ const useStyles = makeStyles({
     justifyContent: 'center',
     padding: 0,
   },
-});
+  popover: {
+    pointerEvents: 'none',
+  },
+  paper: {
+    padding: theme.spacing(1),
+  },
+}));
 
 const FieldSet = ({
   context,
@@ -288,7 +294,10 @@ const FieldSet = ({
         {items.map((i, idx) => {
           const key = i.id === 0 ? idx : i.id;
           return (
-            <ListItem className={classes.listItem} key={key}>
+            <ListItem
+              className={classes.listItem}
+              key={key}
+            >
               <AppraisalInput
                 item={i}
                 idx={idx}
