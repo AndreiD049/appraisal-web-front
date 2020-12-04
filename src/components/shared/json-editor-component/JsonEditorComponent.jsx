@@ -35,13 +35,14 @@ JsonEditorComponent.propTypes = {
   value: PropTypes.string.isRequired,
   readOnly: PropTypes.bool,
   setValue: PropTypes.func.isRequired,
-  Component: PropTypes.element.isRequired,
+  Component: PropTypes.element,
   className: PropTypes.string,
 };
 
 JsonEditorComponent.defaultProps = {
   readOnly: false,
   className: '',
+  Component: null,
 };
 
 export default JsonEditorComponent;

@@ -15,7 +15,7 @@ const ReportingPage = ({ ctx, setCtx }) => {
       <LoginRequired ctx={ctx} setCtx={setCtx} />
       <Container maxWidth="lg">
         <Switch>
-          <Route exact path={path}>
+          <Route path={`${path}/reports`}>
             <AuthorizationRedirectComponent
               code="REPORTS"
               grant="read"

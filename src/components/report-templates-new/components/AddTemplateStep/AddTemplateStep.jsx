@@ -46,8 +46,12 @@ AddTemplateStep.propTypes = {
   prevStep: PropTypes.func.isRequired,
   name: PropTypes.string.isRequired,
   setName: PropTypes.func.isRequired,
-  file: PropTypes.shape({}).isRequired,
+  file: PropTypes.shape({}),
   setFile: PropTypes.func.isRequired,
+};
+
+AddTemplateStep.defaultProps = {
+  file: null,
 };
 
 export default AddTemplateStep;

@@ -45,7 +45,7 @@ const AggregationStep = ({ value, setValue, advanceStep }) => {
             : null
         }
       </div>
-      <Button variant="container" color="primary" onClick={handleSample}>Get sample</Button>
+      <Button variant="contained" color="primary" onClick={handleSample}>Get sample</Button>
       <Button variant="contained" color="primary" onClick={advanceStep}>Next</Button>
     </Box>
   );

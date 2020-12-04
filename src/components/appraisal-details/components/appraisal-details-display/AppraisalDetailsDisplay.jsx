@@ -73,7 +73,7 @@ const AppraisalDetailsDisplay = ({ context, periodDetails }) => {
     return () => {
       mounted = false;
     };
-  }, []);
+  }, [periodDetails, user.id]);
 
   return (
     <Container maxWidth="md" className={classes.conatiner}>
@@ -168,6 +168,7 @@ const AppraisalDetailsDisplay = ({ context, periodDetails }) => {
 AppraisalDetailsDisplay.propTypes = {
   context: PropTypes.shape({
     user: PropTypes.shape({
+      id: PropTypes.string,
       avatar: PropTypes.string,
       username: PropTypes.string,
     }),

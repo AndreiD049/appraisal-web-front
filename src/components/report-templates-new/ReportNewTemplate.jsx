@@ -6,6 +6,7 @@ import {
   StepContent,
   Container,
 } from '@material-ui/core';
+import { downloadBlob } from 'download.js';
 import React, { useState } from 'react';
 import ReportingService from '../../services/ReportingService';
 import AddTemplateStep from './components/AddTemplateStep';
@@ -50,7 +51,8 @@ const ReportTemplateNew = () => {
     formData.append('template', selectedFile);
 
     const result = await ReportingService.generateTemplate(formData);
-    window.open(`/api/reporting/template/generate?filepath=${result.filepath}`);
+    console.log(result);
+    await downloadBlob('report.xlsx', result);
   };
 
   const stepContents = [

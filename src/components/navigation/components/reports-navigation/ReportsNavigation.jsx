@@ -15,7 +15,7 @@ import AuthorizationComponent from '../../../shared/authorization-component';
 const ReportsNavigation = () => (
   <List component="div" disablePadding>
     <AuthorizationComponent code="REPORTS" grant="read">
-      <ListItem button component={Link} to="/reporting">
+      <ListItem button component={Link} to="/reporting/reports">
         <ListItemIcon>
           <AssessmentIcon fontSize="small" />
         </ListItemIcon>
