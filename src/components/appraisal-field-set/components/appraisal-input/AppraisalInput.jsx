@@ -241,7 +241,6 @@ const AppraisalInput = ({
       enterDelay={500}
       disableHoverListener={item.id === 0}
       disableFocusListener
-      disableTouchListener
     >
       <TextField
         className={clsx(

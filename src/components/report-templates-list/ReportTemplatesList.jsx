@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory, useRouteMatch, Link } from 'react-router-dom';
 import {
   Button,
@@ -7,28 +7,48 @@ import {
 import MaterialTable from 'material-table';
 import materialTableUtils from '../../utils/material-table-utils';
 import useStyles from './styles';
+import ReportingService from '../../services/ReportingService';
+import PageHeader from '../shared/page-header/PageHeader';
 
 const ReportTemplatesList = () => {
   const classes = useStyles();
   const history = useHistory();
+  const [templates, setTemplates] = useState([]);
   const { path } = useRouteMatch();
+
+  useEffect(() => {
+    let mounted = true;
+    async function run() {
+      const result = await ReportingService.getTemplates();
+      if (mounted) {
+        setTemplates(result);
+      }
+    }
+    run();
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   return (
     <Container maxWidth="lg">
-      <h1 style={{ textAlign: 'center' }}>Templates</h1>
+      <PageHeader text="Templates" />
       <Paper className={classes.container}>
         <Link
           to={`${path}/new`}
-          color="secondary"
-          variant="contained"
-          component={Button}
+          className="textDecorationOff"
         >
-          Create Template
+          <Button
+            color="secondary"
+            variant="contained"
+          >
+            Create Template
+          </Button>
         </Link>
       </Paper>
       <MaterialTable
         icons={materialTableUtils.tableIcons}
-        title="List"
+        title=""
         columns={[
           {
             title: 'Name', field: 'name',
@@ -37,29 +57,16 @@ const ReportTemplatesList = () => {
             title: 'Filename', field: 'filename',
           },
           {
-            title: 'User created', field: 'createdUser',
+            title: 'User created',
+            field: 'createdUser.username',
           },
         ]}
-        data={[
-          {
-            id: 1234, name: 'Test', filename: 'test.xlsx', createdUser: 'me@you.com',
-          },
-          {
-            id: 41231, name: 'Test1', filename: 'test.xlsx', createdUser: 'me@you.com',
-          },
-          {
-            id: 123124, name: 'Test2', filename: 'test.xlsx', createdUser: 'me@you.com',
-          },
-          {
-            id: 12345, name: 'Test3', filename: 'test.xlsx', createdUser: 'me@you.com',
-          },
-        ]}
+        data={templates}
         actions={[
           {
             icon: materialTableUtils.tableIcons.Download,
             tooltip: 'Download Template',
-            // eslint-disable-next-line no-alert
-            onClick: () => alert('Download file'),
+            onClick: (evt, data) => ReportingService.downloadTemplate(data.id, data.filename),
           },
         ]}
         onRowClick={(evt, rowData) => history.push(`${path}/${rowData.id}`)}

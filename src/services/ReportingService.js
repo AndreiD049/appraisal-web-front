@@ -1,24 +1,24 @@
 import axios from 'axios';
+import { downloadBlob } from 'download.js';
 import NotificationService from './NotificationService';
 
 const ReportingService = {
-  getTempaltesPath: '/api/reporting/templates',
-  getReportPath: (id) => `/api/reporting/reports/${id}`,
-  postReportGeneratePath: (id) => `/api/reporting/reports/${id}/generate`,
-  getReportsPath: '/api/reporting/reports',
-  getTemplateParametersPath: (id) => `/api/reporting/templates/${id}/parameters`,
-  postTemplatePath: '/api/reporting/templates',
-  GenerateTemplatePath: '/api/reporting/templates/generate',
-  postGetSamplePath: '/api/reporting/templates/sample',
-  postReportPath: '/api/reporting/reports',
-
   notify(type, header, content) {
     NotificationService.notify({ type, header, content });
   },
+  /**
+   * Templates
+   */
+  templatesPath: '/api/reporting/templates',
+  templatePath: (id) => `/api/reporting/templates/${id}`,
+  templateDownloadPath: (id) => `/api/reporting/templates/${id}/download`,
+  templateParametersPath: (id) => `/api/reporting/templates/${id}/parameters`,
+  generateTemplatePath: '/api/reporting/templates/generate',
+  templateSamplePath: '/api/reporting/templates/sample',
 
   async getTemplates() {
     try {
-      const response = await axios.get(this.getTempaltesPath);
+      const response = await axios.get(this.templatesPath);
       if (response.status === 200) {
         return response.data;
       }
@@ -29,9 +29,9 @@ const ReportingService = {
     }
   },
 
-  async getTempalteParameters(id) {
+  async getTemplate(id) {
     try {
-      const response = await axios.get(this.getTemplateParametersPath(id));
+      const response = await axios.get(this.templatePath(id));
       if (response.status === 200) {
         return response.data;
       }
@@ -44,7 +44,7 @@ const ReportingService = {
 
   async createTemplate(formdata) {
     try {
-      const response = await axios.post(this.postTemplatePath, formdata, {
+      const response = await axios.post(this.templatesPath, formdata, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -64,9 +64,49 @@ const ReportingService = {
     }
   },
 
+  async updateTemplate(id, update) {
+    try {
+      const response = await axios.put(this.templatePath(id), update);
+      if (response.status === 200) {
+        return response.data;
+      }
+      throw new Error(`Server response: ${response.status} - ${response.statusText}`);
+    } catch (err) {
+      this.notify('error', 'Error', (err.response && err.response.data && err.response.data.error));
+      throw err;
+    }
+  },
+
+  async downloadTemplate(id, filename) {
+    try {
+      const response = await axios.post(this.templateDownloadPath(id), null, {
+        responseType: 'blob',
+      });
+      if (response.status === 200) {
+        await downloadBlob(filename, response.data);
+      }
+    } catch (err) {
+      this.notify('error', 'Error', (err.response && err.response.data && err.response.data.error));
+      throw err;
+    }
+  },
+
+  async getTempalteParameters(id) {
+    try {
+      const response = await axios.get(this.templateParametersPath(id));
+      if (response.status === 200) {
+        return response.data;
+      }
+      throw new Error(`Server response: ${response.status} - ${response.statusText}`);
+    } catch (err) {
+      this.notify('error', 'Error', (err.response && err.response.data && err.response.data.error));
+      throw err;
+    }
+  },
+
   async generateTemplate(formdata) {
     try {
-      const response = await axios.post(this.GenerateTemplatePath, formdata, {
+      const response = await axios.post(this.generateTemplatePath, formdata, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -89,7 +129,7 @@ const ReportingService = {
 
   async getSample(aggregation) {
     try {
-      const response = await axios.post(this.postGetSamplePath, { aggregation });
+      const response = await axios.post(this.templateSamplePath, { aggregation });
       if (response.status === 200) {
         return response.data;
       }
@@ -100,13 +140,16 @@ const ReportingService = {
     }
   },
 
-  async downloadTemplate(path) {
+  /**
+   * Reports
+   */
+  reportPath: (id) => `/api/reporting/reports/${id}`,
+  postReportGeneratePath: (id) => `/api/reporting/reports/${id}/generate`,
+  reportsPath: '/api/reporting/reports',
+
+  async getReports() {
     try {
-      const response = await axios.get(this.GenerateTemplatePath, {
-        params: {
-          filepath: path,
-        },
-      });
+      const response = await axios.get(this.reportsPath);
       if (response.status === 200) {
         return response.data;
       }
@@ -119,11 +162,35 @@ const ReportingService = {
 
   async getReport(id) {
     try {
-      const response = await axios.get(this.getReportPath(id));
+      const response = await axios.get(this.reportPath(id));
       if (response.status === 200) {
         return response.data;
       }
       throw new Error(`Server response: ${response.status} - ${response.statusText}`);
+    } catch (err) {
+      this.notify('error', 'Error', (err.response && err.response.data && err.response.data.error));
+      throw err;
+    }
+  },
+
+  async addReport(formData) {
+    try {
+      const result = await axios.post(this.reportsPath, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      return result.data;
+    } catch (err) {
+      this.notify('error', 'Error', (err.response && err.response.data && err.response.data.error));
+      throw err;
+    }
+  },
+
+  async updateReport(id, update) {
+    try {
+      const result = await axios.put(this.reportPath(id), update);
+      return result.data;
     } catch (err) {
       this.notify('error', 'Error', (err.response && err.response.data && err.response.data.error));
       throw err;
@@ -144,34 +211,6 @@ const ReportingService = {
       throw err;
     }
   },
-
-  async getReports() {
-    try {
-      const response = await axios.get(this.getReportsPath);
-      if (response.status === 200) {
-        return response.data;
-      }
-      throw new Error(`Server response: ${response.status} - ${response.statusText}`);
-    } catch (err) {
-      this.notify('error', 'Error', (err.response && err.response.data && err.response.data.error));
-      throw err;
-    }
-  },
-
-  async addReport(formData) {
-    try {
-      const result = await axios.post(this.postReportPath, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-      return result;
-    } catch (err) {
-      this.notify('error', 'Error', (err.response && err.response.data && err.response.data.error));
-      throw err;
-    }
-  },
-
 };
 
 export default ReportingService;

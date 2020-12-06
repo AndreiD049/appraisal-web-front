@@ -6,6 +6,7 @@ import {
   StepContent,
   Container,
 } from '@material-ui/core';
+import { useHistory } from 'react-router-dom';
 import { downloadBlob } from 'download.js';
 import React, { useState } from 'react';
 import ReportingService from '../../services/ReportingService';
@@ -16,6 +17,7 @@ import useStyles from './styles';
 
 const ReportTemplateNew = () => {
   const classes = useStyles();
+  const history = useHistory();
   const [activeStep, setActiveStep] = useState(0);
   const [aggregation, setAggregation] = useState('');
   const [name, setName] = useState('');
@@ -42,6 +44,7 @@ const ReportTemplateNew = () => {
     formData.append('template', selectedFile);
 
     await ReportingService.createTemplate(formData);
+    history.push('/reporting/templates');
   };
 
   const handleGenerate = async () => {
@@ -51,8 +54,7 @@ const ReportTemplateNew = () => {
     formData.append('template', selectedFile);
 
     const result = await ReportingService.generateTemplate(formData);
-    console.log(result);
-    await downloadBlob('report.xlsx', result);
+    await downloadBlob(selectedFile.name, result);
   };
 
   const stepContents = [

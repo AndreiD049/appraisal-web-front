@@ -18,6 +18,7 @@ import NotificationManager from '../shared/notification-manager';
 import UserSecuritiesProvider from '../shared/user-securities-provider';
 import AuthorizationService from '../../services/AuthorizationService';
 import UserInfoProvider from '../shared/user-info-provider';
+import GlobalCss from '../../styles/GlobalCSS';
 import useStyle from './styles';
 
 import { themeDark, themeLight } from '../../styles/theme';
@@ -50,6 +51,7 @@ function App() {
         <NotificationManager />
         <UserInfoProvider ctx={context} setCtx={setContext} />
         <CssBaseline />
+        <GlobalCss />
         <UserSecuritiesProvider />
         <Router>
           <Navigation />
