@@ -14,7 +14,7 @@ import {
 } from '@material-ui/core';
 import {
   Delete,
-  History,
+  Info,
   MoreVert,
   ChevronLeft,
   ChevronRight,
@@ -124,12 +124,72 @@ const AppraisalInput = ({
     handleClose();
   };
 
+  const tooltip = (
+    <>
+      {
+        validations.isRelated
+          ? (
+            <Typography variant="caption">
+              This item was added automatically from your previous appraisals
+              <br />
+            </Typography>
+          )
+          : null
+      }
+      <Typography variant="caption">
+        <strong>Created user:</strong>
+        {' '}
+        {item.createdUser && item.createdUser.username}
+      </Typography>
+      <br />
+      <Typography variant="caption">
+        <strong>Created date:</strong>
+        {' '}
+        {item.createdDate && new Date(item.createdDate).toLocaleString()}
+      </Typography>
+      {
+        item.modifiedUser
+          ? (
+            <>
+              <br />
+              <Typography variant="caption">
+                <strong>Modified user:</strong>
+                {' '}
+                {item.modifiedUser && item.modifiedUser.username}
+              </Typography>
+            </>
+          )
+          : null
+      }
+      {
+        item.modifiedUser
+          ? (
+            <>
+              <br />
+              <Typography variant="caption">
+                <strong>Modified date:</strong>
+                {' '}
+                {item.modifiedDate && new Date(item.modifiedDate).toLocaleString()}
+              </Typography>
+            </>
+          )
+          : null
+      }
+    </>
+  );
+
   const startAdornment = (
-    validations.isRelated
+    item.id !== 0
       ? (
         <InputAdornment position="start" className={classes.startAdornment}>
-          <Tooltip title="This item was added automatically from your previous appraisals" aria-label="historical item">
-            <History />
+          <Tooltip
+            title={tooltip}
+            enterDelay={500}
+            disableHoverListener={item.id === 0}
+            disableFocusListener
+            aria-label="historical item"
+          >
+            <Info />
           </Tooltip>
         </InputAdornment>
       )
@@ -191,76 +251,25 @@ const AppraisalInput = ({
     </InputAdornment>
   );
 
-  const tooltip = (
-    <>
-      <Typography variant="caption">
-        <strong>Created user:</strong>
-        {' '}
-        {item.createdUser && item.createdUser.username}
-      </Typography>
-      <br />
-      <Typography variant="caption">
-        <strong>Created date:</strong>
-        {' '}
-        {item.createdDate && new Date(item.createdDate).toLocaleString()}
-      </Typography>
-      {
-        item.modifiedUser
-          ? (
-            <>
-              <br />
-              <Typography variant="caption">
-                <strong>Modified user:</strong>
-                {' '}
-                {item.modifiedUser && item.modifiedUser.username}
-              </Typography>
-            </>
-          )
-          : null
-      }
-      {
-        item.modifiedUser
-          ? (
-            <>
-              <br />
-              <Typography variant="caption">
-                <strong>Modified date:</strong>
-                {' '}
-                {item.modifiedDate && new Date(item.modifiedDate).toLocaleString()}
-              </Typography>
-            </>
-          )
-          : null
-      }
-    </>
-  );
-
   return (
-    <Tooltip
-      title={tooltip}
-      enterDelay={500}
-      disableHoverListener={item.id === 0}
-      disableFocusListener
-    >
-      <TextField
-        className={clsx(
+    <TextField
+      className={clsx(
         // classes.root,
-          item.type === 'Feedback' ? classes.feedBackInput : classes.root,
-        )}
-        id={`app-item-${item.type.toLowerCase()}-${idx}`}
-        value={value.content}
-        size="small"
-        variant="outlined"
-        multiline
-        onChange={handleChange}
-        onBlur={handleBlur}
-        disabled={!validations.inputEditable}
-        InputProps={{
-          startAdornment,
-          endAdornment: showEndAdornment() ? endAdornment : null,
-        }}
-      />
-    </Tooltip>
+        item.type === 'Feedback' ? classes.feedBackInput : classes.root,
+      )}
+      id={`app-item-${item.type.toLowerCase()}-${idx}`}
+      value={value.content}
+      size="small"
+      variant="outlined"
+      multiline
+      onChange={handleChange}
+      onBlur={handleBlur}
+      disabled={!validations.inputEditable}
+      InputProps={{
+        startAdornment,
+        endAdornment: showEndAdornment() ? endAdornment : null,
+      }}
+    />
   );
 };
 
