@@ -73,7 +73,7 @@ const ReportDetailsParametersEdit = ({ template, params, handleUpdate }) => {
     return () => {
       mounted = false;
     };
-  }, []);
+  }, [template.id]);
 
   return (
     <List dense className="owl fullWidth">

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import clsx from 'clsx';
 import {
   InputAdornment,
   IconButton,
@@ -187,7 +186,7 @@ const AppraisalInput = ({
             enterDelay={500}
             disableHoverListener={item.id === 0}
             disableFocusListener
-            aria-label="historical item"
+            aria-label="info item"
           >
             <Info />
           </Tooltip>
@@ -251,26 +250,48 @@ const AppraisalInput = ({
     </InputAdornment>
   );
 
-  return (
-    <TextField
-      className={clsx(
-        // classes.root,
-        item.type === 'Feedback' ? classes.feedBackInput : classes.root,
-      )}
-      id={`app-item-${item.type.toLowerCase()}-${idx}`}
-      value={value.content}
-      size="small"
-      variant="outlined"
-      multiline
-      onChange={handleChange}
-      onBlur={handleBlur}
-      disabled={!validations.inputEditable}
-      InputProps={{
-        startAdornment,
-        endAdornment: showEndAdornment() ? endAdornment : null,
-      }}
-    />
-  );
+  return item.type !== 'Feedback'
+    ? (
+      <TextField
+        className={classes.root}
+        id={`app-item-${item.type.toLowerCase()}-${idx}`}
+        value={value.content}
+        size="small"
+        variant="outlined"
+        multiline
+        onChange={handleChange}
+        onBlur={handleBlur}
+        disabled={!validations.inputEditable}
+        InputProps={{
+          startAdornment,
+          endAdornment: showEndAdornment() ? endAdornment : null,
+        }}
+      />
+    )
+    : (
+      <Tooltip
+        title={tooltip}
+        enterDelay={500}
+        disableHoverListener={item.id === 0}
+        disableFocusListener
+        aria-label="info item"
+      >
+        <TextField
+          className={classes.feedBackInput}
+          id={`app-item-${item.type.toLowerCase()}-${idx}`}
+          value={value.content}
+          size="small"
+          variant="outlined"
+          multiline
+          onChange={handleChange}
+          onBlur={handleBlur}
+          disabled={!validations.inputEditable}
+          InputProps={{
+            endAdornment: showEndAdornment() ? endAdornment : null,
+          }}
+        />
+      </Tooltip>
+    );
 };
 
 AppraisalInput.propTypes = {
